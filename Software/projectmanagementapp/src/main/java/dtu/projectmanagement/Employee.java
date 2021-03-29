@@ -3,14 +3,17 @@ package dtu.projectmanagement;
 public class Employee {
 
 	private String name; 
+	private String initials; 
 	
-	public Employee(String name) {
+	public Employee(String name, String initials) {
 		this.name = name;
+		this.initials = initials; // MANGLER CHECK PÅ INITIALS
 		
 	}
 	
-	public Project createProject(String title, int id) {
-		return new Project(title, id);
+	public Project createProject(String title) throws OperationNotAllowed {
+		return new Project(title);
+		
 	}
 	
 	public void endProject() {
