@@ -5,12 +5,12 @@ public class Employee {
 	private String name; 
 	
 	public Employee(String name) {
-		this.name=name;
+		this.name = name;
 		
 	}
 	
-	public Project createProject(String title,int id) {
-		return Project(title,id);
+	public Project createProject(String title, int id) {
+		return new Project(title, id);
 	}
 	
 	public void endProject() {
@@ -22,7 +22,7 @@ public class Employee {
 	}
 	
 	public Activity createActivity(String title, int duration) { //tilbagemelding fra Anders omkring, hvilken type, at duration har
-		return Activity(title,duration);
+		return new Activity(title, duration);
 	}
 	
 	public Activity editActivity() {
