@@ -1,4 +1,4 @@
-package dtu.projectManagement;
+package dtu.calculator;
 
 /**
  * A test class to check which tests are run with which framework.

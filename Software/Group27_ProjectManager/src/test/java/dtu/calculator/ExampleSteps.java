@@ -1,8 +1,7 @@
-package dtu.projectManagement;
+package dtu.calculator;
 
 import static org.junit.Assert.assertEquals;
 
-import dtu.projectManagement.UpnCalculator;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
