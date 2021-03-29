@@ -26,14 +26,14 @@ public class Console {
 	//Prints all employees in the app and the active user can then be chosen.
 	public void chooseActiveUser()
 	{	
-		for(int i = 0; i<app.employees.size();i++)
+		for(int i = 0; i<app.getEmployees().size();i++)
 		{
-			System.out.println(i+": "+app.employees.get(i).getName());
+			System.out.println(i+": "+app.getEmployees().get(i).getName());
 		}
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
-		app.setActiveUser(app.employees.get(scanner.nextInt()));
+		app.setActiveUser(app.getEmployees().get(scanner.nextInt()));
 		
 		mainMenu();
 	}
@@ -103,16 +103,16 @@ public class Console {
 	//Prints all active projects and chooses one to be the active project
 	public void seeProjects()
 	{
-		for(int i = 0; i<app.projects.size();i++)
+		for(int i = 0; i<app.getProjects().size();i++)
 		{
-			System.out.println(i+": "+app.projects.get(i).getTitle());
+			System.out.println(i+": "+app.getProjects().get(i).getTitle());
 		}
 		
 		System.out.println("Choose a project");
 		
-		while (!scanner.hasNextInt() || scanner.nextInt()<0 || scanner.nextInt()>app.projects.size()) scanner.next();
+		while (!scanner.hasNextInt() || scanner.nextInt()<0 || scanner.nextInt()>app.getProjects().size()) scanner.next();
 		
-		app.setActiveProject(app.projects.get(scanner.nextInt()));
+		app.setActiveProject(app.getProjects().get(scanner.nextInt()));
 		
 		activeProjectChoices();
 	}
@@ -121,9 +121,9 @@ public class Console {
 	//Prints all eligible employees and assigns one as project manager on currently active project
 	public void setProjectManager()
 	{
-		for(int i = 0; i<app.employees.size();i++)
+		for(int i = 0; i<app.getEmployees().size();i++)
 		{
-			System.out.println(i+": "+app.employees.get(i).getName);
+			System.out.println(i+": "+app.getEmployees().get(i).getName());
 		}
 		
 		System.out.println("Choose a Project Manager");
@@ -135,14 +135,14 @@ public class Console {
 	//Choices after choosing a project
 	public void activeProjectChoices()
 	{
-		System.out.println("Current project: " + app.activeProject.getTitle() + " Serial number: " app.activeProject.getId()
+		System.out.println("Current project: " + app.getActiveProject().getTitle() + " Serial number: " app.getActiveProject().getId()
 				+ "\n1: See tasks"
 				+ "\n2: Edit tasks"
 				+ "\n3: Create task"
 				+ "\n4: Assign project manager"
 				+ "\n5: Go back");
 		
-		if(app.activeProject.projectManager == app.activeUser)
+		if(app.activeProject.getProjectManager() == app.getActiveUser())
 		{
 			System.out.println("Project Manager choices: "
 				+ "\n6: Create a report"
@@ -171,13 +171,13 @@ public class Console {
 				seeProjects();
 				break;
 			default: 
-				if(app.activeProject.projectManager != app.activeUser)
+				if(app.getActiveProject().getProjectManager != app.activeUser)
 				{
 					System.out.println("Incorrect input.");
 				}
 		}
 		
-		if(app.activeProject.projectManager == app.activeUser)
+		if(app.getActiveProject().getProjectManager() == app.activeUser)
 		{
 			switch(scanner.nextInt())
 			{
@@ -294,22 +294,22 @@ public class Console {
 	//Prints all tasks (in name only) 
 	private void printTasks()
 	{
-		for(int i = 0; i<app.activeProject.tasks.length;i++)
+		for(int i = 0; i<app.getActiveProject().getTasks().size();i++)
 		{
-			System.out.println(i+": "+app.activeProject.tasks[i].getName());
+			System.out.println(i+": "+app.getActiveProject().getTasks().get(i).getName());
 		}
 	}
 	
 	//Prints all tasks and their information
 	private void printAllTaskInformation()
 	{
-		for(int i = 0; i<app.activeProject.tasks.length;i++)
+		for(int i = 0; i<app.getActiveProject().getTasks().size();i++)
 		{
-			System.out.println(i+": "+app.activeProject.tasks[i].getName());
-			System.out.println("Start time: "+app.activeProject.tasks[i].getStartTime());
-			System.out.println("Estimated time: "+app.activeProject.tasks[i].getEstimatedTime());
-			System.out.println("Time spent: "+app.activeProject.tasks[i].getTimeSpent());
-			System.out.println("Remaining time: "+app.activeProject.tasks[i].getRemainingTime());
+			System.out.println(i+": "+app.getActiveProject().getTasks()[i].getName());
+			System.out.println("Start time: "+app.getActiveProject().getTasks()[i].getStartTime());
+			System.out.println("Estimated time: "+app.getActiveProject().getTasks()[i].getEstimatedTime());
+			System.out.println("Time spent: "+app.getActiveProject().getTasks()[i].getTimeSpent());
+			System.out.println("Remaining time: "+app.getActiveProject().getTasks()[i].getRemainingTime());
 		}
 	}
 	
@@ -396,7 +396,7 @@ public class Console {
 	{
 		for(int i = 0; i<app.projects.size();i++)
 		{
-			System.out.println(i+": "+app.activeUser.getActivities().get(i));
+			System.out.println(i+": "+app.getActiveUser().getActivities().get(i));
 		}	
 	}
 	
