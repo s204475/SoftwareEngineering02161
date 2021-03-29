@@ -1,5 +1,11 @@
 package dtu.projectManagement;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 /* The UI done as console commands 
@@ -9,9 +15,9 @@ import java.util.Scanner;
 public class Console {
 	
 	public static Scanner scanner = new Scanner(System.in);
-	private ProjectMangementApp app;
+	private ProjectManagementApp app;
 	
-	public Console(ProjectMangementApp app)
+	public Console(ProjectManagementApp app)
 	{
 		this.app = app;
 		chooseActiveUser();
@@ -20,31 +26,93 @@ public class Console {
 	//Prints all employees in the app and the active user can then be chosen.
 	public void chooseActiveUser()
 	{	
-		for(int i = 0; i<app.employees.length;i++)
+		for(int i = 0; i<app.employees.size();i++)
 		{
-			System.out.println(i+": "+app.employees[i].name);
+			System.out.println(i+": "+app.employees.get(i).getName());
 		}
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
-		app.setActiveUser(app.employees[scanner.nextInt()]);
+		app.setActiveUser(app.employees.get(scanner.nextInt()));
 		
-		seeProjects();
+		mainMenu();
 	}
 	
+	private void mainMenu()
+	{
+		System.out.println("Main menu: " 
+		+ "\n1: Change active user"
+		+ "\n2: See projects"
+		+ "\n3: See personal activities"
+		+ "\n4: Quit");
+		
+		while (!scanner.hasNextInt()) scanner.next();
+		
+		switch(scanner.nextInt())
+		{
+			case 1:
+				chooseActiveUser();
+				break;
+			case 2: 
+				seeProjects();
+				break;
+			case 3: 
+				seePersonalActivities();
+				break;
+			case 4: 
+				System.exit(0);
+				break;
+		}
+
+	}
+
+	private void seePersonalActivities()
+	{
+		
+		System.out.println(""
+				+ "\n1: Edit activity"
+				+ "\n2: Add activity"
+				+ "\n3: See activities"
+				+ "\n4: Print schedule"
+				+ "\n5: Go back");
+		
+		while (!scanner.hasNextInt()) scanner.next();
+		
+		switch(scanner.nextInt())
+		{
+			case 1:
+				editActivity();
+				break;
+			case 2: 
+				addActivity();
+				break;
+			case 3: 
+				printAllActivitesInfo();
+				break;
+			case 4: 
+				printSchedule();
+				break;
+			case 5: 
+				mainMenu();
+				break;
+		}
+	}
+
+
+
 	//Prints all active projects and chooses one to be the active project
 	public void seeProjects()
 	{
-		for(int i = 0; i<app.projects.length;i++)
+		for(int i = 0; i<app.projects.size();i++)
 		{
-			System.out.println(i+": "+app.projects[i].title);
+			System.out.println(i+": "+app.projects.get(i).getTitle());
 		}
 		
 		System.out.println("Choose a project");
 		
-		while (!scanner.hasNextInt() || scanner.nextInt()<0 || scanner.nextInt()>app.projects.length) scanner.next();
+		while (!scanner.hasNextInt() || scanner.nextInt()<0 || scanner.nextInt()>app.projects.size()) scanner.next();
 		
-		app.setActiveProject(app.projects[scanner.NextInt()]);
+		app.setActiveProject(app.projects.get(scanner.nextInt()));
 		
 		activeProjectChoices();
 	}
@@ -53,21 +121,21 @@ public class Console {
 	//Prints all eligible employees and assigns one as project manager on currently active project
 	public void setProjectManager()
 	{
-		for(int i = 0; i<app.employees.length;i++)
+		for(int i = 0; i<app.employees.size();i++)
 		{
-			System.out.println(i+": "+app.employees[i].name);
+			System.out.println(i+": "+app.employees.get(i).getName);
 		}
 		
 		System.out.println("Choose a Project Manager");
 		
 		while (!scanner.hasNextInt()) scanner.next();
-		app.activeProject.assignProjectManager(app.employees[scanner.hasNextInt()]);
+		app.activeProject.assignProjectManager(app.employees.get(scanner.nextInt()));
 	}
 	
 	//Choices after choosing a project
 	public void activeProjectChoices()
 	{
-		System.out.println("Current project: " + app.activeProject.title
+		System.out.println("Current project: " + app.activeProject.getTitle() + " Serial number: " app.activeProject.getId()
 				+ "\n1: See tasks"
 				+ "\n2: Edit tasks"
 				+ "\n3: Create task"
@@ -76,8 +144,8 @@ public class Console {
 		
 		if(app.activeProject.projectManager == app.activeUser)
 		{
-			System.out.println(""
-				+ "6: Create a report"
+			System.out.println("Project Manager choices: "
+				+ "\n6: Create a report"
 				+ "\n7: Show estimated time until project completion"
 				+ "\n8: Show time spent on project"
 				+ "\n9: Show remaining budgeted time");
@@ -126,7 +194,7 @@ public class Console {
 					printBudgetedTime();
 					break;
 				default: 
-					if(choice <1 || choice > 8)
+					if(choice <1 || choice > 9)
 					{
 						System.out.println("Incorrect input.");
 					}
@@ -134,12 +202,16 @@ public class Console {
 			}
 		}
 		
-		activeProjectChoices();
+		if (choice != 5) //unless you go back, you are presented with the project choices again.
+		{
+			activeProjectChoices();
+		}
+		
 	}
 	
 	private void createReport()
 	{
-		// TODO Auto-generated method stub
+		// TODO iMPLEMENT THIS
 		System.out.println("A report is printed");
 	}
 
@@ -165,7 +237,7 @@ public class Console {
 		String taskName = scanner.next();
 		System.out.println("Input estimated duration of task in hours");
 		while (!scanner.hasNextDouble()) scanner.next();
-		app.createTask(taskName,scanner.nextDouble());
+		app.createTask(taskName,scanner.nextDouble()); //duration!
 	}
 	
 	private void editTasks() {
@@ -175,7 +247,7 @@ public class Console {
 		
 		while (!scanner.hasNextInt()) scanner.next();
 
-		app.setActiveTask(scanner.nextInt());
+		app.setActiveTask(app.getTasks().scanner.nextInt));
 		
 		System.out.println("Choose what to edit");
 		
@@ -198,14 +270,17 @@ public class Console {
 			case 2: 
 				//input startTIme
 				System.out.println("Change start time to");
+				while (!scanner.hasNextInt()) scanner.next();
 				app.setTaskStartTime(scanner.nextInt());
 				break;
 			case 3: 
 				System.out.println("Input new estimated time");
+				while (!scanner.hasNextInt()) scanner.next();
 				app.setTaskEstimatedTime(scanner.nextInt());
 				break;
 			case 4: 
 				System.out.println("Input new time worked on task");
+				while (!scanner.hasNextInt()) scanner.next();
 				app.setTaskTimeWorked(scanner.nextInt());
 				break;
 			default:
@@ -231,10 +306,107 @@ public class Console {
 		for(int i = 0; i<app.activeProject.tasks.length;i++)
 		{
 			System.out.println(i+": "+app.activeProject.tasks[i].getName());
-			System.out.println(app.activeProject.tasks[i].getStartTime());
-			System.out.println(app.activeProject.tasks[i].getEstimatedTime());
-			System.out.println(app.activeProject.tasks[i].getTimeSpent());
-			System.out.println(app.activeProject.tasks[i].getRemainingTime());
+			System.out.println("Start time: "+app.activeProject.tasks[i].getStartTime());
+			System.out.println("Estimated time: "+app.activeProject.tasks[i].getEstimatedTime());
+			System.out.println("Time spent: "+app.activeProject.tasks[i].getTimeSpent());
+			System.out.println("Remaining time: "+app.activeProject.tasks[i].getRemainingTime());
 		}
+	}
+	
+	private void printSchedule()
+	{
+		//To-do: Implement schedule
+		System.out.println("This should be a schedule.");
+	}
+
+	//Adds a new activity to the active user
+	//Test this method thoroughly
+	private void addActivity()
+	{
+		System.out.println("Input name for activity");
+		while (!scanner.hasNext()) scanner.nextLine();
+		String activityName = scanner.next();
+		
+		System.out.println("Input start time (e.g: dd-MM-yyyy)");
+		
+		while (!scanner.hasNext()) scanner.nextLine();
+		Date start = convertDate(scanner.nextLine());
+		
+		System.out.println("Input end time (e.g: dd-MM-yyyy)");
+		
+		while (!scanner.hasNext()) scanner.nextLine();
+		Date end = convertDate(scanner.nextLine());
+		        
+		Duration activityDuration = Duration.between(start.toInstant(), end.toInstant());
+		
+		app.createTask(activityName, activityDuration);
+	}
+	
+	private Date convertDate(String dateString) throws ParseException
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		
+		return sdf.parse(sdf.format(dateString));
+	}
+
+	private void editActivity()
+	{
+		System.out.println("Choose activity to edit: ");
+		printActivities();
+		
+		while (!scanner.hasNextInt()) scanner.next();
+		app.setActiveActivity(app.activeUser.getActivities().get(scanner.nextInt()));
+		
+		System.out.println(""
+				+ "\n1: Edit name"
+				+ "\n2: Edit start time"
+				+ "\n3: Edit end time"
+				+ "\n4: Go back");
+		
+		while (!scanner.hasNextInt()) scanner.next();
+		int choice = scanner.nextInt();
+		switch(choice)
+		{
+			case 1: 
+				System.out.println("Input new activity name");
+				app.setActivityName(scanner.next());
+				break;
+			case 2: 
+				System.out.println("This edits the start time"); //Needs implementation
+				break;
+			case 3: 
+				System.out.println("This edits the end time"); //Needs implementation
+				break;
+			case 4: 
+				mainMenu();
+				break;
+			default:
+				System.out.println("Invalid input");
+				break;
+				
+		}
+		
+		if (choice != 4)
+		{
+			seePersonalActivities();
+		}
+	}
+
+	private void printActivities()
+	{
+		for(int i = 0; i<app.projects.size();i++)
+		{
+			System.out.println(i+": "+app.activeUser.getActivities().get(i));
+		}	
+	}
+	
+	private void printAllActivitesInfo()
+	{
+		for(int i = 0; i<app.activeUser.getActivities().size();i++)
+		{
+			System.out.println(i+": "+app.getActivities().get(i).getName());
+			System.out.println("Start time: "+app.getActivities().get(i).getStartTime());
+			System.out.println("End time: "app.getActivities().get(i).getEndTime());
+		}	
 	}
 }
