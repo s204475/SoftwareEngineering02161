@@ -9,18 +9,20 @@ public class Project {
 	private String title;
 	private int id;
 	private Calendar startTime; 
-	
+	private int budgetTime;
 	private Employee projectManager;
 	
 	private DateServer dateServer = new DateServer();
 	ArrayList<Task> tasks = new ArrayList<Task>();
 	
-	
-	
 	public Project(String title, int id) {
 		this.title = title;
 		this.id = id;
 		this.startTime = dateServer.getDate();
+	}
+	
+	public void setBudgetTime(int budgetTime) {
+		this.budgetTime=budgetTime;
 	}
 	
 	public void createTask(String title, Duration estimatedTime) {
@@ -32,13 +34,12 @@ public class Project {
 		projectManager = employee;
 	}
 	
+	public double getRemaningTime() {
+		double remaningTimeInHours=0.0;
+		for(Task task : tasks) {
+			remaningTimeInHours+=task.getRemainingTime().toMinutes()/60;
+		}
+		return remaningTimeInHours;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-
 }

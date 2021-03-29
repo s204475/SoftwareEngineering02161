@@ -14,8 +14,7 @@ public class Task {
 		this.name = name;
 		this.startTime = dateServer.getDate();
 		this.estimatedTime = estimatedTime;
-		this.timeSpent = Duration.ofHours(0);
-		
+		this.timeSpent = Duration.ofMinutes(0);		
 	}
 	
 	public void setTimeSpent(Duration timeSpent) {
