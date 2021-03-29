@@ -41,7 +41,7 @@ public class Employee {
 		//will be implementet later
 	}
 	
-	public boolean isAvabilble(timeSlot) {
+	public boolean isAvailable(timeSlot) {
 		return //activity in timeSlot == null ? true : false;
 	}
  }

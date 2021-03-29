@@ -21,7 +21,7 @@ public class ProjectManagementApp {
 	public ArrayList<Employee> getAvailableEmployees() {
 	ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
 	for(Employee employee : employees) {
-		if(employee.isAvabilble()) {
+		if(employee.isAvailable()) {
 			availableEmployees.add(employee);
 		}
 	}
