@@ -1,5 +1,7 @@
 package dtu.projectManagement;
 
+import java.util.Calendar;
+
 public class Task {
 	private String name;
 	private DateServer dateServer = new DateServer();
