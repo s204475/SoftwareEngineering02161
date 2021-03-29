@@ -25,8 +25,8 @@ public class ProjectSteps {
 	@Given("there is an employee")
 	public void there_is_an_employee() {
 	    employee = new Employee("John", "joh");
-	    managementApp.setActiveUser(employee);
 	    managementApp.addEmployee(employee);
+	    managementApp.setActiveUser(employee);
 	    assertTrue(managementApp.getEmployees().contains(employee));
 	}
 

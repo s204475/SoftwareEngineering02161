@@ -54,7 +54,7 @@ public class ProjectManagementApp {
 		if (!(employees.contains(employee))) {
 			//implementer error message. Med den employee ikke eksistere 
 		} else {
-			activeUser=employee;	
+			activeUser = employee;	
 		}
 	}
 	
