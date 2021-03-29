@@ -1,5 +1,6 @@
 package dtu.projectManagement;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -22,8 +23,8 @@ public class Project {
 		this.startTime = dateServer.getDate();
 	}
 	
-	public void createTask(String title) {
-		Task task = new Task(title);
+	public void createTask(String title, Duration estimatedTime) {
+		Task task = new Task(title, estimatedTime);
 		tasks.add(task);
 	}
 	
