@@ -59,7 +59,7 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public int getProjectBugetTime() {
+	public int getProjectBudgetTime() {
 		if(activeProject == null) {
 			//Error message. no activeProject.
 			return 0;

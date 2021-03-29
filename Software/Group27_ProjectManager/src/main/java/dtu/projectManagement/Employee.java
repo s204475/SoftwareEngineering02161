@@ -21,9 +21,9 @@ public class Employee {
 		//will be implementet later.
 	}
 	
-	public Activity createActivity(String title, int duration) { //tilbagemelding fra Anders omkring, hvilken type, at duration har
-		return new Activity(title, duration);
-	}
+//	public Activity createActivity(String title, int duration) { //tilbagemelding fra Anders omkring, hvilken type, at duration har
+//		return new Activity(title, duration);
+//	}
 	
 	public Activity editActivity() {
 		//will be implementet later.

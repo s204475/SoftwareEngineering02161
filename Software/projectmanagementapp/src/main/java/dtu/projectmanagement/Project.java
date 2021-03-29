@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+
 public class Project {
 	private String title;
 	private String id;
 	private Calendar startTime; 
+	private int budgetTime;
 	
 	private Employee projectManager;
 	
@@ -32,6 +34,14 @@ public class Project {
 		this.startTime = dateServer.getDate();
 	}
 	
+	public void setBudgetTime(int budgetTime) {
+		this.budgetTime=budgetTime;
+	}
+	
+	public int getBudgetTime() {
+		return budgetTime;
+	}
+	
 	public void createTask(String title, Duration estimatedTime) {
 		Task task = new Task(title, estimatedTime);
 		tasks.add(task);
@@ -44,6 +54,23 @@ public class Project {
 		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + "0001"; // IMPLEMENTER LØBENUMMER
 		return id;
 	}
+	
+	public double getEstimatedTime() {
+		double estimatedTimeInHours=0.0;
+		for(Task task : tasks) {
+			estimatedTimeInHours+=(double)task.getEstimatedTime().toMinutes()/60;
+		}
+		return estimatedTimeInHours;
+	}
+	
+	public double getRemaningTime() {
+		double remaningTimeInHours=0.0;
+		for(Task task : tasks) {
+			remaningTimeInHours+=(double)task.getRemainingTime().toMinutes()/60;
+		}
+		return remaningTimeInHours;
+	}
+	
 	
 	
 	

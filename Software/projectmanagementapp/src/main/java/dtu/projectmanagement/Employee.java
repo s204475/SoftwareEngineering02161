@@ -1,5 +1,6 @@
 package dtu.projectmanagement;
 
+
 public class Employee {
 
 	private String name; 
@@ -15,7 +16,6 @@ public class Employee {
 		return new Project(title);
 		
 	}
-	
 	public void endProject() {
 		//will be implementet later.
 	}
@@ -27,7 +27,7 @@ public class Employee {
 //	public Activity createActivity(String title, int duration) { //tilbagemelding fra Anders omkring, hvilken type, at duration har
 //		return new Activity(title, duration);
 //	}
-	
+//	
 //	public Activity editActivity() {
 //		//will be implementet later.
 //	}
