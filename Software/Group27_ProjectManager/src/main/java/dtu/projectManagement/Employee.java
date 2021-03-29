@@ -44,9 +44,4 @@ public class Employee {
 	public boolean isAvabilble(timeSlot) {
 		return //activity in timeSlot == null ? true : false;
 	}
-	
-//	public Employee[] getAvalibleEmployees() { forkert sted, men rigtig struktur.
-//		List<Employee> avalibleEmplyess= new ArrayList<Employee>();
-//		for()
-//	}
  }

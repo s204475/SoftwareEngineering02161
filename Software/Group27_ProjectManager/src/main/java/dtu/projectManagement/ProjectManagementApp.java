@@ -13,7 +13,20 @@ public class ProjectManagementApp {
 		projects.add(project);
 	}
 	
+	public void createEmployee(String name) {
+		Employee employee = new Employee(name);
+		employees.add(employee);
+	}
 	
+	public ArrayList<Employee> getAvailableEmployees() {
+	ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
+	for(Employee employee : employees) {
+		if(employee.isAvabilble()) {
+			availableEmployees.add(employee);
+		}
+	}
+	return availableEmployees;
+}
 	
 	
 }
