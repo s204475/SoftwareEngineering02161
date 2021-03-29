@@ -1,4 +1,4 @@
-package dtu.projectManagement;
+package dtu.projectmanagement;
 
 import java.time.Duration;
 import java.util.Calendar;
