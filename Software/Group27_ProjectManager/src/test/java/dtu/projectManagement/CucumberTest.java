@@ -1,4 +1,4 @@
-package dtu.calculator;
+package dtu.projectManagement;
 
 
 import org.junit.runner.RunWith;
