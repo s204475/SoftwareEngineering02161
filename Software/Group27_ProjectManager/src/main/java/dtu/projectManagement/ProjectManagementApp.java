@@ -59,10 +59,15 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public double getProjectBugetTime() {
-		
+	public int getProjectBugetTime() {
+		if(activeProject == null) {
+			//Error message. no activeProject.
+			return 0;
+		}
+		else {
+			return activeProject.getBudgetTime();
+		}
 	}
-	
 	
 	public double getProjectEstimatedTime() {
 		if(activeProject == null) {
@@ -83,11 +88,8 @@ public class ProjectManagementApp {
 		return remamningTimeInHours;
 		}
 	}
-	
-	
+		
 }
-	//getProjectBugetTime
-	//getRemaningTime
 	
 	//getTaskStarttime
 	//getTaskTimespent

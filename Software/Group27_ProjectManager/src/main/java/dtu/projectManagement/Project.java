@@ -25,6 +25,10 @@ public class Project {
 		this.budgetTime=budgetTime;
 	}
 	
+	public int getBudgetTime() {
+		return budgetTime;
+	}
+	
 	public void createTask(String title, Duration estimatedTime) {
 		Task task = new Task(title, estimatedTime);
 		tasks.add(task);
@@ -34,10 +38,18 @@ public class Project {
 		projectManager = employee;
 	}
 	
+	public double getEstimatedTime() {
+		double estimatedTimeInHours=0.0;
+		for(Task task : tasks) {
+			estimatedTimeInHours+=(double)task.getEstimatedTime().toMinutes()/60;
+		}
+		return estimatedTimeInHours;
+	}
+	
 	public double getRemaningTime() {
 		double remaningTimeInHours=0.0;
 		for(Task task : tasks) {
-			remaningTimeInHours+=task.getRemainingTime().toMinutes()/60;
+			remaningTimeInHours+=(double)task.getRemainingTime().toMinutes()/60;
 		}
 		return remaningTimeInHours;
 	}

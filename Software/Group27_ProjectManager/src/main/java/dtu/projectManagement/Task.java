@@ -17,6 +17,10 @@ public class Task {
 		this.timeSpent = Duration.ofMinutes(0);		
 	}
 	
+	public Duration getEstimatedTime() {
+		return estimatedTime;
+	}
+	
 	public void setTimeSpent(Duration timeSpent) {
 		this.timeSpent = this.timeSpent.plus(timeSpent);
 	}
