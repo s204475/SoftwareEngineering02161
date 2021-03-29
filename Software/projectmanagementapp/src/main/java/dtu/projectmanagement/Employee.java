@@ -39,6 +39,10 @@ public class Employee {
 	public void editHoursWorked() {
 		//will be implementet later
 	}
+
+	public String getInitials() {
+		return initials; 
+	}
 	
 //	public void finishTask() {
 //		//will be implementet later

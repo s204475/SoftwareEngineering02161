@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.function.BooleanSupplier;
 
 
 public class Project {
@@ -16,7 +17,7 @@ public class Project {
 	private String id;
 	private Calendar startTime; 
 	private int budgetTime;
-	
+
 	private Employee projectManager;
 	
 	private DateServer dateServer = new DateServer();
@@ -32,6 +33,7 @@ public class Project {
 		}
 		this.id = setId();
 		this.startTime = dateServer.getDate();
+		
 	}
 	
 	public void setBudgetTime(int budgetTime) {
@@ -69,6 +71,18 @@ public class Project {
 			remaningTimeInHours+=(double)task.getRemainingTime().toMinutes()/60;
 		}
 		return remaningTimeInHours;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public Employee getProjectManager() {
+		return projectManager;
 	}
 	
 	

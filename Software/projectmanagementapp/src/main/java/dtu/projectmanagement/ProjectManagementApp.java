@@ -1,6 +1,8 @@
 package dtu.projectmanagement;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class ProjectManagementApp {
 	Employee activeUser;
@@ -108,7 +110,34 @@ public class ProjectManagementApp {
 		return remamningTimeInHours;
 		}
 	}
-		
+	public Employee searchEmployees(String initials) {
+		for (Employee employee : employees) {
+			if (employee.getInitials().equals(initials)) {
+				return employee;
+			}
+		}
+		return null;
+	}
+	
+	public Project searchProjectsId(String id) {
+		for (Project project : projects) {
+			if (project.getId().equals(id)) {
+				return project;
+			}
+		}
+		return null;
+	}
+	
+	public List<Project> searchProjectsTitle(String title) {
+		List<Project> projectsWithTitle = new ArrayList<>();
+		for (Project project : projects) {
+			if (project.getTitle().equals(title)) {
+				projectsWithTitle.add(project);
+			}
+		}
+		return projectsWithTitle;
+	}
+	
 }
 	
 	//getTaskStarttime
