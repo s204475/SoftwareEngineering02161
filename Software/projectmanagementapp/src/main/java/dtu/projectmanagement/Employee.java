@@ -1,10 +1,13 @@
 package dtu.projectmanagement;
 
+import java.time.Duration;
+import java.util.ArrayList;
 
 public class Employee {
 
 	private String name; 
 	private String initials; 
+	private ArrayList<Activity> activities;
 	
 	public Employee(String name, String initials) {
 		this.name = name;
@@ -42,6 +45,14 @@ public class Employee {
 
 	public String getInitials() {
 		return initials; 
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ArrayList<Activity> getActivities() {
+		return activities;
 	}
 	
 //	public void finishTask() {

@@ -135,7 +135,10 @@ public class Console {
 	//Choices after choosing a project
 	public void activeProjectChoices()
 	{
-		System.out.println("Current project: " + app.getActiveProject().getTitle() + " Serial number: " app.getActiveProject().getId()
+		System.out.println("Current project: "
+												+ app.getActiveProject().getTitle()
+												+ " Serial number: "
+												+ app.getActiveProject().getId()
 				+ "\n1: See tasks"
 				+ "\n2: Edit tasks"
 				+ "\n3: Create task"
@@ -171,7 +174,7 @@ public class Console {
 				seeProjects();
 				break;
 			default: 
-				if(app.getActiveProject().getProjectManager != app.activeUser)
+				if(app.getActiveProject().getProjectManager() != app.activeUser)
 				{
 					System.out.println("Incorrect input.");
 				}
@@ -217,7 +220,7 @@ public class Console {
 
 	private void printBudgetedTime()
 	{
-		System.out.println(app.getProjectBudgetedTime());
+		System.out.println(app.getProjectBudgetTime());
 	}
 
 	private void printRemainingTime()
@@ -235,7 +238,7 @@ public class Console {
 		System.out.println("Input name for task");
 		while (!scanner.hasNext()) scanner.next();
 		String taskName = scanner.next();
-		System.out.println("Input estimated duration of task in hours");
+		System.out.println("Input estimated time to complete task in hours");
 		while (!scanner.hasNextDouble()) scanner.next();
 		app.createTask(taskName,scanner.nextDouble()); //duration!
 	}
@@ -247,7 +250,7 @@ public class Console {
 		
 		while (!scanner.hasNextInt()) scanner.next();
 
-		app.setActiveTask(app.getTasks().scanner.nextInt));
+		app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
 		
 		System.out.println("Choose what to edit");
 		
@@ -305,11 +308,11 @@ public class Console {
 	{
 		for(int i = 0; i<app.getActiveProject().getTasks().size();i++)
 		{
-			System.out.println(i+": "+app.getActiveProject().getTasks()[i].getName());
-			System.out.println("Start time: "+app.getActiveProject().getTasks()[i].getStartTime());
-			System.out.println("Estimated time: "+app.getActiveProject().getTasks()[i].getEstimatedTime());
-			System.out.println("Time spent: "+app.getActiveProject().getTasks()[i].getTimeSpent());
-			System.out.println("Remaining time: "+app.getActiveProject().getTasks()[i].getRemainingTime());
+			System.out.println(i+": "+app.getActiveProject().getTasks().get(i).getName());
+			System.out.println("Start time: "+app.getActiveProject().getTasks().get(i).getStartTime());
+			System.out.println("Estimated time: "+app.getActiveProject().getTasks().get(i).getEstimatedTime());
+			System.out.println("Time spent: "+app.getActiveProject().getTasks().get(i).getTimeSpent());
+			System.out.println("Remaining time: "+app.getActiveProject().getTasks().get(i).getRemainingTime());
 		}
 	}
 	
@@ -321,7 +324,7 @@ public class Console {
 
 	//Adds a new activity to the active user
 	//Test this method thoroughly
-	private void addActivity()
+	private void addActivity() throws ParseException
 	{
 		System.out.println("Input name for activity");
 		while (!scanner.hasNext()) scanner.nextLine();
@@ -339,7 +342,7 @@ public class Console {
 		        
 		Duration activityDuration = Duration.between(start.toInstant(), end.toInstant());
 		
-		app.createTask(activityName, activityDuration);
+		app.createActivity(activityName, activityDuration);
 	}
 	
 	private Date convertDate(String dateString) throws ParseException
@@ -404,9 +407,9 @@ public class Console {
 	{
 		for(int i = 0; i<app.activeUser.getActivities().size();i++)
 		{
-			System.out.println(i+": "+app.getActivities().get(i).getName());
-			System.out.println("Start time: "+app.getActivities().get(i).getStartTime());
-			System.out.println("End time: "app.getActivities().get(i).getEndTime());
+			System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
+			System.out.println("Start time: "+app.getActiveUser().getActivities().get(i).getStartTime());
+			System.out.println("End time: "app.getActiveUser().getActivities().get(i).getEndTime());
 		}	
 	}
 }

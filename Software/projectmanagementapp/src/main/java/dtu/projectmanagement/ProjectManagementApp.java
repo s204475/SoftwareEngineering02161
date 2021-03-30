@@ -1,6 +1,8 @@
 package dtu.projectmanagement;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -101,7 +103,7 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public double getProjectRemaningTime() {
+	public double getProjectRemainingTime() {
 		if(activeProject == null) {
 			//Error message. no activeProject.
 			return 0.0;
@@ -136,6 +138,41 @@ public class ProjectManagementApp {
 			}
 		}
 		return projectsWithTitle;
+	}
+	public Project getActiveProject() {
+		return activeProject;
+	}
+	public void createTask(String taskName, double estimatedDuration) {
+		//current date as default starttime
+		
+	}
+	public void setTaskName(String newName) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setTaskStartTime(Date newStartTime) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setTaskEstimatedTime(double estimatedTime) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setTaskTimeWorked(double timeWorked) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setActiveActivity(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void createActivity(String activityName, Duration activityDuration) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setNewActivityName(String newName) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

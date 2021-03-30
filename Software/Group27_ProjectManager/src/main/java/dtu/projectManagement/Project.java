@@ -53,5 +53,25 @@ public class Project {
 		}
 		return remaningTimeInHours;
 	}
+
+	public Employee getProjectManager()
+	{
+		return projectManager;
+	}
+
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public ArrayList<Task> getTasks()
+	{
+		return tasks;
+	}
 	
 }

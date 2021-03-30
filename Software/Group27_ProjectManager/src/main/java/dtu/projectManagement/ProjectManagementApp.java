@@ -1,5 +1,6 @@
 package dtu.projectManagement;
 
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class ProjectManagementApp {
@@ -79,7 +80,7 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public double getProjectRemaningTime() {
+	public double getProjectRemainingTime() {
 		if(activeProject == null) {
 			//Error message. no activeProject.
 			return 0.0;
@@ -87,6 +88,61 @@ public class ProjectManagementApp {
 		double remamningTimeInHours = activeProject.getRemaningTime(); 
 		return remamningTimeInHours;
 		}
+	}
+
+	public ArrayList<Employee> getEmployees()
+	{
+		return employees;
+	}
+
+	public ArrayList<Project> getProjects()
+	{
+		return projects;
+	}
+
+	public Project getActiveProject()
+	{
+		return activeProject;
+	}
+
+	public Employee getActiveUser()
+	{
+		return activeUser;
+	}
+
+	public void setTaskName(String newName) {
+		// TODO Auto-generated method stub
+	}
+
+	public void setTaskEstimatedTime(int newEstimatedTime) {
+		// TODO Auto-generated method stub
+	}
+
+	public void setTaskTimeWorked(int newTimeWorked) {
+		// TODO Auto-generated method stub
+	}
+
+	public void createTask(String taskName, double taskEstimatedTime) {
+		// TODO Auto-generated method stub
+	}
+
+	public void setActivityName(String newName) {
+		// TODO Auto-generated method stub
+	}
+
+	public Object getTasks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void createActivity(String activityName, Duration activityDuration) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setActiveActivity(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 		
 }

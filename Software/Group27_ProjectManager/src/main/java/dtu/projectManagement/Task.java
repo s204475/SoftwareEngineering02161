@@ -8,7 +8,7 @@ public class Task {
 	private DateServer dateServer = new DateServer();
 	private Calendar startTime;
 	private Duration estimatedTime;
-	private Duration timeSpent;
+	private Duration timeSpent; //Should it not be an int=?
 	
 	public Task (String name, Duration estimatedTime) {
 		this.name = name;
@@ -27,6 +27,21 @@ public class Task {
 	
 	public Duration getRemainingTime() {
 		return estimatedTime.minus(timeSpent);
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public Calendar getStartTime()
+	{
+		return startTime;
+	}
+
+	public int getTimeSpent() //Not implemented - should it be an int?
+	{
+		return 1;
 	}
 	
 	

@@ -16,6 +16,11 @@ public class Activity {
 	public Calendar getEndTime() {
 		return endTime;
 	}
+
+	public String getName()
+	{
+		return name;
+	}
 	
 	
 }

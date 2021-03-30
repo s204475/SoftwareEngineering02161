@@ -84,6 +84,10 @@ public class Project {
 	public Employee getProjectManager() {
 		return projectManager;
 	}
+
+	public ArrayList<Task> getTasks() {
+		return tasks;
+	}
 	
 	
 	

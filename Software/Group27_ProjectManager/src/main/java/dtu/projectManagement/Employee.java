@@ -1,8 +1,12 @@
 package dtu.projectManagement;
 
+import java.time.Duration;
+import java.util.ArrayList;
+
 public class Employee {
 
 	private String name; 
+	private ArrayList<Activity> activities;
 	
 	public Employee(String name) {
 		this.name = name;
@@ -25,9 +29,9 @@ public class Employee {
 //		return new Activity(title, duration);
 //	}
 	
-	public Activity editActivity() {
-		//will be implementet later.
-	}
+//	public Activity editActivity() {
+//		//will be implementet later.
+//	}
 	
 	public void setHoursWorked() {
 		//will be implementet later
@@ -37,11 +41,20 @@ public class Employee {
 		//will be implementet later
 	}
 	
-	public void finishTask() {
-		//will be implementet later
-	}
+//	public void finishTask() {
+//		//will be implementet later
+//	}
 	
-	public boolean isAvailable(timeSlot) {
-		return //activity in timeSlot == null ? true : false;
+	public boolean isAvailable(Duration timeSlot) {
+		return true; //activity in timeSlot == null ? true : false;
 	}
- }
+
+	public ArrayList<Activity> getActivities() {
+		return activities;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+}
