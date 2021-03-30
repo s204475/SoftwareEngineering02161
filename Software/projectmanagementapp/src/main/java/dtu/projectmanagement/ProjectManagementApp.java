@@ -1,5 +1,6 @@
 package dtu.projectmanagement;
 
+import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,12 @@ public class ProjectManagementApp {
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
+	public static void main(String[] args) throws ParseException, OperationNotAllowed
+	{
+		ProjectManagementApp app = new ProjectManagementApp();
+		Console console = new Console(app);
+	}
+	
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = activeUser.createProject(title);
 		addProject(project);
@@ -21,7 +28,6 @@ public class ProjectManagementApp {
 	public void addProject(Project project) {
 		projects.add(project);
 	}
-	
 	
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
@@ -173,6 +179,28 @@ public class ProjectManagementApp {
 	public void setNewActivityName(String newName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String createInitials(String userName) {
+		String initials = "";
+		initials += userName.charAt(0);
+		for (int i = 1; i < userName.length() - 1; i++)
+		{
+			 if (userName.charAt(i) == ' ')
+			 {
+				 initials += userName.charAt(i + 1);
+			 }
+		}
+		if(initials.length()>4)
+		{
+			String shortInitials = "";
+			shortInitials += initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
+			return shortInitials;
+		}
+		else
+		{
+			return initials;
+		}
 	}
 	
 }

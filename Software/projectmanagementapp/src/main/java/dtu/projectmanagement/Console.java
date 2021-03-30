@@ -15,34 +15,82 @@ public class Console {
 	public static Scanner scanner = new Scanner(System.in);
 	private ProjectManagementApp app;
 	
-	public Console(ProjectManagementApp app) throws ParseException
+	public Console(ProjectManagementApp app) throws ParseException, OperationNotAllowed
 	{
 		this.app = app;
 		chooseActiveUser();
 	}
 	
-	//Prints all employees in the app and the active user can then be chosen.
-	public void chooseActiveUser() throws ParseException
+	
+	/*Prints all employees in the app and the active user can then be chosen.
+	 * If there are no user in the app, a guest user is automatically added. 
+	 */
+	
+	public void chooseActiveUser() throws ParseException, OperationNotAllowed
 	{	
-		for(int i = 0; i<app.getEmployees().size();i++)
+		if(app.getEmployees() == null || app.getEmployees().size() == 0)
 		{
-			System.out.println(i+": "+app.getEmployees().get(i).getName());
+			System.out.println("You need to create a user");
+			createEmployee();
+		}
+		else
+		{
+			for(int i = 0; i<app.getEmployees().size();i++)
+			{
+				System.out.println(i+": "+app.getEmployees().get(i).getName());
+			}
+			
+			while (!scanner.hasNextInt()) scanner.next();
+			
+			app.setActiveUser(app.getEmployees().get(scanner.nextInt()));
 		}
 		
-		while (!scanner.hasNextInt()) scanner.next();
-		
-		app.setActiveUser(app.getEmployees().get(scanner.nextInt()));
 		
 		mainMenu();
 	}
 	
-	private void mainMenu() throws ParseException
+	private void createEmployee()
+	{
+		System.out.println("Type in your full name.");
+		while (!scanner.hasNext()) scanner.next(); 
+		String userName = scanner.nextLine();
+		String initials = app.createInitials(userName);
+		System.out.println("Your initials will be: "+initials);
+		app.createEmployee(userName, initials);
+	}
+
+	//Checks if a string has any digits.
+	//Currently not used
+	public boolean hasDigits(String s) {
+	    boolean digits = false;
+
+	    if (s != null && !s.isEmpty())
+	    {
+	        for (char c : s.toCharArray())
+	        {
+	            if (Character.isDigit(c))
+	            {
+	                return true;
+	            }
+	            else
+	            {
+	            	return false;
+	            }
+	        }
+	    }
+
+	    return digits;
+	}
+
+	private void mainMenu() throws ParseException, OperationNotAllowed
 	{
 		System.out.println("Main menu: " 
 		+ "\n1: Change active user"
-		+ "\n2: See projects"
-		+ "\n3: See personal activities"
-		+ "\n4: Quit");
+		+ "\n2: Add user"
+		+ "\n3: Create project"
+		+ "\n4: See projects"
+		+ "\n5: See personal activities"
+		+ "\n6: Quit");
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
@@ -51,20 +99,37 @@ public class Console {
 			case 1:
 				chooseActiveUser();
 				break;
-			case 2: 
-				seeProjects();
+			case 2:
+				createEmployee(); //something goes wrong when creating second employee
+				mainMenu();
 				break;
-			case 3: 
-				seePersonalActivities();
+			case 3:
+				createProject();
+				mainMenu();
 				break;
 			case 4: 
+				seeProjects();
+				break;
+			case 5: 
+				seePersonalActivities();
+				break;
+			case 6: 
 				System.exit(0);
 				break;
 		}
 
 	}
 
-	private void seePersonalActivities() throws ParseException
+	private void createProject() throws OperationNotAllowed {
+		System.out.println("Type in the name of the project");
+		while (!scanner.hasNext()) scanner.next(); 
+		String title = scanner.nextLine();
+		app.createProject(title);
+		System.out.println("The project can now be found under \"See projects\"");
+	}
+
+
+	private void seePersonalActivities() throws ParseException, OperationNotAllowed
 	{
 		
 		System.out.println(""
@@ -351,7 +416,7 @@ public class Console {
 		return sdf.parse(sdf.format(dateString));
 	}
 
-	private void editActivity() throws ParseException
+	private void editActivity() throws ParseException, OperationNotAllowed
 	{
 		System.out.println("Choose activity to edit: ");
 		printActivities();
