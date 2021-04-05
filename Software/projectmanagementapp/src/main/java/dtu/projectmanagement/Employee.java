@@ -8,10 +8,12 @@ public class Employee {
 	private String name; 
 	private String initials; 
 	private ArrayList<Activity> activities;
+	private boolean isActiveUser;
 	
 	public Employee(String name, String initials) {
 		this.name = name;
 		this.initials = initials; // MANGLER CHECK PÅ INITIALS
+		this.isActiveUser = false;
 		
 	}
 	
@@ -53,6 +55,14 @@ public class Employee {
 
 	public ArrayList<Activity> getActivities() {
 		return activities;
+	}
+	
+	public void setActiveUser() {
+		isActiveUser = true;
+	}
+	
+	public void removeActiveUser() {
+		isActiveUser = false;
 	}
 	
 //	public void finishTask() {

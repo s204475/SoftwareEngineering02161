@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.cucumber.messages.Messages.TestCaseStarted;
+
 
 public class ProjectManagementApp {
 	Employee activeUser;
@@ -64,6 +66,10 @@ public class ProjectManagementApp {
 		if (!(employees.contains(employee))) {
 			//implementer error message. Med den employee ikke eksistere 
 		} else {
+			if (activeUser != null) {
+				activeUser.removeActiveUser();
+			}
+			employee.setActiveUser();
 			activeUser = employee;	
 		}
 	}
@@ -148,9 +154,21 @@ public class ProjectManagementApp {
 	public Project getActiveProject() {
 		return activeProject;
 	}
-	public void createTask(String taskName, double estimatedDuration) {
-		//current date as default starttime
+	public void createTask(String taskName, long estimatedDuration) throws OperationNotAllowed {
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeProject.createTask(taskName, Duration.ofHours(estimatedDuration));
+		} else {
+			throw new OperationNotAllowed("You have to be a project manager to create a task");
+		}
 		
+	}
+	
+	public void addTask(Task task) throws OperationNotAllowed { 
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeProject.addTask(task);
+		} else {
+			throw new OperationNotAllowed("You have to be a project manager to create a task");
+		}
 	}
 	public void setTaskName(String newName) {
 		// TODO Auto-generated method stub

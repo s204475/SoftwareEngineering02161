@@ -76,8 +76,15 @@ public class Project {
 		return title;
 	}
 
-	public Employee getProjectManager() {
-		return projectManager;
+	public Employee getProjectManager() { 
+			return projectManager;
+	}
+	
+	public boolean isProjectManager(Employee employee) {
+		if (projectManager != null && projectManager.equals(employee)) {
+			return true;
+		}
+		return false;
 	}
 
 	public ArrayList<Task> getTasks() {
@@ -92,13 +99,9 @@ public class Project {
 		tasks.add(task);
 	}
 	
-	
-	
-	
-	
+}
 	
 	
 	
 	
 
-}

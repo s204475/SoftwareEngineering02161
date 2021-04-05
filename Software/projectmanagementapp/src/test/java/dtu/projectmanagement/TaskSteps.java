@@ -50,6 +50,7 @@ public class TaskSteps {
 	public void there_is_a_project_with_the_name(String title) throws OperationNotAllowed {
 		project = new Project(title);
 		managementApp.addProject(project);
+		managementApp.setActiveProject(project);
 	    assertTrue(managementApp.getProjects().contains(project));
 	}
 
@@ -70,6 +71,21 @@ public class TaskSteps {
 		assertTrue(project.getTasks().contains(task));
 	}
 	
+	@Given("the employee is not project manager of the project")
+	public void the_employee_is_not_project_manager_of_the_project() {
+	    assertFalse(project.isProjectManager(employee));
+	}
+
+	@When("the employee tries to create a task")
+	public void the_employee_tries_to_create_a_task() {
+		try {
+			task = new Task("Test", Duration.ofHours(20));
+			managementApp.addTask(task);	
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	   	assertFalse(project.getTasks().contains(task));
+	}
 
 	
 }
