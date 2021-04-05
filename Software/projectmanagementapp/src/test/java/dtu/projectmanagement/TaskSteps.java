@@ -15,7 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class TaskSteps {
-	private ProjectManagementApp managementApp;
+	protected ProjectManagementApp managementApp;
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
 	private Project project;
