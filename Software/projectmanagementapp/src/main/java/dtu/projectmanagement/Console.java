@@ -1,10 +1,8 @@
 package dtu.projectmanagement;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
@@ -17,7 +15,6 @@ public class Console {
 	
 	public static Scanner scanner = new Scanner(System.in);
 	private ProjectManagementApp app;
-
 	
 	public Console(ProjectManagementApp app)
 	{
@@ -42,6 +39,8 @@ public class Console {
 		}
 		else
 		{
+			//clearConsole();
+			System.out.println("Choose active user:");
 			for(int i = 0; i<app.getEmployees().size();i++)
 			{
 				System.out.println(i+": "+app.getEmployees().get(i).getName());
@@ -55,15 +54,13 @@ public class Console {
 			} else {
 				app.setActiveUser(app.getEmployees().get(userChoice));
 			}
-			
 		}
-		
 		mainMenu();
 	}
 	
 	private void createEmployee()
 	{
-		System.out.println("Type in your full name.");
+		System.out.println("Creating new user... \nType in your full name.");
 		String userName = userInput();
 		String initials = app.createInitials(userName);
 		System.out.println("Your initials will be: "+initials);
@@ -155,7 +152,6 @@ public class Console {
 	
 	private void seePersonalActivities() throws ParseException, OperationNotAllowed
 	{
-		
 		System.out.println(""
 				+ "\n1: Edit activity"
 				+ "\n2: Add activity"
@@ -197,11 +193,10 @@ public class Console {
 	private void InvalidInput() {
 		System.out.println("Invalid input");
 	}
-
-
-	//Prints all active projects and chooses one to be the active project
+	
 	public void seeProjects() throws ParseException, OperationNotAllowed
 	{
+		//Prints all active projects and chooses one to be the active project
 		if (app.getProjects().size() == 0)
 		{
 			System.out.println("There are currently no projects. Please create one first. Returning to main menu...");
@@ -234,25 +229,40 @@ public class Console {
 	//Prints all eligible employees and assigns one as project manager on currently active project
 	public void setProjectManager() throws ParseException, OperationNotAllowed
 	{
+		System.out.println("Choose a Project Manager.");
+		if(app.getActiveProject().getProjectManager() != null)
+		{
+			System.out.println("Current project manager: "+app.getActiveProject().getProjectManager().getName());
+		} else {
+			System.out.println("There is currently no project manager.");
+		}
+		
 		for(int i = 0; i<app.getEmployees().size();i++)
 		{
 			System.out.println(i+": "+app.getEmployees().get(i).getName());
 		}
 		
-		System.out.println("Choose a Project Manager. ");
-		if(app.getActiveProject().getProjectManager() != null)
-		{
-			System.out.print("Current project manager: "+app.getActiveProject().getProjectManager());
-		} else {
-			System.out.print("There is currently no project manager.");
-		}
-		
 		while (!scanner.hasNextInt()) scanner.next();
 		app.activeProject.assignProjectManager(app.employees.get(scanner.nextInt()));
+		
+		//clearConsole();
 		
 		activeProjectChoices();
 	}
 	
+	public String displayProjectManager()
+	{
+		String output = "Project manager: ";
+		if(app.getActiveProject().getProjectManager() == null)
+		{
+			output += "No project manager assigned.";
+		} else {
+			output += app.getActiveProject().getProjectManager();
+		}
+		
+		return output;
+		
+	}
 	
 	public void activeProjectChoices() throws ParseException, OperationNotAllowed
 	{
@@ -260,7 +270,8 @@ public class Console {
 		System.out.println("Current project: "
 												+ app.getActiveProject().getTitle()
 												+ " (Serial number: "
-												+ app.getActiveProject().getId()+")"
+												+ app.getActiveProject().getId()+") \n"
+												+ displayProjectManager()
 				+ "\n1: See tasks"
 				+ "\n2: Edit tasks"
 				+ "\n3: Create task"
@@ -351,7 +362,8 @@ public class Console {
 	{
 		System.out.println("Press enter to continue...");
 		scanner.nextLine();
-		scanner.nextLine();
+		//scanner.nextLine();
+		//clearConsole();
 	}
 
 	private void printBudgetedTime()
@@ -511,45 +523,50 @@ public class Console {
 
 	private void editActivity() throws ParseException, OperationNotAllowed
 	{
-		System.out.println("Choose activity to edit: ");
-		printActivities();
-		
-		while (!scanner.hasNextInt()) scanner.next();
-		app.setActiveActivity(app.activeUser.getActivities().get(scanner.nextInt()));
-		
-		System.out.println(""
-				+ "\n1: Edit name"
-				+ "\n2: Edit start time"
-				+ "\n3: Edit end time"
-				+ "\n4: Go back");
-		
-		while (!scanner.hasNextInt()) scanner.next();
-		int choice = scanner.nextInt();
-		switch(choice)
+		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
 		{
-			case 1: 
-				System.out.println("Input new activity name");
-				app.setNewActivityName(scanner.next());
-				break;
-			case 2: 
-				System.out.println("This edits the start time"); //Needs implementation
-				break;
-			case 3: 
-				System.out.println("This edits the end time"); //Needs implementation
-				break;
-			case 4: 
-				mainMenu();
-				break;
-			default:
-				System.out.println("Invalid input");
-				break;
-				
-		}
-		
-		if (choice != 4)
-		{
+			System.out.println("You currently have no activities.");
 			seePersonalActivities();
-		}
+		} else {
+			System.out.println("Choose activity to edit: ");
+			printActivities();
+			
+			while (!scanner.hasNextInt()) scanner.next();
+			app.setActiveActivity(app.activeUser.getActivities().get(scanner.nextInt()));
+			
+			System.out.println(""
+					+ "\n1: Edit name"
+					+ "\n2: Edit start time"
+					+ "\n3: Edit end time"
+					+ "\n4: Go back");
+			
+			while (!scanner.hasNextInt()) scanner.next();
+			int choice = scanner.nextInt();
+			switch(choice)
+			{
+				case 1: 
+					System.out.println("Input new activity name");
+					app.setNewActivityName(scanner.next());
+					break;
+				case 2: 
+					System.out.println("This edits the start time"); //Needs implementation
+					break;
+				case 3: 
+					System.out.println("This edits the end time"); //Needs implementation
+					break;
+				case 4: 
+					mainMenu();
+					break;
+				default:
+					System.out.println("Invalid input");
+					break;	
+			}
+			
+			if (choice != 4)
+			{
+				seePersonalActivities();
+			}
+		}	
 	}
 
 	private void printActivities()
@@ -575,4 +592,11 @@ public class Console {
 			}	
 		}
 	}
+	
+	public void clearConsole()
+	{
+		//Clears the console. 
+		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
+	}
+	
 }
