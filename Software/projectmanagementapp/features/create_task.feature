@@ -12,7 +12,7 @@ Scenario: A project manager creates a task successfully
     Then the task is created
 
 Scenario: An employee tries to create a task
-    Given there is an employee with the intials "joh"
+    Given there is an employee with the initials "joh"
     And there is a project with the name "project1"
     And the employee is not project manager of the project
     When the employee tries to create a task
