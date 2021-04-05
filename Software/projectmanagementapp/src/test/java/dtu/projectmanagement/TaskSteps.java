@@ -33,7 +33,7 @@ public class TaskSteps {
 		}
 	}
 	
-	@Given("there is an employee with the intials {string}")
+	@Given("there is an employee with the initials {string}")
 	public void there_is_an_employee_with_the_intials(String initials) {
 		employee = new Employee("John", initials);
 		managementApp.addEmployee(employee);
