@@ -381,13 +381,13 @@ public class Console {
 		System.out.println(app.getProjectEstimatedTime());
 	}
 
-	public void createTask()
+	public void createTask() throws OperationNotAllowed
 	{
 		System.out.println("Input name for task");
 		String taskName = userInput();
 		System.out.println("Input estimated duration of task in hours (e.g. 4.5 hours)");
 		while (!scanner.hasNextDouble()) scanner.next();
-		app.createTask(taskName,scanner.nextDouble());
+		app.createTask(taskName,scanner.nextLong());
 	}
 	
 	private void editTasks() throws ParseException, OperationNotAllowed {
@@ -510,7 +510,7 @@ public class Console {
 		        
 		Duration activityDuration = Duration.between(start.toInstant(), end.toInstant());
 		
-		app.createActivity(activityName, activityDuration);
+		//app.createActivity(activityName, activityDuration);
 	}
 	
 	private Date convertDate(String dateString) throws ParseException

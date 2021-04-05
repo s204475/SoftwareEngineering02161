@@ -1,31 +1,35 @@
 package dtu.projectmanagement;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Activity {
 	private String name;
 	private Calendar startTime;
 	private Calendar endTime;
-	private DateServer dateServer = new DateServer();
 	
 	
-	public Activity(String name, Calendar endTime) {
-		this.name = name;
-		this.startTime = dateServer.getDate();
+	public Activity(String name, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		if (name.equals("")) {
+			throw new OperationNotAllowed("An activity needs a name");
+		} else {
+			this.name = name;
+		}
+		this.startTime = startTime;
 		this.endTime = endTime;
 	}
 	
 	public Calendar getEndTime() {
 		return endTime;
 	}
-
+	public Calendar getStartTime() {
+		return startTime;
+	}
+	
 	public String getName() {
 		return name;
 	}
 
-	public Calendar getStartTime() {
-		return startTime;
-	}
 	
 	
 }

@@ -9,6 +9,11 @@ public class DateServer {
 		Calendar c = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 		return c;
 	}
+	public Calendar getDateAndTime() {
+		Calendar calendar = new GregorianCalendar();
+		Calendar c = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), 0);
+		return c;
+	}
 	public int getYear() {
 		Calendar calendar = new GregorianCalendar();
 		return calendar.get(Calendar.YEAR);

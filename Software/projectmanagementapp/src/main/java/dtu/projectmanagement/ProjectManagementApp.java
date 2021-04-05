@@ -3,8 +3,12 @@ package dtu.projectmanagement;
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import io.cucumber.messages.Messages.TestCaseStarted;
 
 
 public class ProjectManagementApp {
@@ -15,10 +19,31 @@ public class ProjectManagementApp {
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
+	
+	/* --------- UI CONNECTION --------- */ 
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = activeUser.createProject(title);
 		addProject(project);
 	}
+	public void createEmployee(String name, String initials) {
+		Employee employee = new Employee(name, initials);
+		addEmployee(employee);
+	}
+	
+	public void createTask(String taskName, long estimatedDuration) throws OperationNotAllowed {
+		Task task = new Task(taskName, Duration.ofHours(estimatedDuration));
+		addTask(task);
+	}
+	public void createActivity(String activityName, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		Activity activity = new Activity(activityName, startTime, endTime);
+		addActivity(activity);
+	}
+	
+	
+	/* ---------------------------------- */
+	/* --------- BUSINESS LOGIC --------- */
+	/* ---------------------------------- */
+	/* METHODS */
 	public void addProject(Project project) throws OperationNotAllowed {
 		for (Project p : projects) {
 			if (p.getTitle().equals(project.getTitle())) {
@@ -28,15 +53,24 @@ public class ProjectManagementApp {
 		projects.add(project);
 	}
 	
-	public void createEmployee(String name, String initials) {
-		Employee employee = new Employee(name, initials);
-		addEmployee(employee);
-	}
-	
 	public void addEmployee(Employee employee) {
 		employees.add(employee);
 	}
+	public void addTask(Task task) throws OperationNotAllowed { 
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeProject.addTask(task);
+		} else {
+			throw new OperationNotAllowed("You have to be a project manager to create a task");
+		}
+	}
+	public void addActivity(Activity activity) throws OperationNotAllowed { 
+		activeUser.addActivity(activity);
+	}
 	
+	
+	
+	
+	/* GETTERS AND SETTERS */
 	public ArrayList<Employee> getEmployees() {
 		return employees;
 	}
@@ -48,16 +82,6 @@ public class ProjectManagementApp {
 	public ArrayList<Project> getProjects() {
 		return projects;
 	}
-	
-//	public ArrayList<Employee> getAvailableEmployees() {
-//		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
-//		for (Employee employee : employees) {
-//			if (employee.isAvailable()) {
-//				availableEmployees.add(employee);
-//			}
-//		}
-//		return availableEmployees;
-//	}
 	
 	public void setActiveUser(Employee employee) {
 		if (!(employees.contains(employee))) {
@@ -75,6 +99,20 @@ public class ProjectManagementApp {
 			activeProject=project;
 		}
 	}
+	
+	
+	
+//	public ArrayList<Employee> getAvailableEmployees() {
+//		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
+//		for (Employee employee : employees) {
+//			if (employee.isAvailable()) {
+//				availableEmployees.add(employee);
+//			}
+//		}
+//		return availableEmployees;
+//	}
+	
+	
 	
 	public void setActiveTask(Task task) {
 		if(activeProject == null) {
@@ -146,10 +184,7 @@ public class ProjectManagementApp {
 	public Project getActiveProject() {
 		return activeProject;
 	}
-	public void createTask(String taskName, double estimatedDuration) {
-		//current date as default starttime
-		
-	}
+	
 	public void setTaskName(String newName) {
 		// TODO Auto-generated method stub
 		
@@ -170,10 +205,7 @@ public class ProjectManagementApp {
 		// TODO Auto-generated method stub
 		
 	}
-	public void createActivity(String activityName, Duration activityDuration) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	public void setNewActivityName(String newName) {
 		// TODO Auto-generated method stub
 		

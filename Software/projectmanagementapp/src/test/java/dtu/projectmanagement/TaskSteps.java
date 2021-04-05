@@ -15,7 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class TaskSteps {
-	protected ProjectManagementApp managementApp;
+	private ProjectManagementApp managementApp;
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
 	private Project project;
@@ -25,15 +25,8 @@ public class TaskSteps {
 		this.managementApp = managementApp;
 		this.errorMessageHolder = errorMessageHolder;
 	}
-
-	@Given("these employees are contained in the app")
-	public void these_employees_are_contained_in_the_app(List<List<String>> employees) {
-		for (List<String> employee : employees) {
-			managementApp.createEmployee(employee.get(0), employee.get(1));
-		}
-	}
 	
-	@Given("there is an employee with the intials {string}")
+	@Given("there is an employee with the initials {string}")
 	public void there_is_an_employee_with_the_intials(String initials) {
 		employee = new Employee("John", initials);
 		managementApp.addEmployee(employee);
@@ -50,19 +43,14 @@ public class TaskSteps {
 	public void there_is_a_project_with_the_name(String title) throws OperationNotAllowed {
 		project = new Project(title);
 		managementApp.addProject(project);
+		managementApp.setActiveProject(project);
 	    assertTrue(managementApp.getProjects().contains(project));
 	}
 
 	@Given("the employee is project manager of the project")
 	public void the_employee_is_project_manager_of_the_project() {
 	    project.assignProjectManager(employee);
-	    assertTrue(project.getProjectManager().equals(employee));
-	}
-
-	@When("the project manager creates a task with the name {string} and a estimated time of {int} hours")
-	public void the_project_manager_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
-	   	task = new Task(title, Duration.ofHours(time));
-	   	project.addTask(task);
+	    assertTrue(project.isProjectManager(employee));
 	}
 
 	@Then("the task is created")
@@ -70,6 +58,20 @@ public class TaskSteps {
 		assertTrue(project.getTasks().contains(task));
 	}
 	
+	@Given("the employee is not project manager of the project")
+	public void the_employee_is_not_project_manager_of_the_project() {
+	    assertFalse(project.isProjectManager(employee));
+	}
+
+	@When("the employee creates a task with the name {string} and a estimated time of {int} hours")
+	public void the_employee_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
+		try {
+			task = new Task(title, Duration.ofHours(time));
+			managementApp.addTask(task);	
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
 
 	
 }

@@ -4,12 +4,12 @@ Feature: Create project
 	
 Scenario: Create project successfully
     Given there is an employee who is active user
-    When the active user creates a project with a name
+    When the active user tries to create a project with the name "Project1"
     Then the project is created and added to the list of projects
 	
 Scenario: An employee tries to create a project with no name
     Given there is an employee who is active user
-    When the active user tries to create a project which does not have a name
+    When the active user tries to create a project with the name ""
     Then the error message "A project needs a name" is given
     And the project is not added to the list of projects
     
