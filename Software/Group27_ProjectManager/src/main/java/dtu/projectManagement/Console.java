@@ -409,7 +409,7 @@ public class Console {
 		{
 			System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
 			System.out.println("Start time: "+app.getActiveUser().getActivities().get(i).getStartTime());
-			System.out.println("End time: "app.getActiveUser().getActivities().get(i).getEndTime());
+			System.out.println("End time: "+app.getActiveUser().getActivities().get(i).getEndTime());
 		}	
 	}
 }

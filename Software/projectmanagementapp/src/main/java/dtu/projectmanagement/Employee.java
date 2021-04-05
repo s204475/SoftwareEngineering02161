@@ -17,7 +17,6 @@ public class Employee {
 	
 	public Project createProject(String title) throws OperationNotAllowed {
 		return new Project(title);
-		
 	}
 	public void endProject() {
 		//will be implementet later.
