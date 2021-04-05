@@ -33,7 +33,6 @@ public class Project {
 		}
 		this.id = setId();
 		this.startTime = dateServer.getDate();
-		
 	}
 	
 	public void setBudgetTime(int budgetTime) {

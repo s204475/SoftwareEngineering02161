@@ -15,12 +15,6 @@ public class ProjectManagementApp {
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
-	public static void main(String[] args) throws ParseException, OperationNotAllowed
-	{
-		ProjectManagementApp app = new ProjectManagementApp();
-		Console console = new Console(app);
-	}
-	
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = activeUser.createProject(title);
 		addProject(project);
