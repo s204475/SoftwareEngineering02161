@@ -22,8 +22,8 @@ public class ProjectSteps {
 	}
 	
 	
-	@Given("there is an employee")
-	public void there_is_an_employee() {
+	@Given("there is an employee who is active user")
+	public void there_is_an_employee_who_is_active_user() {
 	    employee = new Employee("John", "joh");
 	    managementApp.addEmployee(employee);
 	    managementApp.setActiveUser(employee);
@@ -62,6 +62,19 @@ public class ProjectSteps {
 	@Then("the project is not added to the list of projects")
 	public void the_project_is_not_added_to_the_list_of_projects() {
 	    assertFalse(managementApp.getProjects().contains(project));
+	}
+	
+	
+	
+	@When("the active user tries to create a project with the name {string}")
+	public void the_active_user_tries_to_create_a_project_with_the_name(String title) {
+	    try {
+			project = employee.createProject(title);
+			managementApp.addProject(project);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	    
 	}
 	
 	
