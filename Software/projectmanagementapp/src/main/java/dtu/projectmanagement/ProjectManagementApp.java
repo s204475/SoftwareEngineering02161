@@ -65,10 +65,6 @@ public class ProjectManagementApp {
 		if (!(employees.contains(employee))) {
 			//implementer error message. Med den employee ikke eksistere 
 		} else {
-			if (activeUser != null) {
-				activeUser.removeActiveUser();
-			}
-			employee.setActiveUser();
 			activeUser = employee;	
 		}
 	}
@@ -153,11 +149,8 @@ public class ProjectManagementApp {
 		return activeProject;
 	}
 	public void createTask(String taskName, long estimatedDuration) throws OperationNotAllowed {
-		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
-			activeProject.createTask(taskName, Duration.ofHours(estimatedDuration));
-		} else {
-			throw new OperationNotAllowed("You have to be a project manager to create a task");
-		}
+		Task task = new Task(taskName, Duration.ofHours(estimatedDuration));
+		addTask(task);
 		
 	}
 	

@@ -62,8 +62,12 @@ public class TaskSteps {
 
 	@When("the project manager creates a task with the name {string} and a estimated time of {int} hours")
 	public void the_project_manager_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
-	   	task = new Task(title, Duration.ofHours(time));
-	   	project.addTask(task);
+		try {
+			task = new Task(title, Duration.ofHours(time));
+			managementApp.addTask(task);	
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
 	}
 
 	@Then("the task is created")
