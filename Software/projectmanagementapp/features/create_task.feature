@@ -8,8 +8,8 @@ Scenario: A project manager creates a task successfully
     And the employee is active user
     And there is a project with the name "project1"
     And the employee is project manager of the project
-    When the project manager creates a task with the name "Refactoring"
-    Then the task "Refactoring" is created
+    When the project manager creates a task with the name "Refactoring" and a estimated time of 20 hours
+    Then the task is created
 
 #Scenario: An employee tries to create a task
 #    Given there is an employee with the intials "joh"

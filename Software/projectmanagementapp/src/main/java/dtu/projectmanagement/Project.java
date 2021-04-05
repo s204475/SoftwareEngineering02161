@@ -43,11 +43,6 @@ public class Project {
 		return budgetTime;
 	}
 	
-	public void createTask(String title, Duration estimatedTime) {
-		Task task = new Task(title, estimatedTime);
-		tasks.add(task);
-	}
-	
 	public void assignProjectManager(Employee employee) {
 		projectManager = employee;
 	}
@@ -88,6 +83,13 @@ public class Project {
 		return tasks;
 	}
 	
+	public void createTask(String title, Duration estimatedTime) throws OperationNotAllowed {
+		Task task = new Task(title, estimatedTime);
+		addTask(task);
+	}
+	public void addTask(Task task) {
+		tasks.add(task);
+	}
 	
 	
 	
