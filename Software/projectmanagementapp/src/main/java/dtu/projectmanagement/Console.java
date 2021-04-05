@@ -498,7 +498,7 @@ public class Console {
 		        
 		Duration activityDuration = Duration.between(start.toInstant(), end.toInstant());
 		
-		app.createActivity(activityName, activityDuration);
+		//app.createActivity(activityName, activityDuration);
 	}
 	
 	private Date convertDate(String dateString) throws ParseException

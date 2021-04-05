@@ -72,7 +72,7 @@ public class AssignManagerSteps {
 		project.assignProjectManager(secondEmployee);
 	}
 
-	@Then("then the project manager of the project is changed to the second employee")
+	@Then("the project manager of the project is changed to the second employee")
 	public void then_the_project_manager_of_the_project_is_changed_to_the_second_employee() {
 		assertEquals(secondEmployee, project.getProjectManager());
 	}

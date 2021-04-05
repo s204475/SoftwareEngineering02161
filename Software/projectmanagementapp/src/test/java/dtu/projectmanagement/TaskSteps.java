@@ -15,7 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class TaskSteps {
-	protected ProjectManagementApp managementApp;
+	private ProjectManagementApp managementApp;
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
 	private Project project;
@@ -24,13 +24,6 @@ public class TaskSteps {
 	public TaskSteps (ProjectManagementApp managementApp, ErrorMessageHolder errorMessageHolder) {
 		this.managementApp = managementApp;
 		this.errorMessageHolder = errorMessageHolder;
-	}
-
-	@Given("these employees are contained in the app")
-	public void these_employees_are_contained_in_the_app(List<List<String>> employees) {
-		for (List<String> employee : employees) {
-			managementApp.createEmployee(employee.get(0), employee.get(1));
-		}
 	}
 	
 	@Given("there is an employee with the initials {string}")
@@ -57,17 +50,7 @@ public class TaskSteps {
 	@Given("the employee is project manager of the project")
 	public void the_employee_is_project_manager_of_the_project() {
 	    project.assignProjectManager(employee);
-	    assertTrue(project.getProjectManager().equals(employee));
-	}
-
-	@When("the project manager creates a task with the name {string} and a estimated time of {int} hours")
-	public void the_project_manager_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
-		try {
-			task = new Task(title, Duration.ofHours(time));
-			managementApp.addTask(task);	
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
+	    assertTrue(project.isProjectManager(employee));
 	}
 
 	@Then("the task is created")
@@ -80,15 +63,14 @@ public class TaskSteps {
 	    assertFalse(project.isProjectManager(employee));
 	}
 
-	@When("the employee tries to create a task")
-	public void the_employee_tries_to_create_a_task() {
+	@When("the employee creates a task with the name {string} and a estimated time of {int} hours")
+	public void the_employee_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
 		try {
-			task = new Task("Test", Duration.ofHours(20));
+			task = new Task(title, Duration.ofHours(time));
 			managementApp.addTask(task);	
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
-	   	assertFalse(project.getTasks().contains(task));
 	}
 
 	

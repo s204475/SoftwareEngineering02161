@@ -2,12 +2,18 @@ package dtu.projectmanagement;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.stream.Collectors;
+
+import org.junit.runner.manipulation.Sortable;
 
 public class Employee {
 
 	private String name; 
 	private String initials; 
-	private ArrayList<Activity> activities;
+	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	
 	public Employee(String name, String initials) {
 		this.name = name;
@@ -26,10 +32,17 @@ public class Employee {
 		//will be implementet later.
 	}
 	
-//	public Activity createActivity(String title, int duration) { //tilbagemelding fra Anders omkring, hvilken type, at duration har
-//		return new Activity(title, duration);
-//	}
-//	
+	public void addActivity(Activity activity) {
+		activities.add(activity);
+		sortActivities();
+	}
+	
+	public void sortActivities() {
+		activities = (ArrayList<Activity>) activities.stream()
+				.sorted(Comparator.comparing(Activity::getStartTime))
+				.collect(Collectors.toList());
+	}
+	
 //	public Activity editActivity() {
 //		//will be implementet later.
 //	}

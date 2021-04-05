@@ -26,7 +26,7 @@ public class Project {
 	
 	
 	public Project(String title) throws OperationNotAllowed {
-		if (title == "") {
+		if (title.equals("")) {
 			throw new OperationNotAllowed("A project needs a name");
 		} else {
 			this.title = title;
@@ -36,7 +36,7 @@ public class Project {
 	}
 	
 	public void setBudgetTime(int budgetTime) {
-		this.budgetTime=budgetTime;
+		this.budgetTime = budgetTime;
 	}
 	
 	public int getBudgetTime() {
@@ -46,23 +46,24 @@ public class Project {
 	public void assignProjectManager(Employee employee) {
 		projectManager = employee;
 	}
+	
 	public String setId() { 
 		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + "0001"; // IMPLEMENTER LØBENUMMER
 		return id;
 	}
 	
 	public double getEstimatedTime() {
-		double estimatedTimeInHours=0.0;
+		double estimatedTimeInHours = 0.0;
 		for(Task task : tasks) {
-			estimatedTimeInHours+=(double)task.getEstimatedTime().toMinutes()/60;
+			estimatedTimeInHours += (double) task.getEstimatedTime().toMinutes() / 60;
 		}
 		return estimatedTimeInHours;
 	}
 	
 	public double getRemaningTime() {
-		double remaningTimeInHours=0.0;
+		double remaningTimeInHours = 0.0;
 		for(Task task : tasks) {
-			remaningTimeInHours+=(double)task.getRemainingTime().toMinutes()/60;
+			remaningTimeInHours += (double) task.getRemainingTime().toMinutes() / 60;
 		}
 		return remaningTimeInHours;
 	}

@@ -1,5 +1,5 @@
 Feature: Assign project manager
-    Description: The employees assign a project manager to a project
+    Description: An employees assign a project manager to a project
     Actors: Employee
 
 Scenario: An employee is assigned as project manager
@@ -16,4 +16,4 @@ Scenario: The active user changes the project manager of a project
     And there is two employees with the initials "joh" and "pet"
     And and the first empolyee is the project manager of the project
     When the active user assigns the second employee as project manager for the project
-    Then then the project manager of the project is changed to the second employee
+    Then the project manager of the project is changed to the second employee
