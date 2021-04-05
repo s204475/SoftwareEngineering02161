@@ -17,17 +17,16 @@ public class ProjectManagementApp {
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
-	public static void main(String[] args) throws ParseException, OperationNotAllowed
-	{
-		ProjectManagementApp app = new ProjectManagementApp();
-		Console console = new Console(app);
-	}
-	
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = activeUser.createProject(title);
 		addProject(project);
 	}
-	public void addProject(Project project) {
+	public void addProject(Project project) throws OperationNotAllowed {
+		for (Project p : projects) {
+			if (p.getTitle().equals(project.getTitle())) {
+				throw new OperationNotAllowed("The project name is already taken");
+			}
+		}
 		projects.add(project);
 	}
 	
@@ -61,7 +60,7 @@ public class ProjectManagementApp {
 //		}
 //		return availableEmployees;
 //	}
-//	
+	
 	public void setActiveUser(Employee employee) {
 		if (!(employees.contains(employee))) {
 			//implementer error message. Med den employee ikke eksistere 
@@ -88,7 +87,7 @@ public class ProjectManagementApp {
 			//Error message. no activeProject.
 		}
 		else if(!(activeProject.tasks.contains(task))) {
-			//Error message. activeProject, does not contaion the task. 
+			//Error message. activeProject, does not contain the task. 
 		}
 		else {
 			activeTask=task; 
