@@ -4,7 +4,7 @@ Feature: Create task
 
 
 Scenario: A project manager creates a task successfully
-    Given there is an employee with the intials "joh"
+    Given there is an employee with the initials "joh"
     And the employee is active user
     And there is a project with the name "project1"
     And the employee is project manager of the project
