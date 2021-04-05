@@ -136,14 +136,13 @@ public class ProjectManagementApp {
 		return null;
 	}
 	
-	public List<Project> searchProjectsTitle(String title) {
-		List<Project> projectsWithTitle = new ArrayList<>();
+	public Project searchProjectsTitle(String title) {
 		for (Project project : projects) {
 			if (project.getTitle().equals(title)) {
-				projectsWithTitle.add(project);
+				return project;
 			}
 		}
-		return projectsWithTitle;
+		return null;
 	}
 	public Project getActiveProject() {
 		return activeProject;
