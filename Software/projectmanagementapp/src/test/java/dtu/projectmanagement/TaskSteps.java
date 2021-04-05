@@ -19,6 +19,7 @@ public class TaskSteps {
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
 	private Project project;
+	private Task task;
 	
 	public TaskSteps (ProjectManagementApp managementApp, ErrorMessageHolder errorMessageHolder) {
 		this.managementApp = managementApp;
@@ -58,14 +59,17 @@ public class TaskSteps {
 	    assertTrue(project.getProjectManager().equals(employee));
 	}
 
-	@When("the project manager creates a task with the name {string}")
-	public void the_project_manager_creates_a_task_with_the_name(String title) {
-		throw new io.cucumber.java.PendingException();
+	@When("the project manager creates a task with the name {string} and a estimated time of {int} hours")
+	public void the_project_manager_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
+	   	task = new Task(title, Duration.ofHours(time));
+	   	project.addTask(task);
 	}
 
-	@Then("the task {string} is created")
-	public void the_task_is_created(String string) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+	@Then("the task is created")
+	public void the_task_is_created() {
+		assertTrue(project.getTasks().contains(task));
 	}
+	
+
+	
 }
