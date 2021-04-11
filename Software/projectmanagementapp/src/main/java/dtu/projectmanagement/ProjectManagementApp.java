@@ -1,5 +1,6 @@
 package dtu.projectmanagement;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -231,6 +232,11 @@ public class ProjectManagementApp {
 		{
 			return initials;
 		}
+	}
+	
+	public void printReport(String path_to_file) throws IOException {
+		ReportWriter writer = new ReportWriter(path_to_file);
+		writer.writeReportToFile("This is a report");
 	}
 	
 }

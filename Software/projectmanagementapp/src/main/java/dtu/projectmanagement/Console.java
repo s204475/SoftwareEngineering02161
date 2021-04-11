@@ -1,5 +1,6 @@
 package dtu.projectmanagement;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -272,15 +273,15 @@ public class Console {
 												+ " (Serial number: "
 												+ app.getActiveProject().getId()+") \n"
 												+ displayProjectManager()
-				+ "\n1: See tasks"
-				+ "\n2: Edit tasks"
-				+ "\n3: Create task"
-				+ "\n4: Assign project manager"
-				+ "\n5: Go back");
+				+ "\n1: Go back"
+				+ "\n2: See tasks"
+				+ "\n3: Assign project manager");
 		
 		if(app.activeProject.getProjectManager() == app.getActiveUser())
 		{
 			System.out.println("Project Manager choices: "
+				+ "\n4: Create task"
+				+ "\n5: Edit task"
 				+ "\n6: Create a report"
 				+ "\n7: Show estimated time until project completion"
 				+ "\n8: Show time spent on project"
@@ -292,19 +293,19 @@ public class Console {
 		switch(choice)
 		{
 			case 1:
-				printAllTaskInformation();
+				seeProjects();
 				break;
 			case 2: 
-				editTasks();
+				printAllTaskInformation();
 				break;
 			case 3: 
-				createTask();
-				break;
-			case 4: 
 				setProjectManager();
 				break;
+			case 4: 
+				createTask();
+				break;
 			case 5: 
-				seeProjects();
+				editTasks();
 				break;
 			default: 
 				if(app.getActiveProject().getProjectManager() != app.activeUser)
@@ -354,7 +355,16 @@ public class Console {
 	
 	private void createReport()
 	{
-		// TODO iMPLEMENT THIS
+		System.out.println("Please input complete path to save report in.");
+		
+		String path_to_file = userInput();
+		try {
+			app.printReport(path_to_file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		System.out.println("A report is printed");
 	}
 	
