@@ -18,24 +18,14 @@ public class ReportWriter {
 		this.path = path;
 	}
 	
-	/*public void writeReportToFile(String report) throws IOException
+	public void writeReportToFile(String fileName, String report) throws IOException
 	{
-		FileWriter write = new FileWriter(path,append);
+		FileWriter write = new FileWriter(path + fileName+".txt");
 		PrintWriter print = new PrintWriter(write);
 		
 		print.printf("%s" + "%n", report);
 		
 		print.close();
-	}*/
-	
-	public void writeReportToFile(String contents)
-	{
-		Path path = Paths.get(this.path);
-		try {
-		    Files.writeString(path, contents, StandardCharsets.UTF_8);
-		} catch (IOException ex) {
-			// Handle exception
-		}
 	}
 	
 }

@@ -236,7 +236,12 @@ public class ProjectManagementApp {
 	
 	public void printReport(String path_to_file) throws IOException {
 		ReportWriter writer = new ReportWriter(path_to_file);
-		writer.writeReportToFile("This is a report");
+		
+		String reportFileName = "Report " + activeProject.getTitle() + " ("+activeProject.getId()+")";
+		
+		String reportContent = "This is the report's contents.";
+		
+		writer.writeReportToFile(reportFileName,reportContent);
 	}
 	
 }
