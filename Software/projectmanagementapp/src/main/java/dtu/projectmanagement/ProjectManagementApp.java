@@ -67,6 +67,15 @@ public class ProjectManagementApp {
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
 	}
+	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			searchEmployees(initials).assignTask(taskActivity);
+			
+		} else {
+			throw new OperationNotAllowed("Only project managers can assign tasks");
+		}
+	}
+
 	
 	
 	

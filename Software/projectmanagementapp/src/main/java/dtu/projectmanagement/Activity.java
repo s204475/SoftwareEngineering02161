@@ -8,7 +8,6 @@ public class Activity {
 	private Calendar startTime;
 	private Calendar endTime;
 	
-	
 	public Activity(String name, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
 		if (name.equals("")) {
 			throw new OperationNotAllowed("An activity needs a name");
@@ -29,7 +28,5 @@ public class Activity {
 	public String getName() {
 		return name;
 	}
-
-	
-	
 }
+
