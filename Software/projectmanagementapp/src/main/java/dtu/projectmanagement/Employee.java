@@ -32,7 +32,12 @@ public class Employee {
 		//will be implementet later.
 	}
 	
-	public void addActivity(Activity activity) {
+	public void addActivity(Activity activity) throws OperationNotAllowed {
+		for (Activity a : activities) {
+			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) || activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime()))) {
+				throw new OperationNotAllowed("Timeframe not available");
+			}
+		}
 		activities.add(activity);
 		sortActivities();
 	}
