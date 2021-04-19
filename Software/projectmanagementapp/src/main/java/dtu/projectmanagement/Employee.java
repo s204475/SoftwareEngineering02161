@@ -32,7 +32,13 @@ public class Employee {
 		//will be implementet later.
 	}
 	
-	public void addActivity(Activity activity) {
+	public void addActivity(Activity activity) throws OperationNotAllowed {
+		for (Activity a : activities) {
+			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
+			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) || activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime()))) {
+				throw new OperationNotAllowed("Timeframe not available");
+			}
+		}
 		activities.add(activity);
 		sortActivities();
 	}
@@ -42,7 +48,11 @@ public class Employee {
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
 	}
-	
+	public void assignTask(TaskActivity taskActivity) {
+		activities.add(taskActivity);
+		sortActivities();
+		
+	}
 //	public Activity editActivity() {
 //		//will be implementet later.
 //	}
@@ -66,6 +76,8 @@ public class Employee {
 	public ArrayList<Activity> getActivities() {
 		return activities;
 	}
+
+	
 	
 
 	
