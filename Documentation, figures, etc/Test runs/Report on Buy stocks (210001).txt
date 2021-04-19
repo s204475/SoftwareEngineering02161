@@ -1,0 +1,17 @@
+Project name: Buy stocks
+Project ID: 210001
+Collective budget time spent for all tasks: 0
+Estimated time remaining on tasks: 4.5
+Remaining budget time on tasks: 4.5
+Current project manager: Victor Rasmussen(VR)
+The following task are associated with the project:
+
+----------------------------------------------------------------
+Task name: Task1
+Estimated time left on task: 4.5
+Total budget time on task: 4.5
+Task started on: java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Europe/Paris",offset=3600000,dstSavings=3600000,useDaylight=true,transitions=184,lastRule=java.util.SimpleTimeZone[id=Europe/Paris,offset=3600000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=2,startMonth=2,startDay=-1,startDayOfWeek=1,startTime=3600000,startTimeMode=2,endMode=2,endMonth=9,endDay=-1,endDayOfWeek=1,endTime=3600000,endTimeMode=2]],firstDayOfWeek=2,minimalDaysInFirstWeek=4,ERA=?,YEAR=2021,MONTH=3,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=19,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]
+Total work hours used on project: 0.0
+Employees currently assigned to task: 
+There are no employees on this task yet.
+

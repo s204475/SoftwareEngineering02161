@@ -1,10 +1,13 @@
 package dtu.projectmanagement;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -29,10 +32,15 @@ public class ProjectManagementApp {
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
 		addEmployee(employee);
+		sortEmployees();
 	}
 	
-	public void createTask(String taskName, long estimatedDuration) throws OperationNotAllowed {
-		Task task = new Task(taskName, Duration.ofHours(estimatedDuration));
+	private void sortEmployees() {
+		employees.sort(new NameSort());        
+	}
+	
+	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
+		Task task = new Task(taskName, estimatedDuration);
 		addTask(task);
 	}
 	public void createActivity(String activityName, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
@@ -234,17 +242,101 @@ public class ProjectManagementApp {
 		}
 	}
 	
+	
+	
+	private String getActiveProjectInformation() {
+		
+		String taskInformation = "";
+		
+		//PROJECT INFORMATION
+		taskInformation += "Project name: "+activeProject.getTitle()+"\n";
+		taskInformation += "Project ID: "+activeProject.getId()+"\n";
+		taskInformation += "Collective budget time spent for all tasks: "+activeProject.getBudgetTime()+"\n";
+		taskInformation += "Estimated time remaining on tasks: "+activeProject.getEstimatedTime()+"\n";
+		taskInformation += "Remaining budget time on tasks: "+activeProject.getRemaningTime()+"\n";
+		taskInformation += "Current project manager: "+activeProject.getProjectManager().getName()
+														+ "("+activeProject.getProjectManager().getInitials()+")"+"\n";
+		
+		taskInformation += "The following task are associated with the project:\n";
+		
+		taskInformation += "\n";
+		
+		//TASK INFORMATION
+		if(activeProject.tasks.size() > 0)
+		{
+			for(Task task : activeProject.tasks)
+			{
+				taskInformation += "----------------------------------------------------------------\n";
+				taskInformation += "Task name: "+ task.getName()+"\n";
+				taskInformation += "Estimated time left on task: "+task.getEstimatedTime()+"\n";
+				taskInformation += "Total budget time on task: "+task.getRemainingTime()+"\n";
+				taskInformation += "Task started on: "+task.getStartTime().getTime().toString()+"\n";
+				taskInformation += "Total work hours used on project: "+task.getTimeSpent()+"\n";
+				taskInformation += "Employees currently assigned to task: "+"\n";
+				if(task.getEmployeesOnTask().size() > 0)
+				{
+					for(Employee employee : task.getEmployeesOnTask())
+					{
+						taskInformation += employee.getName() + "("+employee.getInitials()+")"+"\n";
+					}
+				} else {
+					taskInformation += "There are no employees on this task yet."+"\n";
+				}
+				
+			}
+		} else {
+			taskInformation += "There are no task associated with this project yet."+"\n";
+		}
+		
+		
+		return taskInformation;
+	}
+	public void addEmployeeToTask(Employee employee) {
+		if(!activeTask.getEmployeesOnTask().contains(employee))
+		{
+			activeTask.addEmployeeToTask(employee);
+		}
+	}
+	
+	public class NameSort implements Comparator<Employee> 
+	{
+		//Sorts employees alphabetically
+	    @Override
+	    public int compare(Employee employee1, Employee employee2)
+	    {
+	        return employee1.getName().compareToIgnoreCase(employee2.getName());
+	    }
+	}
+
 	public void printReport(String path_to_file) throws IOException {
-		ReportWriter writer = new ReportWriter(path_to_file);
+		if(pathExists(path_to_file))
+		{
+			ReportWriter writer = new ReportWriter(path_to_file);
+			
+			String reportFileName = "Report on " + activeProject.getTitle() + " ("+activeProject.getId()+")";
+			
+			String reportContent = getActiveProjectInformation();
+			
+			writer.writeReportToFile(reportFileName,reportContent);
+		}
 		
-		String reportFileName = "Report " + activeProject.getTitle() + " ("+activeProject.getId()+")";
+	}
+	
+	public boolean pathExists(String path_to_file) {
 		
-		String reportContent = "This is the report's contents.";
-		
-		writer.writeReportToFile(reportFileName,reportContent);
+		File file = new File(path_to_file);
+		 
+        if (file.isDirectory()) {
+            return true;
+        }
+        else {
+            return false;
+        }
 	}
 	
 }
+
+
 	
 	//getTaskStarttime
 	//getTaskTimespent

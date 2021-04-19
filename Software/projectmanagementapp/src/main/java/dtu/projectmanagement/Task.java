@@ -1,32 +1,33 @@
 package dtu.projectmanagement;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Task {
 	private String name;
 	private DateServer dateServer = new DateServer();
 	private Calendar startTime;
-	private Duration estimatedTime;
-	private Duration timeSpent; //should be an integer, right? Class diagram is wrong, tænker jeg (Victor)
+	private double estimatedTime;
+	private double timeSpent;
+	private ArrayList<Employee> employeesOnTask = new ArrayList<Employee>();
 	
-	public Task (String name, Duration estimatedTime) {
+	public Task (String name, double estimatedTime) {
 		this.name = name;
 		this.startTime = dateServer.getDate();
 		this.estimatedTime = estimatedTime;
-		this.timeSpent = Duration.ofHours(0);
-		
+		this.timeSpent = 0;
 	}
 	
-	public void setTimeSpent(Duration timeSpent) {
-		this.timeSpent = this.timeSpent.plus(timeSpent);
+	public void setTimeSpent(double timeSpent) {
+		this.timeSpent = timeSpent;
 	}
 	
-	public Duration getRemainingTime() {
-		return estimatedTime.minus(timeSpent);
+	public double getRemainingTime() {
+		return estimatedTime-timeSpent;
 	}
 	
-	public Duration getEstimatedTime() {
+	public double getEstimatedTime() {
 		return estimatedTime;
 	}
 
@@ -38,8 +39,17 @@ public class Task {
 		return startTime;
 	}
 
-	public int getTimeSpent() { //should be an integer, right? should not return 1. Only for testing
-		return 1;
+	public double getTimeSpent() {
+		return timeSpent;
+	}
+
+	public void addEmployeeToTask(Employee employee)
+	{
+		employeesOnTask.add(employee);
+	}
+	
+	public ArrayList<Employee> getEmployeesOnTask() {
+		return employeesOnTask;
 	}
 	
 	
