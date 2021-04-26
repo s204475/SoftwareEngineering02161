@@ -74,7 +74,7 @@ public class ActivitySteps {
 	@Given("there is a task in the project")
 	public void there_is_a_task_in_the_project() {
 		try {
-			task = new Task("Task", Duration.ofHours(10));
+			task = new Task("Task", 10);
 			managementApp.addTask(task);	
 			managementApp.setActiveTask(task);
 		} catch (OperationNotAllowed e) {

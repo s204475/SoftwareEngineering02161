@@ -66,7 +66,7 @@ public class TaskSteps {
 	@When("the employee creates a task with the name {string} and a estimated time of {int} hours")
 	public void the_employee_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
 		try {
-			task = new Task(title, Duration.ofHours(time));
+			task = new Task(title, time);
 			managementApp.addTask(task);	
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
