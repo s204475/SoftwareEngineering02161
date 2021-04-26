@@ -41,14 +41,10 @@ public class ProjectManagementApp {
 	}
 	
 	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
-		if(taskName.equals("") || estimatedDuration <= 0) {
-			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		Task task = new Task(taskName, estimatedDuration);
+		addTask(task);
 		}
-		else {
-			Task task = new Task(taskName, estimatedDuration);
-			addTask(task);
-		}
-	}
+	
 	public void createActivity(String activityName, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
 		addActivity(activity);
@@ -71,8 +67,11 @@ public class ProjectManagementApp {
 	public void addEmployee(Employee employee) {
 		employees.add(employee);
 	}
-	public void addTask(Task task) throws OperationNotAllowed { 
-		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+	public void addTask(Task task) throws OperationNotAllowed {
+		if(task.getName().equals("") || task.getEstimatedTime() <= 0) {
+			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		}
+		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			activeProject.addTask(task);
 		} else {
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
@@ -300,7 +299,10 @@ public class ProjectManagementApp {
 	}
 	
 	public void setTaskName(String newName) throws OperationNotAllowed {
-		if(newName.equals("")) {
+		if(activeTask == null) {
+			throw new OperationNotAllowed("the task does not exist");
+		}
+		else if(newName.equals("")) {
 			throw new OperationNotAllowed("A task has to have a name and estimed time");
 		} else {
 		activeTask.setName(newName);
