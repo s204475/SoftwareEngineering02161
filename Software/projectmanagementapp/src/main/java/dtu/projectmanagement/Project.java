@@ -95,6 +95,10 @@ public class Project {
 		tasks.add(task);
 	}
 	
+	public void removeProjectManager() {
+		projectManager = null;
+	}
+	
 }
 	
 	

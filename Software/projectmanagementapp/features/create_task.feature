@@ -16,4 +16,14 @@ Scenario: An employee tries to create a task
     And there is a project with the name "project1"
     And the employee is not project manager of the project
     When the employee creates a task with the name "Refactoring" and a estimated time of 20 hours
-    Then the error message "You have to be a project manager to create a task" is given
+    Then the error message "You have to be a project manager to change or create a task" is given
+    
+Scenario: A project mannager tries to create a task with no name or estimated time
+	Given there is an employee with the initials "joh"
+    And the employee is active user
+    And there is a project with the name "project1"
+    And the employee is project manager of the project
+    When the employee creates a task with no name
+    Then the error message "A task has to have a name and estimed time" is given
+	When the employee creates a task with no estimated time
+	Then the error message "A task has to have a name and estimed time" is given

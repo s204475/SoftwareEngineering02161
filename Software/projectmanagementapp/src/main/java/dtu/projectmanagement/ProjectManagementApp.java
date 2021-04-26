@@ -32,8 +32,13 @@ public class ProjectManagementApp {
 	}
 	
 	public void createTask(String taskName, long estimatedDuration) throws OperationNotAllowed {
-		Task task = new Task(taskName, Duration.ofHours(estimatedDuration));
-		addTask(task);
+		if(taskName.equals("") || estimatedDuration == 0L) {
+			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		}
+		else {
+			Task task = new Task(taskName, Duration.ofHours(estimatedDuration));
+			addTask(task);
+		}
 	}
 	public void createActivity(String activityName, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
@@ -61,15 +66,25 @@ public class ProjectManagementApp {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			activeProject.addTask(task);
 		} else {
-			throw new OperationNotAllowed("You have to be a project manager to create a task");
+			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
 		}
 	}
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
 	}
 	
-	
-	
+	public void setEstimatedTimeOfTask(Duration Time) throws OperationNotAllowed {
+		if(activeTask == null) {
+			throw new OperationNotAllowed("the task does not exist");
+		}
+		else {
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeTask.setEstimatedTime(Time);
+		} else {
+			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
+		}
+		}
+	}
 	
 	/* GETTERS AND SETTERS */
 	public ArrayList<Employee> getEmployees() {
@@ -186,10 +201,14 @@ public class ProjectManagementApp {
 		return activeProject;
 	}
 	
-	public void setTaskName(String newName) {
-		// TODO Auto-generated method stub
-		
+	public void setTaskName(String newName) throws OperationNotAllowed {
+		if(newName.equals("")) {
+			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		} else {
+		activeTask.setName(newName);
+		}
 	}
+	
 	public void setTaskStartTime(Date newStartTime) {
 		// TODO Auto-generated method stub
 		
@@ -250,8 +269,8 @@ public class ProjectManagementApp {
 	//getTaskTimespent
 	//getTaskEstimatedTime
 	//getTaskRemaningTime
-	
-	//setTaskName
+
+
 	//setTaskEstimatedTime
 	//setTaskTimeWorked
 	//setStartTime

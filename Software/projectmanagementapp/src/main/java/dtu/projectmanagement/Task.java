@@ -29,6 +29,18 @@ public class Task {
 	public Duration getEstimatedTime() {
 		return estimatedTime;
 	}
+	
+	public void setEstimatedTime(Duration newEstimatedTime) throws OperationNotAllowed {
+		if(newEstimatedTime == Duration.ofHours(0)) {
+			throw new OperationNotAllowed ("A task has to have a name and estimed time");
+		} else {
+		estimatedTime = newEstimatedTime;
+		}
+	}
+	
+	public void setName(String newName) {
+		name = newName;
+	}
 
 	public String getName() {
 		return name;
@@ -41,6 +53,5 @@ public class Task {
 	public int getTimeSpent() { //should be an integer, right? should not return 1. Only for testing
 		return 1;
 	}
-	
 	
 }
