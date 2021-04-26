@@ -31,11 +31,11 @@ public class Task {
 		return estimatedTime;
 	}
 	
-	public void setEstimatedTime(Duration newEstimatedTime) throws OperationNotAllowed {
-		if(newEstimatedTime == Duration.ofHours(0)) {
+	public void setEstimatedTime(double newEstimatedTime) throws OperationNotAllowed {
+		if(newEstimatedTime <= 0) {
 			throw new OperationNotAllowed ("A task has to have a name and estimed time");
 		} else {
-		estimatedTime = newEstimatedTime;
+			estimatedTime = newEstimatedTime;
 		}
 	}
 	

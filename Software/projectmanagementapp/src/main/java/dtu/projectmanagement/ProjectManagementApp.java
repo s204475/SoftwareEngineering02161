@@ -41,11 +41,11 @@ public class ProjectManagementApp {
 	}
 	
 	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
-		if(taskName.equals("") || estimatedDuration =< 0) {
+		if(taskName.equals("") || estimatedDuration <= 0) {
 			throw new OperationNotAllowed("A task has to have a name and estimed time");
 		}
 		else {
-			Task task = new Task(taskName, Duration.ofHours(estimatedDuration));
+			Task task = new Task(taskName, estimatedDuration);
 			addTask(task);
 		}
 	}
@@ -143,17 +143,19 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void setEstimatedTimeOfTask(Duration Time) throws OperationNotAllowed {
+	public void setEstimatedTimeOfTask(double Time) throws OperationNotAllowed {
 		if(activeTask == null) {
 			throw new OperationNotAllowed("the task does not exist");
 		}
 		else {
-		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
-			activeTask.setEstimatedTime(Time);
-		} else {
-			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
+			if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+				activeTask.setEstimatedTime(Time);
+			} else {
+				throw new OperationNotAllowed("You have to be a project manager to change or create a task");
+			}
 		}
-		}
+	}
+	
 	public void addEmployeeToTask(Employee employee) {
 		if(!activeTask.getEmployeesOnTask().contains(employee))
 		{
