@@ -29,6 +29,7 @@ public class ProjectManagementApp {
 		Project project = activeUser.createProject(title);
 		addProject(project);
 	}
+	
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
 		addEmployee(employee);
@@ -85,10 +86,109 @@ public class ProjectManagementApp {
 	}
 
 	
+	public Employee searchEmployees(String initials) {
+		for (Employee employee : employees) {
+			if (employee.getInitials().equals(initials)) {
+				return employee;
+			}
+		}
+		return null;
+	}
 	
+	public Project searchProjectsId(String id) {
+		for (Project project : projects) {
+			if (project.getId().equals(id)) {
+				return project;
+			}
+		}
+		return null;
+	}
 	
+	public Project searchProjectsTitle(String title) {
+		for (Project project : projects) {
+			if (project.getTitle().equals(title)) {
+				return project;
+			}
+		}
+		return null;
+	}
 	
+	public String createInitials(String userName) {
+		String initials = "";
+		initials += userName.charAt(0);
+		for (int i = 1; i < userName.length() - 1; i++)
+		{
+			 if (userName.charAt(i) == ' ')
+			 {
+				 initials += userName.charAt(i + 1);
+			 }
+		}
+		if(initials.length()>4)
+		{
+			String shortInitials = "";
+			shortInitials += initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
+			return shortInitials;
+		}
+		else
+		{
+			return initials;
+		}
+	}
+	
+	public void addEmployeeToTask(Employee employee) {
+		if(!activeTask.getEmployeesOnTask().contains(employee))
+		{
+			activeTask.addEmployeeToTask(employee);
+		}
+	}
+	
+	public class NameSort implements Comparator<Employee> 
+	{
+		//Sorts employees alphabetically
+	    @Override
+	    public int compare(Employee employee1, Employee employee2)
+	    {
+	        return employee1.getName().compareToIgnoreCase(employee2.getName());
+	    }
+	}
+
+	public void printReport(String path_to_file) throws IOException {
+		if(pathExists(path_to_file))
+		{
+			ReportWriter writer = new ReportWriter(path_to_file);
+			
+			String reportFileName = "Report on " + activeProject.getTitle() + " ("+activeProject.getId()+")";
+			
+			String reportContent = getActiveProjectInformation();
+			
+			writer.writeReportToFile(reportFileName,reportContent);
+		}
+		
+	}
+	
+	public boolean pathExists(String path_to_file) {
+		
+		File file = new File(path_to_file);
+		 
+        if (file.isDirectory()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+	}
+	
+	public void ExitApp() {
+		System.exit(0);
+	}
+	
+
 	/* GETTERS AND SETTERS */
+	
+	public void assignProjectManager(Employee employee) {
+		activeProject.assignProjectManager(employee);
+	}
+	
 	public ArrayList<Employee> getEmployees() {
 		return employees;
 	}
@@ -173,83 +273,36 @@ public class ProjectManagementApp {
 		return remamningTimeInHours;
 		}
 	}
-	public Employee searchEmployees(String initials) {
-		for (Employee employee : employees) {
-			if (employee.getInitials().equals(initials)) {
-				return employee;
-			}
-		}
-		return null;
-	}
 	
-	public Project searchProjectsId(String id) {
-		for (Project project : projects) {
-			if (project.getId().equals(id)) {
-				return project;
-			}
-		}
-		return null;
-	}
-	
-	public Project searchProjectsTitle(String title) {
-		for (Project project : projects) {
-			if (project.getTitle().equals(title)) {
-				return project;
-			}
-		}
-		return null;
-	}
 	public Project getActiveProject() {
 		return activeProject;
 	}
 	
 	public void setTaskName(String newName) {
-		// TODO Auto-generated method stub
-		
+		//activeTask.setTaskName(newName);
 	}
+	
 	public void setTaskStartTime(Date newStartTime) {
-		// TODO Auto-generated method stub
-		
+		//activeTask.setTaskStartTime(newStartTime);
 	}
+	
 	public void setTaskEstimatedTime(double estimatedTime) {
-		// TODO Auto-generated method stub
-		
+		//activeTask.setTaskEstimatedTime(estimatedTime);
 	}
+	
 	public void setTaskTimeWorked(double timeWorked) {
-		// TODO Auto-generated method stub
-		
+		activeTask.setTimeSpent(timeWorked);
 	}
+	
 	public void setActiveActivity(Activity activity) {
-		// TODO Auto-generated method stub
-		
+		//activeTask.setActiveActivity(activity);
 	}
 	
 	public void setNewActivityName(String newName) {
-		// TODO Auto-generated method stub
-		
+		//activeTask.setNewActivityName(newName);
 	}
 
-	public String createInitials(String userName) {
-		String initials = "";
-		initials += userName.charAt(0);
-		for (int i = 1; i < userName.length() - 1; i++)
-		{
-			 if (userName.charAt(i) == ' ')
-			 {
-				 initials += userName.charAt(i + 1);
-			 }
-		}
-		if(initials.length()>4)
-		{
-			String shortInitials = "";
-			shortInitials += initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
-			return shortInitials;
-		}
-		else
-		{
-			return initials;
-		}
-	}
+	
 	
 	
 	
@@ -300,48 +353,8 @@ public class ProjectManagementApp {
 		
 		return taskInformation;
 	}
-	public void addEmployeeToTask(Employee employee) {
-		if(!activeTask.getEmployeesOnTask().contains(employee))
-		{
-			activeTask.addEmployeeToTask(employee);
-		}
-	}
 	
-	public class NameSort implements Comparator<Employee> 
-	{
-		//Sorts employees alphabetically
-	    @Override
-	    public int compare(Employee employee1, Employee employee2)
-	    {
-	        return employee1.getName().compareToIgnoreCase(employee2.getName());
-	    }
-	}
-
-	public void printReport(String path_to_file) throws IOException {
-		if(pathExists(path_to_file))
-		{
-			ReportWriter writer = new ReportWriter(path_to_file);
-			
-			String reportFileName = "Report on " + activeProject.getTitle() + " ("+activeProject.getId()+")";
-			
-			String reportContent = getActiveProjectInformation();
-			
-			writer.writeReportToFile(reportFileName,reportContent);
-		}
-		
-	}
 	
-	public boolean pathExists(String path_to_file) {
-		
-		File file = new File(path_to_file);
-		 
-        if (file.isDirectory()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-	}
 	
 }
 

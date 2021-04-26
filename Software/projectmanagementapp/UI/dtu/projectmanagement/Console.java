@@ -128,7 +128,7 @@ public class Console {
 				seePersonalActivities();
 				break;
 			case 6: 
-				System.exit(0);
+				app.ExitApp();
 				break;
 		}
 	}
@@ -244,7 +244,8 @@ public class Console {
 		}
 		
 		while (!scanner.hasNextInt()) scanner.next();
-		app.activeProject.assignProjectManager(app.employees.get(scanner.nextInt()));
+		
+		app.assignProjectManager(app.employees.get(scanner.nextInt()));
 		
 		//clearConsole();
 		
@@ -326,16 +327,19 @@ public class Console {
 				case 7: 
 					System.out.println("Collectively, the current tasks should take the following hours to complete: ");
 					printEstimatedTime();
+					System.out.println();
 					pressEnterToContinue();
 					break;
 				case 8: 
 					System.out.println("Remaining time on project:");
 					printRemainingTime();
+					System.out.println();
 					pressEnterToContinue();
 					break;
 				case 9:
 					System.out.println("The following total hours are paid (budgeted):");
 					printBudgetedTime();
+					System.out.println();
 					pressEnterToContinue();
 					break;
 				default: 
