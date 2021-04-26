@@ -55,7 +55,7 @@ public class Project {
 	public double getEstimatedTime() {
 		double estimatedTimeInHours = 0.0;
 		for(Task task : tasks) {
-			estimatedTimeInHours += (double) task.getEstimatedTime().toMinutes() / 60;
+			estimatedTimeInHours += (double) task.getEstimatedTime();
 		}
 		return estimatedTimeInHours;
 	}
@@ -63,7 +63,7 @@ public class Project {
 	public double getRemaningTime() {
 		double remaningTimeInHours = 0.0;
 		for(Task task : tasks) {
-			remaningTimeInHours += (double) task.getRemainingTime().toMinutes() / 60;
+			remaningTimeInHours += (double) task.getRemainingTime();
 		}
 		return remaningTimeInHours;
 	}

@@ -128,7 +128,7 @@ public class Console {
 				seePersonalActivities();
 				break;
 			case 6: 
-				System.exit(0);
+				app.ExitApp();
 				break;
 		}
 	}
@@ -244,7 +244,8 @@ public class Console {
 		}
 		
 		while (!scanner.hasNextInt()) scanner.next();
-		app.activeProject.assignProjectManager(app.employees.get(scanner.nextInt()));
+		
+		app.assignProjectManager(app.employees.get(scanner.nextInt()));
 		
 		//clearConsole();
 		
@@ -258,7 +259,7 @@ public class Console {
 		{
 			output += "No project manager assigned.";
 		} else {
-			output += app.getActiveProject().getProjectManager();
+			output += app.getActiveProject().getProjectManager().getName();
 		}
 		
 		return output;
@@ -293,10 +294,11 @@ public class Console {
 		switch(choice)
 		{
 			case 1:
-				seeProjects();
+				mainMenu();
 				break;
 			case 2: 
 				printAllTaskInformation();
+				pressEnterToContinue();
 				break;
 			case 3: 
 				setProjectManager();
@@ -325,16 +327,19 @@ public class Console {
 				case 7: 
 					System.out.println("Collectively, the current tasks should take the following hours to complete: ");
 					printEstimatedTime();
+					System.out.println();
 					pressEnterToContinue();
 					break;
 				case 8: 
 					System.out.println("Remaining time on project:");
 					printRemainingTime();
+					System.out.println();
 					pressEnterToContinue();
 					break;
 				case 9:
 					System.out.println("The following total hours are paid (budgeted):");
 					printBudgetedTime();
+					System.out.println();
 					pressEnterToContinue();
 					break;
 				default: 
@@ -358,14 +363,19 @@ public class Console {
 		System.out.println("Please input complete path to save report in.");
 		
 		String path_to_file = userInput();
-		try {
-			app.printReport(path_to_file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		System.out.println("A report is printed");
+		if(app.pathExists(path_to_file))
+		{
+			try {
+				app.printReport(path_to_file);
+				System.out.println("A report is printed");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else
+		{
+			System.out.println("That path does not exist.");
+		}
 	}
 	
 	public void pressEnterToContinue()
@@ -395,9 +405,9 @@ public class Console {
 	{
 		System.out.println("Input name for task");
 		String taskName = userInput();
-		System.out.println("Input estimated duration of task in hours (e.g. 4.5 hours)");
+		System.out.println("Input estimated duration of task in hours (e.g. 4.5 or 4.0 )");
 		while (!scanner.hasNextDouble()) scanner.next();
-		app.createTask(taskName,scanner.nextLong());
+		app.createTask(taskName,scanner.nextDouble());
 	}
 	
 	private void editTasks() throws ParseException, OperationNotAllowed {
@@ -422,7 +432,8 @@ public class Console {
 					+ "\n2: Edit start time"
 					+ "\n3: Estimated completion time"
 					+ "\n4: Time worked on task"
-					+ "\n5: Go back to main menu");
+					+ "\n5: Add employee to task"
+					+ "\n6: Go back to main menu");
 			
 			
 			while (!scanner.hasNextInt()) scanner.next();
@@ -449,6 +460,9 @@ public class Console {
 					app.setTaskTimeWorked(scanner.nextDouble());
 					break;
 				case 5: 
+					addEmployeeToTask();
+					break;
+				case 6: 
 					mainMenu();
 					break;
 				default:
@@ -460,6 +474,16 @@ public class Console {
 	}
 
 	
+	private void addEmployeeToTask() {
+		for(int i = 0; i<app.getEmployees().size();i++)
+		{
+			System.out.println(i+": "+app.getEmployees().get(i).getName());
+		}
+		
+		while (!scanner.hasNextInt()) scanner.next();
+		app.addEmployeeToTask(app.getEmployees().get(scanner.nextInt()));
+	}
+
 	private void printTasks()
 	{
 		//Prints all tasks (in name only) 
