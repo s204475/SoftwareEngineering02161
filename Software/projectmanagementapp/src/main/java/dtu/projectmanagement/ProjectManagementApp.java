@@ -19,6 +19,7 @@ public class ProjectManagementApp {
 	Employee activeUser;
 	Project activeProject;
 	Task activeTask;
+	Activity activeActivity;
 	
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
@@ -49,7 +50,7 @@ public class ProjectManagementApp {
 			addTask(task);
 		}
 	}
-	public void createActivity(String activityName, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
 		addActivity(activity);
 	}
@@ -307,12 +308,17 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void setTaskStartTime(Date newStartTime) {
-		//activeTask.setTaskStartTime(newStartTime);
+	public void setTaskStartTime(Calendar newStartTime) {
+		activeTask.setStartTime(newStartTime);
 	}
 	
 	public void setTaskEstimatedTime(double estimatedTime) {
-		//activeTask.setTaskEstimatedTime(estimatedTime);
+		try {
+			activeTask.setEstimatedTime(estimatedTime);
+		} catch (OperationNotAllowed e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void setTaskTimeWorked(double timeWorked) {
@@ -320,11 +326,11 @@ public class ProjectManagementApp {
 	}
 	
 	public void setActiveActivity(Activity activity) {
-		//activeTask.setActiveActivity(activity);
+		activeActivity = activity;
 	}
 	
 	public void setNewActivityName(String newName) {
-		//activeTask.setNewActivityName(newName);
+		activeActivity.setName(newName);
 	}
 
 	
