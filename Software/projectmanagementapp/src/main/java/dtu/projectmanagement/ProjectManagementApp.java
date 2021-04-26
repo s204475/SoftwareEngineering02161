@@ -83,6 +83,9 @@ public class ProjectManagementApp {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
 		}
 	}
+	public void setProjectManager(Employee employee) {
+		activeProject.assignProjectManager(employee);
+	}
 
 	
 	
