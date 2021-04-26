@@ -34,6 +34,7 @@ public class ActivitySteps {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
 	}
+	
 	@Then("the activity is created and is added to the employees schedule")
 	public void the_activity_is_created_and_is_added_to_the_employees_schedule() {
 	    assertTrue(managementApp.getActiveUser().getActivities().contains(activity));
@@ -118,4 +119,46 @@ public class ActivitySteps {
 	public void the_task_is_not_added_to_activities(String initials) {
 	    assertFalse(managementApp.searchEmployees(initials).getActivities().contains(taskActivity));
 	}
+
+	
+	@Given("{string} has an activity starting at {int} {int} {int} {int} {int} and ending at {int} {int} {int} {int} {int}")
+	public void has_an_activity_starting_at_and_ending_at(String initials, Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart, Integer yearEnd, Integer monthEnd, Integer dayEnd, Integer hourEnd, Integer minuteEnd) {
+	    managementApp.setActiveUser(managementApp.searchEmployees(initials));
+	    try {
+	    	activity = new Activity(
+	    			"Activity", 
+					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart, minuteStart),
+					new GregorianCalendar(yearEnd, monthEnd, dayEnd, hourEnd, minuteEnd));
+			managementApp.addActivity(activity);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	    assertTrue(managementApp.getActiveUser().getActivities().contains(activity));
+	}
+
+	@When("the active user assigns the task to {string} with the start time {int} {int} {int} {int} {int}")
+	public void the_active_user_assigns_the_task_to_with_the_start_time(String initials, Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart) {
+	    try {
+			taskActivity = new TaskActivity(
+					"Working on task", 
+					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart, minuteStart),
+					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart + 1, minuteStart), task);
+			managementApp.assignTask(initials, taskActivity);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+	@When("the active user assigns the task to {string} with the end time {int} {int} {int} {int} {int}")
+	public void the_active_user_assigns_the_task_to_with_the_end_time(String initials, Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart) {
+	    try {
+			taskActivity = new TaskActivity(
+					"Working on task", 
+					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart, minuteStart),
+					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart + 1, minuteStart), task);
+			managementApp.assignTask(initials, taskActivity);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+	
 }

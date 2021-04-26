@@ -38,6 +38,11 @@ public class TaskSteps {
 	    managementApp.setActiveUser(employee);
 	    assertTrue(managementApp.getActiveUser().equals(employee));
 	}
+	@Given("{string} is active user")
+	public void is_active_user(String initials) {
+	    managementApp.setActiveUser(managementApp.searchEmployees(initials));
+	    assertTrue(managementApp.getActiveUser().equals(managementApp.searchEmployees(initials)));
+	}
 	
 	@Given("there is a project with the name {string}")
 	public void there_is_a_project_with_the_name(String title) throws OperationNotAllowed {
@@ -49,8 +54,13 @@ public class TaskSteps {
 
 	@Given("the employee is project manager of the project")
 	public void the_employee_is_project_manager_of_the_project() {
-	    project.assignProjectManager(employee);
+		managementApp.getActiveProject().assignProjectManager(employee);
 	    assertTrue(project.isProjectManager(employee));
+	}
+	@Given("{string} is project manager of the project")
+	public void is_project_manager_of_the_project(String initials) {
+	    managementApp.getActiveProject().assignProjectManager(managementApp.searchEmployees(initials));
+	    assertTrue(managementApp.getActiveProject().isProjectManager(managementApp.searchEmployees(initials)));
 	}
 
 	@Then("the task is created")
@@ -72,6 +82,8 @@ public class TaskSteps {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
 	}
+	
+	
 
 	
 }

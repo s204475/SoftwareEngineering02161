@@ -16,7 +16,7 @@ Scenario: An employee tries to create an activity with no name
     Then the error message "An activity needs a name" is given
     And the activity is not added to the employees schedule
 	
-Scenario: An employee tries to create an activity in the start, mid or end of another activity
+Scenario: An employee tries to create an activity in occupied timeframe
 	Given there is an employee with the initials "joh"
 	And the employee is active user
     And the employee has an activity starting at 2021 04 02 0 0 and ending at 2021 04 04 0 0
@@ -39,6 +39,35 @@ Scenario: Assign task activity successfully
     And there is an employee with the initials "pet"
     When the active user assigns the task to "pet"
     Then the task is added to "pet" activities
+
+
+Scenario: Assign a task activity in occupied timeframe
+    Given there is an employee with the initials "pet"
+    And "pet" has an activity starting at 2021 4 5 0 0 and ending at 2021 4 6 0 0
+    And there is an employee with the initials "joh"
+    And "joh" is active user
+    And there is a project with the name "project1"
+    And "joh" is project manager of the project
+    And there is a task in the project
+    When the active user assigns the task to "pet" with the start time 2021 4 5 12 0
+    Then the error message "Timeframe not available" is given
+    And  the task is not added to "pet" activities
+    When the active user assigns the task to "pet" with the start time 2021 4 5 0 0
+    Then the error message "Timeframe not available" is given
+    And  the task is not added to "pet" activities
+    When the active user assigns the task to "pet" with the start time 2021 4 6 0 0
+    Then the error message "Timeframe not available" is given
+    And  the task is not added to "pet" activities
+    When the active user assigns the task to "pet" with the end time 2021 4 5 12 0
+    Then the error message "Timeframe not available" is given
+    And  the task is not added to "pet" activities
+    When the active user assigns the task to "pet" with the end time 2021 4 5 0 0
+    Then the error message "Timeframe not available" is given
+    And  the task is not added to "pet" activities
+    When the active user assigns the task to "pet" with the end time 2021 4 6 0 0
+    Then the error message "Timeframe not available" is given
+    And  the task is not added to "pet" activities
+
 
 Scenario: Assign task activity when not project manager
     Given there is an employee with the initials "joh"

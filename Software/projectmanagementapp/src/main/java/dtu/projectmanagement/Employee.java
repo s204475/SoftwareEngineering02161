@@ -1,5 +1,6 @@
 package dtu.projectmanagement;
 
+import java.awt.ActiveEvent;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -7,7 +8,11 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
+
 import org.junit.runner.manipulation.Sortable;
+
+
 
 public class Employee {
 
@@ -48,7 +53,13 @@ public class Employee {
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
 	}
-	public void assignTask(TaskActivity taskActivity) {
+	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
+		for (Activity a : activities) {
+			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
+			if ((taskActivity.getStartTime().after(a.getStartTime()) && taskActivity.getStartTime().before(a.getEndTime()) || taskActivity.getStartTime().equals(a.getStartTime()) || taskActivity.getStartTime().equals(a.getEndTime()))) {
+				throw new OperationNotAllowed("Timeframe not available");
+			}
+		}
 		activities.add(taskActivity);
 		sortActivities();
 		
