@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ public class Console {
 	
 	public static Scanner scanner = new Scanner(System.in);
 	private ProjectManagementApp app;
+	private Helper helper = new Helper();
 	
 	public Console(ProjectManagementApp app)
 	{
@@ -154,8 +156,8 @@ public class Console {
 	private void seePersonalActivities() throws ParseException, OperationNotAllowed
 	{
 		System.out.println(""
-				+ "\n1: Edit activity"
-				+ "\n2: Add activity"
+				+ "\n1: Add activity"
+				+ "\n2: Edit activity"
 				+ "\n3: See activities"
 				+ "\n4: Print schedule"
 				+ "\n5: Go back");
@@ -165,11 +167,11 @@ public class Console {
 		switch(scanner.nextInt())
 		{
 			case 1:
-				editActivity();
+				addActivity();
 				seePersonalActivities();
 				break;
 			case 2: 
-				addActivity();
+				editActivity();
 				seePersonalActivities();
 				break;
 			case 3: 
@@ -446,8 +448,20 @@ public class Console {
 					break;
 				case 2: 
 					System.out.println("Input start time (e.g: dd-MM-yyyy)");
-					Date start = convertDate(userInput());
-					app.setTaskStartTime(start);
+					Date start;
+					String dateString = userInput();
+					
+					if(helper.isDate(dateString))
+					{
+						start = helper.convertDate(dateString);
+					} else {
+						System.out.println("Incorrect input.");
+						break;
+					}
+					
+					Calendar startCal = helper.dateToCalendar(start);
+					
+					app.setTaskStartTime(startCal);
 					break;
 				case 3: 
 					System.out.println("Input new estimated time");
@@ -523,37 +537,46 @@ public class Console {
 	{
 		//TODO Implement schedule
 		System.out.println("This should be a schedule.");
-		pressEnterToContinue();
 	}
 
 	
-	private void addActivity() throws ParseException
+	private void addActivity() throws ParseException, OperationNotAllowed
 	{
 		//Adds a new activity to the active user
-			//Test this method thoroughly!
+		
+		Calendar end;
+		Calendar start;
+		
 		System.out.println("Input name for activity");
 		String activityName = userInput();
 		
 		System.out.println("Input start time (e.g: dd-MM-yyyy)");
 		
-		Date start = convertDate(userInput());
+		String dateString = userInput();
+		
+		if(helper.isDate(dateString))
+		{
+			start = helper.dateToCalendar(helper.convertDate(dateString));
+		} else {
+			System.out.println("Incorrect input.");
+			return;
+		}
 		
 		System.out.println("Input end time (e.g: dd-MM-yyyy)");
 		
-		Date end = convertDate(userInput());
-		        
-		Duration activityDuration = Duration.between(start.toInstant(), end.toInstant());
+		dateString = userInput();
+		if(helper.isDate(dateString))
+		{
+			end = helper.dateToCalendar(helper.convertDate(dateString));
+		} else {
+			System.out.println("Incorrect input.");
+			return;
+		}
 		
-		//app.createActivity(activityName, activityDuration);
+		app.createActivity(activityName, start, end);
 	}
 	
-	private Date convertDate(String dateString) throws ParseException
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-
-		Date date = sdf.parse(dateString);
-		return date;
-	}
+	
 
 	private void editActivity() throws ParseException, OperationNotAllowed
 	{
@@ -621,8 +644,8 @@ public class Console {
 			for(int i = 0; i<app.getActiveUser().getActivities().size();i++)
 			{
 				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
-				System.out.println("Start time: "+app.getActiveUser().getActivities().get(i).getStartTime());
-				System.out.println("End time: "+app.getActiveUser().getActivities().get(i).getEndTime());
+				System.out.println("Start time: "+helper.calendarToString(app.getActiveUser().getActivities().get(i).getStartTime()));
+				System.out.println("End time: "+helper.calendarToString(app.getActiveUser().getActivities().get(i).getEndTime()));
 			}	
 		}
 	}
