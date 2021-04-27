@@ -94,13 +94,13 @@ public class ProjectManagementApp {
 	}
 
 	
-	public Employee searchEmployees(String initials) {
+	public Employee searchEmployees(String initials) throws OperationNotAllowed {
 		for (Employee employee : employees) {
 			if (employee.getInitials().equals(initials)) {
 				return employee;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("No employees with the given Initials");
 	}
 	
 	public Project searchProjectsId(String id) {

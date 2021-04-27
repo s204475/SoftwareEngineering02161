@@ -18,6 +18,7 @@ public class GetAvailableEmployeesSteps {
 	private ArrayList<Employee> employees = new ArrayList<Employee>();
 	private GregorianCalendar startTime;
 	private GregorianCalendar endTime;
+	private Employee employee;
 		
 	public GetAvailableEmployeesSteps (ProjectManagementApp managementApp, ErrorMessageHolder errorMessageHolder) {
 		this.managementApp = managementApp;
@@ -25,13 +26,25 @@ public class GetAvailableEmployeesSteps {
 		this.employees = managementApp.getEmployees();
 	}
 	
-	@Given("they have an empty schedules")
-	public void they_have_an_empty_schedules() {
-		for (Employee employee : employees) {
-			assertTrue(employee.getActivities().isEmpty());
-		}  
-	}
+//	@Given("they have an empty schedules")
+//	public void they_have_an_empty_schedules() {
+//		for (Employee employee : employees) {
+//			assertTrue(employee.getActivities().isEmpty());
+//		}  
+//	}
 
+	@Given("{string} has an activty from year {int} month {int} day {int} hour {int} to year {int} month {int} day {int} hour {int}")
+	public void has_an_activty_from_year_month_day_hour_to_year_month_day_hour(String initials, Integer startYear, Integer startMonth, Integer startDay, Integer startHour, Integer endYear, Integer endMonth, Integer endDay, Integer endHour) throws OperationNotAllowed {
+	    try {
+	    	employee = managementApp.searchEmployees(initials);
+	    	GregorianCalendar startTime = new GregorianCalendar(startYear, startMonth, startDay, startHour, 0);
+		    GregorianCalendar endTime = new GregorianCalendar(endYear, endMonth, endDay, endHour, 0);
+		    employee.addActivity(new Activity("Activity", startTime, endTime));
+	    } catch (OperationNotAllowed e) {
+	    	errorMessageHolder.setErrorMessage(e.getMessage());
+	    }
+	}
+	
 	@When("the active user provides a duration")
 	public void the_active_user_provides_a_duration() {
 	    this.startTime = new GregorianCalendar(2021, 10, 10, 12, 0);
@@ -52,15 +65,15 @@ public class GetAvailableEmployeesSteps {
 		}
 	}
 	
-	@Given("they have activities from year {int} month {int} day {int} hour {int} to year {int} month {int} day {int} hour {int}")
-	public void they_have_activities_from_year_month_day_hour_to_year_month_day_hour(Integer startYear, Integer startMonth, Integer startDay, Integer startHour, Integer endYear, Integer endMonth, Integer endDay, Integer endHour) throws OperationNotAllowed {
-		GregorianCalendar startTime = new GregorianCalendar(startYear, startMonth, startDay, startHour, 0);
-	    GregorianCalendar endTime = new GregorianCalendar(endYear, endMonth, endDay, endHour, 0);
-	    for (Employee employee : employees) {
-	    	employee.addActivity(new Activity("Aktivitet", startTime, endTime));
-	    	assertFalse(employee.getActivities().isEmpty());
-	    }
-	}
+//	@Given("they have activities from year {int} month {int} day {int} hour {int} to year {int} month {int} day {int} hour {int}")
+//	public void they_have_activities_from_year_month_day_hour_to_year_month_day_hour(Integer startYear, Integer startMonth, Integer startDay, Integer startHour, Integer endYear, Integer endMonth, Integer endDay, Integer endHour) throws OperationNotAllowed {
+//		GregorianCalendar startTime = new GregorianCalendar(startYear, startMonth, startDay, startHour, 0);
+//	    GregorianCalendar endTime = new GregorianCalendar(endYear, endMonth, endDay, endHour, 0);
+//	    for (Employee employee : employees) {
+//	    	employee.addActivity(new Activity("Aktivitet", startTime, endTime));
+//	    	assertFalse(employee.getActivities().isEmpty());
+//	    }
+//	}
 
 	@When("the active user provides a duration from year {int} month {int} day {int} hour {int} to year {int} month {int} day {int} hour {int}")
 	public void the_active_user_provides_a_duration_from_year_month_day_hour_to_year_month_day_hour(Integer startYear, Integer startMonth, Integer startDay, Integer startHour, Integer endYear, Integer endMonth, Integer endDay, Integer endHour) {
