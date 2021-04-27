@@ -60,12 +60,12 @@ public class Project {
 		return estimatedTimeInHours;
 	}
 	
-	public double getRemaningTime() {
-		double remaningTimeInHours = 0.0;
+	public double getRemainingTime() {
+		double remainingTime = 0.0;
 		for(Task task : tasks) {
-			remaningTimeInHours += (double) task.getRemainingTime();
+			remainingTime += (double) task.getRemainingTime();
 		}
-		return remaningTimeInHours;
+		return remainingTime;
 	}
 
 	public String getId() {
