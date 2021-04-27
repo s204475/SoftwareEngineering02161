@@ -44,11 +44,18 @@ public class ProjectManagementApp {
 	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
 		Task task = new Task(taskName, estimatedDuration);
 		addTask(task);
-		}
 	}
+	
 	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
 		addActivity(activity);
+		
+	}
+	
+	public void createTaskActivity(String activityName, Calendar startTime, Calendar endTime, Task task,Employee employee) throws OperationNotAllowed {
+		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar)startTime, (GregorianCalendar)endTime,task);
+		addActivity(taskActivity);
+		taskActivity.getTask().addEmployeeToTask(employee);
 	}
 	
 	
@@ -78,17 +85,24 @@ public class ProjectManagementApp {
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
 		}
 	}
+	
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
+		if(activity instanceof TaskActivity)
+		{
+			setTaskTimeWorked();
+		}
 	}
+	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
-			
+			setTaskTimeWorked();
 		} else {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
 		}
 	}
+	
 	public void setProjectManager(Employee employee) {
 		activeProject.assignProjectManager(employee);
 	}
@@ -157,6 +171,7 @@ public class ProjectManagementApp {
 	}
 	
 	public void addEmployeeToTask(Employee employee) {
+		//Should be merged wit assigntask method
 		if(!activeTask.getEmployeesOnTask().contains(employee))
 		{
 			activeTask.addEmployeeToTask(employee);
@@ -323,8 +338,8 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void setTaskTimeWorked(double timeWorked) {
-		activeTask.setTimeSpent(timeWorked);
+	public void setTaskTimeWorked() {
+		activeTask.setTimeSpent();
 	}
 	
 	public void setActiveActivity(Activity activity) {
@@ -385,6 +400,10 @@ public class ProjectManagementApp {
 		
 		
 		return taskInformation;
+	}
+
+	public Task getActiveTask() {
+		return activeTask;
 	}
 	
 	

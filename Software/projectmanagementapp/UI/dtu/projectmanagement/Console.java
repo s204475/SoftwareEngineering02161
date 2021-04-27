@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -160,7 +163,8 @@ public class Console {
 				+ "\n2: Edit activity"
 				+ "\n3: See activities"
 				+ "\n4: Print schedule"
-				+ "\n5: Go back");
+				+ "\n5: Set time worked on task/activity"
+				+ "\n6: Go back");
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
@@ -184,13 +188,36 @@ public class Console {
 				pressEnterToContinue();
 				seePersonalActivities();
 				break;
-			case 5: 
+			case 6: 
 				mainMenu();
 				break;
 			default:
 				InvalidInput();
 				break;
 		}
+	}
+
+	private void setTimeWorkedOnTaskActivity() throws ParseException, OperationNotAllowed {
+		
+		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
+		{
+			System.out.println("You currently have no activities.");
+			seePersonalActivities();
+		} else {
+			System.out.println("Choose task to edit work time: ");
+
+			Activity activity = selectTaskActivity();
+			
+			app.setActiveActivity(activity);
+		
+			System.out.println("Input hours worked on task (e.g. 4.5 or 4.0 )");
+			while (!scanner.hasNextDouble()) scanner.next();
+			
+			TaskActivity taskActivity = (TaskActivity)activity;
+		
+		}
+			
+		
 	}
 
 	private void InvalidInput() {
@@ -285,10 +312,11 @@ public class Console {
 			System.out.println("Project Manager choices: "
 				+ "\n4: Create task"
 				+ "\n5: Edit task"
-				+ "\n6: Create a report"
-				+ "\n7: Show estimated time until project completion"
-				+ "\n8: Show time spent on project"
-				+ "\n9: Show remaining budgeted time");
+				+ "\n6: Assign employee to task"
+				+ "\n7: Create a report"
+				+ "\n8: Show estimated time until project completion"
+				+ "\n9: Show time spent on project"
+				+ "\n10: Show remaining budgeted time");
 		}
 		
 		while (!scanner.hasNextInt()) scanner.next();
@@ -311,6 +339,8 @@ public class Console {
 			case 5: 
 				editTasks();
 				break;
+			case 6: 
+				assignEmployeeToTaskActivity();
 			default: 
 				if(app.getActiveProject().getProjectManager() != app.activeUser)
 				{
@@ -322,30 +352,30 @@ public class Console {
 		{
 			switch(choice)
 			{
-				case 6: 
+				case 7: 
 					createReport();
 					pressEnterToContinue();
 					break;
-				case 7: 
+				case 8: 
 					System.out.println("Collectively, the current tasks should take the following hours to complete: ");
 					printEstimatedTime();
 					System.out.println();
 					pressEnterToContinue();
 					break;
-				case 8: 
+				case 9: 
 					System.out.println("Remaining time on project:");
 					printRemainingTime();
 					System.out.println();
 					pressEnterToContinue();
 					break;
-				case 9:
+				case 10:
 					System.out.println("The following total hours are paid (budgeted):");
 					printBudgetedTime();
 					System.out.println();
 					pressEnterToContinue();
 					break;
 				default: 
-					if(choice <1 || choice > 9)
+					if(choice <1 || choice > 10)
 					{
 						System.out.println("Incorrect input.");
 					}
@@ -360,6 +390,11 @@ public class Console {
 		
 	}
 	
+	private void assignEmployeeToTaskActivity() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void createReport()
 	{
 		System.out.println("Please input complete path to save report in.");
@@ -433,9 +468,7 @@ public class Console {
 					+ "\n1: Edit name"
 					+ "\n2: Edit start time"
 					+ "\n3: Estimated completion time"
-					+ "\n4: Time worked on task"
-					+ "\n5: Add employee to task"
-					+ "\n6: Go back to main menu");
+					+ "\n4: Go back to main menu");
 			
 			
 			while (!scanner.hasNextInt()) scanner.next();
@@ -459,7 +492,7 @@ public class Console {
 						break;
 					}
 					
-					Calendar startCal = helper.dateToCalendar(start);
+					GregorianCalendar startCal = helper.dateToCalendar(start);
 					
 					app.setTaskStartTime(startCal);
 					break;
@@ -469,14 +502,6 @@ public class Console {
 					app.setTaskEstimatedTime(scanner.nextDouble());
 					break;
 				case 4: 
-					System.out.println("Input new time worked on task");
-					while (!scanner.hasNextDouble()) scanner.next();
-					app.setTaskTimeWorked(scanner.nextDouble());
-					break;
-				case 5: 
-					addEmployeeToTask();
-					break;
-				case 6: 
 					mainMenu();
 					break;
 				default:
@@ -525,7 +550,7 @@ public class Console {
 			for(int i = 0; i<app.getActiveProject().getTasks().size();i++)
 			{
 				System.out.println(i+": "+app.getActiveProject().getTasks().get(i).getName());
-				System.out.println("Start time: "+app.getActiveProject().getTasks().get(i).getStartTime());
+				System.out.println("Start time: "+helper.calendarToString(app.getActiveProject().getTasks().get(i).getStartTime()));
 				System.out.println("Estimated time: "+app.getActiveProject().getTasks().get(i).getEstimatedTime());
 				System.out.println("Time spent: "+app.getActiveProject().getTasks().get(i).getTimeSpent());
 				System.out.println("Remaining time: "+app.getActiveProject().getTasks().get(i).getRemainingTime());
@@ -544,13 +569,13 @@ public class Console {
 	{
 		//Adds a new activity to the active user
 		
-		Calendar end;
-		Calendar start;
+		GregorianCalendar end;
+		GregorianCalendar start;
 		
 		System.out.println("Input name for activity");
 		String activityName = userInput();
 		
-		System.out.println("Input start time (e.g: dd-MM-yyyy)");
+		System.out.println("Input start time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)");
 		
 		String dateString = userInput();
 		
@@ -562,7 +587,7 @@ public class Console {
 			return;
 		}
 		
-		System.out.println("Input end time (e.g: dd-MM-yyyy)");
+		System.out.println("Input end time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)");
 		
 		dateString = userInput();
 		if(helper.isDate(dateString))
@@ -573,11 +598,29 @@ public class Console {
 			return;
 		}
 		
-		app.createActivity(activityName, start, end);
+		System.out.println("Was this time spent on a project task?"
+				+ "\n1: Yes"
+				+ "\n2: No");
+		while(!scanner.hasNextInt()) scanner.next();
+		switch(scanner.nextInt())
+		{
+			case 1:
+				System.out.println("Which task?");
+				printTasks();
+				while (!scanner.hasNextInt()) scanner.next();
+
+				app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+				
+				app.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
+				app.setTaskTimeWorked();
+				break;
+			case 2:
+				app.createActivity(activityName, start, end);
+				default:
+					System.out.println("Incorrect input.");
+		}
 	}
 	
-	
-
 	private void editActivity() throws ParseException, OperationNotAllowed
 	{
 		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
@@ -607,9 +650,11 @@ public class Console {
 					break;
 				case 2: 
 					System.out.println("This edits the start time"); //Needs implementation
+					app.setTaskTimeWorked();
 					break;
 				case 3: 
 					System.out.println("This edits the end time"); //Needs implementation
+					app.setTaskTimeWorked();
 					break;
 				case 4: 
 					mainMenu();
@@ -628,10 +673,38 @@ public class Console {
 
 	private void printActivities()
 	{
-		for(int i = 0; i<app.projects.size();i++)
+		for(int i = 0; i < app.activeUser.getActivities().size();i++)
 		{
-			System.out.println(i+": "+app.getActiveUser().getActivities().get(i));
+			System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
 		}	
+	}
+	
+	private void printTaskActivities()
+	{
+		for(int i = 0; i < app.activeUser.getActivities().size();i++)
+		{
+			if(app.activeUser.getActivities().get(i) instanceof TaskActivity)
+			{
+				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
+			}
+		}	
+	}
+	
+	private Activity selectTaskActivity()
+	{
+		ArrayList<Activity> tempList = new ArrayList<Activity>();
+		for(int i = 0; i < app.activeUser.getActivities().size();i++)
+		{
+			if(app.activeUser.getActivities().get(i) instanceof TaskActivity)
+			{
+				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
+				tempList.add(app.getActiveUser().getActivities().get(i));
+			}
+		}
+		while(!scanner.hasNextInt()) scanner.next();
+		
+		return tempList.get(scanner.nextInt());
+		
 	}
 	
 	private void printAllActivitesInfo()
