@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.cucumber.java.bs.A;
+import io.cucumber.java.bs.I.Is;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,6 +21,7 @@ public class WhiteBoxTests {
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
 	private Activity activity;
+	private boolean isAvailable;
 
 	
 	public WhiteBoxTests(ProjectManagementApp managementApp, ErrorMessageHolder errorMessageHolder) {
@@ -87,6 +89,23 @@ public class WhiteBoxTests {
 				errorMessageHolder.setErrorMessage(e.getMessage());
 			}
 		} 
+	}
+	
+	@When("a isAvaiable request with the start time {int} {int} {int} {int} {int} and end time {int} {int} {int} {int} {int} is made")
+	public void a_is_avaiable_request_with_the_start_time_and_end_time_is_made(Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart, Integer yearEnd, Integer monthEnd, Integer dayEnd, Integer hourEnd, Integer minuteEnd) {
+	    try {
+			isAvailable = managementApp.getActiveUser().isAvailable(new GregorianCalendar(yearStart, monthStart, dayStart, hourStart, minuteStart), new GregorianCalendar(yearEnd, monthEnd, dayEnd, hourEnd, minuteEnd));
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+	@Then("the result is true")
+	public void the_result_is_true() {
+	    assertTrue(isAvailable);
+	}
+	@Then("the result is false")
+	public void the_result_is_false() {
+	    assertFalse(isAvailable);
 	}
 
 	

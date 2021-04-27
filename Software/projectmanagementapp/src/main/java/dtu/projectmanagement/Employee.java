@@ -122,7 +122,10 @@ public class Employee {
 //		//will be implementet later
 //	}
 //	
-	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) {
+	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		if (startTime.equals(endTime) || endTime.before(startTime) || startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {
+			throw new OperationNotAllowed("Invalid timeframe");
+		}
 		if(activities.isEmpty()) {
 			return true;
 		}
