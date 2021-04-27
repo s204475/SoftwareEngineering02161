@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import io.cucumber.java.bs.A;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -73,13 +74,20 @@ public class WhiteBoxTests {
 	}
 	
 	
-//	@Given("the these activities is contained in the employees activities")
-//	public void the_these_activities_is_contained_in_the_employees_activities(List<List<String>> activities) {
-//		for (List<String> activity : activities) {
-//			managementApp.createEmployee(employee.get(0), employee.get(1));
-//			assertTrue(managementApp.getEmployees().contains(managementApp.searchEmployees(employee.get(1))));
-//		} 
-//	}
+	@Given("the these activities is contained in the employees activities")
+	public void the_these_activities_is_contained_in_the_employees_activities(List<List<String>> activities) {
+		for (List<String> a : activities) {
+			try {
+		    	activity = new Activity(
+		    			a.get(0), 
+						new GregorianCalendar(Integer.parseInt(a.get(1)), Integer.parseInt(a.get(2)), Integer.parseInt(a.get(3)), Integer.parseInt(a.get(4)), Integer.parseInt(a.get(5))),
+						new GregorianCalendar(Integer.parseInt(a.get(6)), Integer.parseInt(a.get(7)), Integer.parseInt(a.get(8)), Integer.parseInt(a.get(9)), Integer.parseInt(a.get(10))));
+				managementApp.addActivity(activity);
+			} catch (OperationNotAllowed e) {
+				errorMessageHolder.setErrorMessage(e.getMessage());
+			}
+		} 
+	}
 
 	
 }

@@ -47,12 +47,13 @@ public class Employee {
 		}
 		for (Activity a : activities) {
 			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
-			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) || activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime()))) {
+			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) ||
+					activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime())) ||
+					activity.getEndTime().equals(a.getStartTime())) {
 				throw new OperationNotAllowed("Timeframe not available");
 			}
 		}
 		activities.add(activity);
-		
 		sortActivities();
 	}
 	
@@ -64,15 +65,7 @@ public class Employee {
 	}
 
 	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
-		for (Activity a : activities) {
-			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
-			if ((taskActivity.getStartTime().after(a.getStartTime()) && taskActivity.getStartTime().before(a.getEndTime()) || taskActivity.getStartTime().equals(a.getStartTime()) || taskActivity.getStartTime().equals(a.getEndTime()))) {
-				throw new OperationNotAllowed("Timeframe not available");
-			}
-		
-		}
-		activities.add(taskActivity);
-		sortActivities();
+		addActivity(taskActivity);
 	}
 	
 	public void removeActivities() {
