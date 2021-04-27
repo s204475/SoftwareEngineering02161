@@ -48,8 +48,8 @@ public class Employee {
 		for (Activity a : activities) {
 			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
 			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) ||
-					activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime())) ||
-					activity.getEndTime().equals(a.getStartTime())) {
+					activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime())) || 
+					activity.getEndTime().equals(a.getStartTime())) { //dens sluttid må vel godt være en andens starttid?
 				throw new OperationNotAllowed("Timeframe not available");
 			}
 		}

@@ -47,10 +47,7 @@ public class Console {
 		{
 			//clearConsole();
 			System.out.println("Choose active user:");
-			for(int i = 0; i<app.getEmployees().size();i++)
-			{
-				System.out.println(i+": "+app.getEmployees().get(i).getName());
-			}
+			printEmployees();
 			
 			while (!scanner.hasNextInt()) scanner.next();
 			int userChoice = scanner.nextInt();
@@ -62,6 +59,13 @@ public class Console {
 			}
 		}
 		mainMenu();
+	}
+
+	private void printEmployees() {
+		for(int i = 0; i<app.getEmployees().size();i++)
+		{
+			System.out.println(i+": "+app.getEmployees().get(i).getName());
+		}
 	}
 	
 	private void createEmployee()
@@ -133,7 +137,7 @@ public class Console {
 				seePersonalActivities();
 				break;
 			case 6: 
-				app.ExitApp();
+				helper.ExitApp();
 				break;
 		}
 	}
@@ -163,8 +167,7 @@ public class Console {
 				+ "\n2: Edit activity"
 				+ "\n3: See activities"
 				+ "\n4: Print schedule"
-				+ "\n5: Set time worked on task/activity"
-				+ "\n6: Go back");
+				+ "\n5: Go back");
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
@@ -188,7 +191,7 @@ public class Console {
 				pressEnterToContinue();
 				seePersonalActivities();
 				break;
-			case 6: 
+			case 5: 
 				mainMenu();
 				break;
 			default:
@@ -267,10 +270,7 @@ public class Console {
 			System.out.println("There is currently no project manager.");
 		}
 		
-		for(int i = 0; i<app.getEmployees().size();i++)
-		{
-			System.out.println(i+": "+app.getEmployees().get(i).getName());
-		}
+		printEmployees();
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
@@ -340,12 +340,14 @@ public class Console {
 				editTasks();
 				break;
 			case 6: 
-				assignEmployeeToTaskActivity();
+				assignEmployeeToTask();
+				break;
 			default: 
 				if(app.getActiveProject().getProjectManager() != app.activeUser)
 				{
 					System.out.println("Incorrect input.");
 				}
+				break;
 		}
 		
 		if(app.getActiveProject().getProjectManager() == app.activeUser)
@@ -390,9 +392,54 @@ public class Console {
 		
 	}
 	
-	private void assignEmployeeToTaskActivity() {
-		// TODO Auto-generated method stub
+	private void assignEmployeeToTask() throws ParseException, OperationNotAllowed {
+		System.out.println("Choose employee to add");
+		printEmployees();
 		
+		while (!scanner.hasNextInt()) scanner.next();
+		int userChoice = scanner.nextInt();
+		
+		if(userChoice>app.getEmployees().size() || userChoice<0)
+		{
+			System.out.println("Incorrect input.");
+		} else {
+			System.out.println("Choose task to add employee to");
+			printTasks();
+			while (!scanner.hasNextInt()) scanner.next();
+			
+			app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+			
+			GregorianCalendar end;
+			GregorianCalendar start;
+			
+			System.out.println("Input start time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)");
+			
+			String dateString = userInput();
+			
+			if(helper.isDate(dateString))
+			{
+				start = helper.dateToCalendar(helper.convertDate(dateString));
+			} else {
+				System.out.println("Incorrect input.");
+				return;
+			}
+			
+			System.out.println("Input end time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)");
+			
+			dateString = userInput();
+			if(helper.isDate(dateString))
+			{
+				end = helper.dateToCalendar(helper.convertDate(dateString));
+			} else {
+				System.out.println("Incorrect input.");
+				return;
+			}
+			
+			app.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
+									+ "\" by "+app.getActiveUser().getName() +"("+ app.getActiveUser().getInitials()+")",
+									start, end, app.getActiveTask(),app.getEmployees().get(userChoice));
+			app.setTaskTimeWorked();
+		}
 	}
 
 	private void createReport()
@@ -514,10 +561,7 @@ public class Console {
 
 	
 	private void addEmployeeToTask() {
-		for(int i = 0; i<app.getEmployees().size();i++)
-		{
-			System.out.println(i+": "+app.getEmployees().get(i).getName());
-		}
+		printEmployees();
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		app.addEmployeeToTask(app.getEmployees().get(scanner.nextInt()));

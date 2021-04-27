@@ -31,18 +31,22 @@ public class ProjectManagementApp {
 		addProject(project);
 	}
 	
+	public void addEmployeeToTask(Employee employee) {
+		//Should be merged wit assigntask method
+		if(!activeTask.getEmployeesOnTask().contains(employee))
+		{
+			activeTask.addEmployeeToTask(employee);
+		}
+	}
+	
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
 		addEmployee(employee);
 		sortEmployees();
 	}
 	
-	private void sortEmployees() {
-		employees.sort(new NameSort());        
-	}
-	
-	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
-		Task task = new Task(taskName, estimatedDuration);
+	public void createTask(String taskName, double estimatedtime) throws OperationNotAllowed {
+		Task task = new Task(taskName, estimatedtime);
 		addTask(task);
 	}
 	
@@ -54,8 +58,9 @@ public class ProjectManagementApp {
 	
 	public void createTaskActivity(String activityName, Calendar startTime, Calendar endTime, Task task,Employee employee) throws OperationNotAllowed {
 		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar)startTime, (GregorianCalendar)endTime,task);
-		addActivity(taskActivity);
+		//addActivity(taskActivity);
 		taskActivity.getTask().addEmployeeToTask(employee);
+		assignTask(employee.getInitials(),taskActivity);
 	}
 	
 	
@@ -109,6 +114,9 @@ public class ProjectManagementApp {
 		activeProject.assignProjectManager(employee);
 	}
 
+	private void sortEmployees() {
+		employees.sort(new NameSort());        
+	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
 		for (Employee employee : employees) {
@@ -172,14 +180,6 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void addEmployeeToTask(Employee employee) {
-		//Should be merged wit assigntask method
-		if(!activeTask.getEmployeesOnTask().contains(employee))
-		{
-			activeTask.addEmployeeToTask(employee);
-		}
-	}
-	
 	public class NameSort implements Comparator<Employee> 
 	{
 		//Sorts employees alphabetically
@@ -214,10 +214,6 @@ public class ProjectManagementApp {
         else {
             return false;
         }
-	}
-	
-	public void ExitApp() {
-		System.exit(0);
 	}
 	
 

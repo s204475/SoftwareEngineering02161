@@ -45,4 +45,8 @@ public class Helper {
 		return date;
 	}
 	
+	public void ExitApp() {
+		System.exit(0);
+	}
+	
 }
