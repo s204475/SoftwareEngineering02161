@@ -41,14 +41,14 @@ public class AssignManagerSteps {
 	}
 	
 	@When("the active user assigns {string} as project manager of the project")
-	public void the_active_user_assigns_as_project_manager_of_the_project(String initials) {
+	public void the_active_user_assigns_as_project_manager_of_the_project(String initials) throws OperationNotAllowed {
 		firstEmployee = managementApp.searchEmployees(initials);
 	    project.assignProjectManager(firstEmployee);
 	}
 	
 	@Then("the employee is assigned as project manager of the project")
 	public void the_employee_is_assigned_as_project_manager_of_the_project() {
-	assertEquals(firstEmployee, project.getProjectManager());
+		assertEquals(firstEmployee, project.getProjectManager());
 	}
 	
 	@Given("there is two employees with the initials {string} and {string}")

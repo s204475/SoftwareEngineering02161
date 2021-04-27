@@ -8,9 +8,10 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
-
 import org.junit.runner.manipulation.Sortable;
+
+
+
 
 
 
@@ -38,6 +39,10 @@ public class Employee {
 	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
+		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
+				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {
+			throw new OperationNotAllowed("Timeframe not available");
+		}
 		for (Activity a : activities) {
 			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
 			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) || activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime()))) {
@@ -45,8 +50,10 @@ public class Employee {
 			}
 		}
 		activities.add(activity);
+		
 		sortActivities();
 	}
+	
 	
 	public void sortActivities() {
 		activities = (ArrayList<Activity>) activities.stream()
