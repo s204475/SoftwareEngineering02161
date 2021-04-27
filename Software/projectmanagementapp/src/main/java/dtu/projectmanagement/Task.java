@@ -27,7 +27,7 @@ public class Task {
 	}
 	
 	public double getRemainingTime() {
-		return estimatedTime-timeSpent;
+		return estimatedTime - timeSpent;
 	}
 	
 	public double getEstimatedTime() {
