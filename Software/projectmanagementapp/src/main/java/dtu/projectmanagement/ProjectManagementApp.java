@@ -253,7 +253,7 @@ public class ProjectManagementApp {
 				}
 			}
 		if (availableEmployees.isEmpty()) {
-			throw new IllegalArgumentException("No available employees at the given time");
+			throw new OperationNotAllowed("No available employees at the given time");
 		} else {
 			return availableEmployees;
 		}
