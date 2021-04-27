@@ -8,9 +8,10 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.PreAction;
-
 import org.junit.runner.manipulation.Sortable;
+
+
+
 
 
 
@@ -19,11 +20,13 @@ public class Employee {
 	private String name; 
 	private String initials; 
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
+	private ArrayList<Activity> oldActivities = new ArrayList<Activity>();
+	private DateServer dateServer = new DateServer();
+	
 	
 	public Employee(String name, String initials) {
 		this.name = name;
 		this.initials = initials; // MANGLER CHECK PÅ INITIALS
-		
 	}
 	
 	public Project createProject(String title) throws OperationNotAllowed {
@@ -38,9 +41,15 @@ public class Employee {
 	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
+		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
+				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {
+			throw new OperationNotAllowed("Timeframe not available");
+		}
 		for (Activity a : activities) {
 			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
-			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) || activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime()))) {
+			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) ||
+					activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime())) ||
+					activity.getEndTime().equals(a.getStartTime())) {
 				throw new OperationNotAllowed("Timeframe not available");
 			}
 		}
@@ -48,22 +57,35 @@ public class Employee {
 		sortActivities();
 	}
 	
+	
 	public void sortActivities() {
 		activities = (ArrayList<Activity>) activities.stream()
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
 	}
+
 	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
-		for (Activity a : activities) {
-			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
-			if ((taskActivity.getStartTime().after(a.getStartTime()) && taskActivity.getStartTime().before(a.getEndTime()) || taskActivity.getStartTime().equals(a.getStartTime()) || taskActivity.getStartTime().equals(a.getEndTime()))) {
-				throw new OperationNotAllowed("Timeframe not available");
+		addActivity(taskActivity);
+	}
+	
+	public void removeActivities() {
+		for(int i = 0; i < activities.size(); i++) {
+			if(activities.get(i).getEndTime().before(dateServer.getDateAndTime())) {
+				oldActivities.add(activities.get(i));
+				activities.remove(i);
+				sortOldActivities();
 			}
 		}
-		activities.add(taskActivity);
-		sortActivities();
 		
 	}
+	
+	public void sortOldActivities() {
+		oldActivities = (ArrayList<Activity>) oldActivities.stream()
+				.sorted(Comparator.comparing(Activity::getStartTime))
+				.collect(Collectors.toList());
+	}
+	
+
 //	public Activity editActivity() {
 //		//will be implementet later.
 //	}
@@ -87,6 +109,10 @@ public class Employee {
 	public ArrayList<Activity> getActivities() {
 		return activities;
 	}
+	
+	public ArrayList<Activity> getOldActivities(){
+		return oldActivities;
+	}
 
 	
 	
@@ -96,7 +122,21 @@ public class Employee {
 //		//will be implementet later
 //	}
 //	
-//	public boolean isAvailable(timeSlot) {
-//		return //activity in timeSlot == null ? true : false;
-//	}
+	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		if (startTime.equals(endTime) || endTime.before(startTime) || startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {
+			throw new OperationNotAllowed("Invalid timeframe");
+		}
+		if(activities.isEmpty()) {
+			return true;
+		}
+		for(int i = 0; i < activities.size(); i++) {
+			if(activities.get(i).getEndTime().before(startTime) && i == activities.size() - 1) {
+				return true;
+			}
+			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {
+				return true;
+			}
+		}
+		return false;
+	}
  }

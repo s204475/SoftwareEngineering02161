@@ -97,6 +97,8 @@ public class ProjectManagementApp {
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
+		} else if(activeUser.getInitials().equals(initials)){
+			activeUser.assignTask(taskActivity);
 			setTaskTimeWorked();
 		} else {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
@@ -108,13 +110,13 @@ public class ProjectManagementApp {
 	}
 
 	
-	public Employee searchEmployees(String initials) {
+	public Employee searchEmployees(String initials) throws OperationNotAllowed {
 		for (Employee employee : employees) {
 			if (employee.getInitials().equals(initials)) {
 				return employee;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
 	public Project searchProjectsId(String id) {
@@ -256,15 +258,25 @@ public class ProjectManagementApp {
 	
 	
 	
-//	public ArrayList<Employee> getAvailableEmployees() {
-//		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
-//		for (Employee employee : employees) {
-//			if (employee.isAvailable()) {
-//				availableEmployees.add(employee);
-//			}
-//		}
-//		return availableEmployees;
-//	}
+	public ArrayList<Employee> getAvailableEmployees(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
+		if (startTime.equals(endTime)) {
+			throw new OperationNotAllowed("You have not selected a duration to find available employees");
+		} else {
+			for (Employee employee : employees) {
+				if (employee.isAvailable(startTime, endTime)) {
+					availableEmployees.add(employee);
+				}
+			}
+		if (availableEmployees.isEmpty()) {
+			throw new OperationNotAllowed("No available employees at the given time");
+		} else {
+			return availableEmployees;
+		}
+		}
+		
+	}
+		
 	
 	
 	
@@ -305,7 +317,7 @@ public class ProjectManagementApp {
 			//Error message. no activeProject.
 			return 0.0;
 		} else {
-		double remamningTimeInHours = activeProject.getRemaningTime(); 
+		double remamningTimeInHours = activeProject.getRemainingTime(); 
 		return remamningTimeInHours;
 		}
 	}
@@ -325,9 +337,21 @@ public class ProjectManagementApp {
 		}
 	}
 	
+
 	public void setTaskStartTime(Calendar newStartTime) {
 		activeTask.setStartTime(newStartTime);
 	}
+
+	public void changeTaskName(String newName) throws OperationNotAllowed {
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeProject.changeTaskName(activeTask, newName);
+		} else {
+			System.out.println("fejl");
+			throw new OperationNotAllowed("Active user is not project manager for this project");
+		}
+	}
+	
+
 	
 	public void setTaskEstimatedTime(double estimatedTime) {
 		try {
@@ -363,7 +387,7 @@ public class ProjectManagementApp {
 		taskInformation += "Project ID: "+activeProject.getId()+"\n";
 		taskInformation += "Collective budget time spent for all tasks: "+activeProject.getBudgetTime()+"\n";
 		taskInformation += "Estimated time remaining on tasks: "+activeProject.getEstimatedTime()+"\n";
-		taskInformation += "Remaining budget time on tasks: "+activeProject.getRemaningTime()+"\n";
+		taskInformation += "Remaining budget time on tasks: "+activeProject.getRemainingTime()+"\n";
 		taskInformation += "Current project manager: "+activeProject.getProjectManager().getName()
 														+ "("+activeProject.getProjectManager().getInitials()+")"+"\n";
 		

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.naming.NameNotFoundException;
+
 public class Task {
 	private String name;
 	private DateServer dateServer = new DateServer();
@@ -41,7 +43,7 @@ public class Task {
 	}
 	
 	public double getRemainingTime() {
-		return estimatedTime-timeSpent;
+		return estimatedTime - timeSpent;
 	}
 	
 	public double getEstimatedTime() {
@@ -81,8 +83,13 @@ public class Task {
 		return employeesOnTask;
 	}
 
+
 	public void setStartTime(Calendar newStartTime) {
 		startTime = newStartTime;
+	}
+	
+	public void changeName(String newName) {
+		name = newName;
 	}
 	
 }

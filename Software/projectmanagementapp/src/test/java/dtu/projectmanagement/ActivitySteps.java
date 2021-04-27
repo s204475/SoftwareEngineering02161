@@ -97,17 +97,17 @@ public class ActivitySteps {
 		
 	}
 	@Then("the task is added to {string} activities")
-	public void the_task_is_added_to_activities(String initials) {
+	public void the_task_is_added_to_activities(String initials) throws OperationNotAllowed {
 	    assertTrue(managementApp.searchEmployees(initials).getActivities().contains(taskActivity));
 	}
 	
 	@Given("{string} is not project manager of the project")
-	public void is_not_project_manager_of_the_project(String initials) {
+	public void is_not_project_manager_of_the_project(String initials) throws OperationNotAllowed {
 		assertFalse(managementApp.getActiveProject().isProjectManager(managementApp.searchEmployees(initials)));
 	}
 	
 	@When("{string} assigns the task to {string}")
-	public void assigns_the_task_to(String initials1, String initials2) {
+	public void assigns_the_task_to(String initials1, String initials2) throws OperationNotAllowed {
 	    managementApp.setActiveUser(managementApp.searchEmployees(initials1));
 	    try {
 			managementApp.assignTask(initials2, taskActivity);
@@ -116,13 +116,13 @@ public class ActivitySteps {
 		}
 	}
 	@Then("the task is not added to {string} activities")
-	public void the_task_is_not_added_to_activities(String initials) {
+	public void the_task_is_not_added_to_activities(String initials) throws OperationNotAllowed {
 	    assertFalse(managementApp.searchEmployees(initials).getActivities().contains(taskActivity));
 	}
 
 	
 	@Given("{string} has an activity starting at {int} {int} {int} {int} {int} and ending at {int} {int} {int} {int} {int}")
-	public void has_an_activity_starting_at_and_ending_at(String initials, Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart, Integer yearEnd, Integer monthEnd, Integer dayEnd, Integer hourEnd, Integer minuteEnd) {
+	public void has_an_activity_starting_at_and_ending_at(String initials, Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart, Integer yearEnd, Integer monthEnd, Integer dayEnd, Integer hourEnd, Integer minuteEnd) throws OperationNotAllowed {
 	    managementApp.setActiveUser(managementApp.searchEmployees(initials));
 	    try {
 	    	activity = new Activity(

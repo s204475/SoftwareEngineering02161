@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
 import java.util.List;
 
-import org.picocontainer.lifecycle.NullLifecycleStrategy;
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -39,7 +37,7 @@ public class TaskSteps {
 	    assertTrue(managementApp.getActiveUser().equals(employee));
 	}
 	@Given("{string} is active user")
-	public void is_active_user(String initials) {
+	public void is_active_user(String initials) throws OperationNotAllowed {
 	    managementApp.setActiveUser(managementApp.searchEmployees(initials));
 	    assertTrue(managementApp.getActiveUser().equals(managementApp.searchEmployees(initials)));
 	}
@@ -58,7 +56,7 @@ public class TaskSteps {
 	    assertTrue(project.isProjectManager(employee));
 	}
 	@Given("{string} is project manager of the project")
-	public void is_project_manager_of_the_project(String initials) {
+	public void is_project_manager_of_the_project(String initials) throws OperationNotAllowed {
 	    managementApp.getActiveProject().assignProjectManager(managementApp.searchEmployees(initials));
 	    assertTrue(managementApp.getActiveProject().isProjectManager(managementApp.searchEmployees(initials)));
 	}
