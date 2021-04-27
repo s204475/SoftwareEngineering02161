@@ -95,10 +95,16 @@ public class Project {
 		tasks.add(task);
 	}
 	
+
 	public void removeProjectManager() {
 		projectManager = null;
 	}
 	
+
+	public void changeTaskName(Task task, String newName) throws OperationNotAllowed {
+		task.changeName(newName);
+	}
+
 }
 	
 	

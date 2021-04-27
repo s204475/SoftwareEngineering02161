@@ -242,15 +242,25 @@ public class ProjectManagementApp {
 	
 	
 	
-//	public ArrayList<Employee> getAvailableEmployees() {
-//		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
-//		for (Employee employee : employees) {
-//			if (employee.isAvailable()) {
-//				availableEmployees.add(employee);
-//			}
-//		}
-//		return availableEmployees;
-//	}
+	public ArrayList<Employee> getAvailableEmployees(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
+		if (startTime.equals(endTime)) {
+			throw new OperationNotAllowed("You have not selected a duration to find available employees");
+		} else {
+			for (Employee employee : employees) {
+				if (employee.isAvailable(startTime, endTime)) {
+					availableEmployees.add(employee);
+				}
+			}
+		if (availableEmployees.isEmpty()) {
+			throw new IllegalArgumentException("No available employees at the given time");
+		} else {
+			return availableEmployees;
+		}
+		}
+		
+	}
+		
 	
 	
 	
@@ -308,9 +318,21 @@ public class ProjectManagementApp {
 		}
 	}
 	
+
 	public void setTaskStartTime(Calendar newStartTime) {
 		activeTask.setStartTime(newStartTime);
 	}
+
+	public void changeTaskName(String newName) throws OperationNotAllowed {
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeProject.changeTaskName(activeTask, newName);
+		} else {
+			System.out.println("fejl");
+			throw new OperationNotAllowed("Active user is not project manager for this project");
+		}
+	}
+	
+
 	
 	public void setTaskEstimatedTime(double estimatedTime) {
 		try {

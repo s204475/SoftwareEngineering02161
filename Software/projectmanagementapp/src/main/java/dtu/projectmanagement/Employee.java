@@ -19,11 +19,13 @@ public class Employee {
 	private String name; 
 	private String initials; 
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
+	private ArrayList<Activity> oldActivities = new ArrayList<Activity>();
+	private DateServer dateServer = new DateServer();
+	
 	
 	public Employee(String name, String initials) {
 		this.name = name;
 		this.initials = initials; // MANGLER CHECK PÅ INITIALS
-		
 	}
 	
 	public Project createProject(String title) throws OperationNotAllowed {
@@ -53,17 +55,37 @@ public class Employee {
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
 	}
+
 	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
 		for (Activity a : activities) {
 			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
 			if ((taskActivity.getStartTime().after(a.getStartTime()) && taskActivity.getStartTime().before(a.getEndTime()) || taskActivity.getStartTime().equals(a.getStartTime()) || taskActivity.getStartTime().equals(a.getEndTime()))) {
 				throw new OperationNotAllowed("Timeframe not available");
 			}
+		
 		}
 		activities.add(taskActivity);
 		sortActivities();
+	}
+	
+	public void removeActivities() {
+		for(int i = 0; i < activities.size(); i++) {
+			if(activities.get(i).getEndTime().before(dateServer.getDateAndTime())) {
+				oldActivities.add(activities.get(i));
+				activities.remove(i);
+				sortOldActivities();
+			}
+		}
 		
 	}
+	
+	public void sortOldActivities() {
+		oldActivities = (ArrayList<Activity>) oldActivities.stream()
+				.sorted(Comparator.comparing(Activity::getStartTime))
+				.collect(Collectors.toList());
+	}
+	
+
 //	public Activity editActivity() {
 //		//will be implementet later.
 //	}
@@ -87,6 +109,10 @@ public class Employee {
 	public ArrayList<Activity> getActivities() {
 		return activities;
 	}
+	
+	public ArrayList<Activity> getOldActivities(){
+		return oldActivities;
+	}
 
 	
 	
@@ -96,7 +122,18 @@ public class Employee {
 //		//will be implementet later
 //	}
 //	
-//	public boolean isAvailable(timeSlot) {
-//		return //activity in timeSlot == null ? true : false;
-//	}
+	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) {
+		if(activities.isEmpty()) {
+			return true;
+		}
+		for(int i = 0; i < activities.size(); i++) {
+			if(activities.get(i).getEndTime().before(startTime) && i == activities.size() - 1) {
+				return true;
+			}
+			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {
+				return true;
+			}
+		}
+		return false;
+	}
  }

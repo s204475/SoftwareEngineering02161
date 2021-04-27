@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.picocontainer.lifecycle.NullLifecycleStrategy;
 
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -18,6 +19,7 @@ public class TaskSteps {
 	private ProjectManagementApp managementApp;
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
+	private Employee employee2;
 	private Project project;
 	private Task task;
 	
@@ -145,7 +147,51 @@ public class TaskSteps {
 		}
 	}
 	
+	@Given("there is a task with the name {string} in the project")
+	public void there_is_a_task_with_the_name_in_the_project(String taskName) {
+		try {
+			task = new Task(taskName, 20);
+			managementApp.addTask(task);
+			managementApp.setActiveTask(task);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+		assertTrue(project.getTasks().contains(task));
+	    
+	}
+
+	@When("the employee changes the name of that task to {string}")
+	public void the_employee_changes_the_name_of_that_task_to(String taskName) {
+	    try {
+			managementApp.changeTaskName(taskName);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@Then("the task name is {string}")
+	public void the_task_name_is(String taskName) {
+	    assertTrue(task.getName().equals(taskName));
+	}
 	
+	@Given("there is an employee with the initials {string} who is not project manager")
+	public void there_is_an_employee_with_the_initials_who_is_not_project_manager(String initials) {
+		employee2 = new Employee("Hannibal", initials);
+		managementApp.addEmployee(employee2);
+		assertTrue(managementApp.getEmployees().contains(employee2));
+		assertFalse(project.getProjectManager().equals(employee2));
+	}
+	
+	@When("{string} tries to edit the name of that task to {string}")
+	public void tries_to_edit_the_name_of_that_task_to(String initials, String newName) {
+	    try {
+	    	managementApp.setActiveUser(employee2);
+			managementApp.changeTaskName(newName);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+
 
 	@When("the employee edits a task to have no estimated time")
 	public void the_employee_edits_a_task_to_have_no_estimated_time() {
