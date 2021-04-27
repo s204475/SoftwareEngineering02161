@@ -44,8 +44,8 @@ public class ProjectManagementApp {
 	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
 		Task task = new Task(taskName, estimatedDuration);
 		addTask(task);
-		}
 	}
+	
 	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
 		addActivity(activity);
