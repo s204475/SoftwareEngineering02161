@@ -19,6 +19,7 @@ public class ProjectManagementApp {
 	Employee activeUser;
 	Project activeProject;
 	Task activeTask;
+	Activity activeActivity;
 	
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
@@ -41,15 +42,11 @@ public class ProjectManagementApp {
 	}
 	
 	public void createTask(String taskName, double estimatedDuration) throws OperationNotAllowed {
-		if(taskName.equals("") || estimatedDuration <= 0) {
-			throw new OperationNotAllowed("A task has to have a name and estimed time");
-		}
-		else {
-			Task task = new Task(taskName, estimatedDuration);
-			addTask(task);
-		}
+		Task task = new Task(taskName, estimatedDuration);
+		addTask(task);
 	}
-	public void createActivity(String activityName, GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+	
+	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
 		addActivity(activity);
 	}
@@ -71,8 +68,11 @@ public class ProjectManagementApp {
 	public void addEmployee(Employee employee) {
 		employees.add(employee);
 	}
-	public void addTask(Task task) throws OperationNotAllowed { 
-		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+	public void addTask(Task task) throws OperationNotAllowed {
+		if(task.getName().equals("") || task.getEstimatedTime() <= 0) {
+			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		}
+		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			activeProject.addTask(task);
 		} else {
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
@@ -242,15 +242,25 @@ public class ProjectManagementApp {
 	
 	
 	
-//	public ArrayList<Employee> getAvailableEmployees() {
-//		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
-//		for (Employee employee : employees) {
-//			if (employee.isAvailable()) {
-//				availableEmployees.add(employee);
-//			}
-//		}
-//		return availableEmployees;
-//	}
+	public ArrayList<Employee> getAvailableEmployees(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
+		if (startTime.equals(endTime)) {
+			throw new OperationNotAllowed("You have not selected a duration to find available employees");
+		} else {
+			for (Employee employee : employees) {
+				if (employee.isAvailable(startTime, endTime)) {
+					availableEmployees.add(employee);
+				}
+			}
+		if (availableEmployees.isEmpty()) {
+			throw new IllegalArgumentException("No available employees at the given time");
+		} else {
+			return availableEmployees;
+		}
+		}
+		
+	}
+		
 	
 	
 	
@@ -301,19 +311,39 @@ public class ProjectManagementApp {
 	}
 	
 	public void setTaskName(String newName) throws OperationNotAllowed {
-		if(newName.equals("")) {
+		if(activeTask == null) {
+			throw new OperationNotAllowed("the task does not exist");
+		}
+		else if(newName.equals("")) {
 			throw new OperationNotAllowed("A task has to have a name and estimed time");
 		} else {
 		activeTask.setName(newName);
 		}
 	}
 	
-	public void setTaskStartTime(Date newStartTime) {
-		//activeTask.setTaskStartTime(newStartTime);
+
+	public void setTaskStartTime(Calendar newStartTime) {
+		activeTask.setStartTime(newStartTime);
+	}
+
+	public void changeTaskName(String newName) throws OperationNotAllowed {
+		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+			activeProject.changeTaskName(activeTask, newName);
+		} else {
+			System.out.println("fejl");
+			throw new OperationNotAllowed("Active user is not project manager for this project");
+		}
 	}
 	
+
+	
 	public void setTaskEstimatedTime(double estimatedTime) {
-		//activeTask.setTaskEstimatedTime(estimatedTime);
+		try {
+			activeTask.setEstimatedTime(estimatedTime);
+		} catch (OperationNotAllowed e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void setTaskTimeWorked(double timeWorked) {
@@ -321,11 +351,11 @@ public class ProjectManagementApp {
 	}
 	
 	public void setActiveActivity(Activity activity) {
-		//activeTask.setActiveActivity(activity);
+		activeActivity = activity;
 	}
 	
 	public void setNewActivityName(String newName) {
-		//activeTask.setNewActivityName(newName);
+		activeActivity.setName(newName);
 	}
 
 	
