@@ -28,13 +28,6 @@ public class TaskSteps {
 		this.errorMessageHolder = errorMessageHolder;
 	}
 	
-	@Given("these employees are contained in the app")
-	public void these_employees_are_contained_in_the_app(List<List<String>> employees) {
-		for (List<String> employee : employees) {
-			managementApp.createEmployee(employee.get(0), employee.get(1));
-		}
-	}
-	
 	@Given("there is an employee with the initials {string}")
 	public void there_is_an_employee_with_the_intials(String initials) {
 		employee = new Employee("John", initials);
@@ -82,138 +75,57 @@ public class TaskSteps {
 	    assertFalse(project.isProjectManager(employee));
 	}
 
-	@When("the employee creates a task with the name {string} and a estimated time of {int} hours")
-	public void the_employee_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) {
-			try {
-				task = new Task(title, time);
-				managementApp.addTask(task);	
-			} catch (OperationNotAllowed e) {
-				errorMessageHolder.setErrorMessage(e.getMessage());
-			}
-	}
-	
-	@When("the employee creates a task with no name")
-	public void the_employee_creates_a_task_with_no_name() {
-		try {
-			managementApp.createTask("",5);	
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-	}
-	
-	@When("the employee creates a task with no estimated time")
-	public void the_employee_creates_a_task_with_no_estimated_time() {
-		try {
-			managementApp.createTask("project",0);	
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
+	@When("the employee tries to creates a task with the name {string} and a estimated time of {int} hours")
+	public void the_employee_tries_to_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) throws OperationNotAllowed {
+		createTask(title,time);
 	}
 	
 	@Given("there exist a task with the name {string} and an estimated time of {int} hours, which is the active task")
-	public void there_exist_a_task_with_the_name_and_an_estimated_time_of_hours_which_is_the_active_task(String title, Integer time) throws OperationNotAllowed {
-		try {
-			project.assignProjectManager(employee);
-			task = new Task(title, time);
-			managementApp.addTask(task);
-			managementApp.setActiveTask(task);
-			project.removeProjectManager();
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		} // kig på om dette ikke kan refactores sammen med linjen @When("the employee creates a task with the name {string} and a estimated time of {int} hours")
-		
-	}	
+	public void there_exist_a_task_with_the_name_and_an_estimated_time_of_hours_which_is_the_active_task(String title, double time) throws OperationNotAllowed {
+		project.assignProjectManager(employee);
+		createTask(title,time);
+		project.removeProjectManager();
+		} 
+
 	
 	@When("the employee tries to change the estimated time to {int} hours")
-	public void the_employee_tries_to_change_the_estimated_time_to_hours(Integer time) {
+	public void the_employee_tries_to_change_the_estimated_time_to_hours(double time) {
 	    try {
 	    	managementApp.setEstimatedTimeOfTask(time);
 	    } catch(OperationNotAllowed e) {
 	    	errorMessageHolder.setErrorMessage(e.getMessage());
 	    }
 	}
-	@Then("the estimated time of the project is changed to {int} hours")
-	public void the_estimated_time_of_the_project_is_changed_to_hours(double time) {
+	@Then("the estimated time of the task is {int} hours")
+	public void the_estimated_time_of_the_task_is_hours(double time) {
 		double estimatedTime = task.getEstimatedTime();
 		assertTrue(estimatedTime == time);
 	    }
 	
-	@When("the employee edits a task to have no name")
-	public void the_employee_edits_a_task_to_have_no_name() {
+	@When("the employee tries to change the name to {string}")
+	public void the_employee_tries_to_change_the_name_to(String name) {
 		try {
-			managementApp.setTaskName("");	
+			managementApp.setTaskName(name);
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
 	}
 	
-	@Given("there is a task with the name {string} in the project")
-	public void there_is_a_task_with_the_name_in_the_project(String taskName) {
+	@Then("the name of the task is {string}")
+	public void the_name_of_the_task_is(String TaskName) {
+	    assertTrue(task.getName().equals(TaskName));
+	}
+	
+	public void createTask(String title, double time) throws OperationNotAllowed {
 		try {
-			task = new Task(taskName, 20);
+			task = new Task(title, time);
 			managementApp.addTask(task);
 			managementApp.setActiveTask(task);
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-		assertTrue(project.getTasks().contains(task));
-	    
+		} 
 	}
-
-	@When("the employee changes the name of that task to {string}")
-	public void the_employee_changes_the_name_of_that_task_to(String taskName) {
-	    try {
-			managementApp.changeTaskName(taskName);
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-	}
-
-	@Then("the task name is {string}")
-	public void the_task_name_is(String taskName) {
-	    assertTrue(task.getName().equals(taskName));
-	}
-	
-	@Given("there is an employee with the initials {string} who is not project manager")
-	public void there_is_an_employee_with_the_initials_who_is_not_project_manager(String initials) {
-		employee2 = new Employee("Hannibal", initials);
-		managementApp.addEmployee(employee2);
-		assertTrue(managementApp.getEmployees().contains(employee2));
-		assertFalse(project.getProjectManager().equals(employee2));
-	}
-	
-	@When("{string} tries to edit the name of that task to {string}")
-	public void tries_to_edit_the_name_of_that_task_to(String initials, String newName) {
-	    try {
-	    	managementApp.setActiveUser(employee2);
-			managementApp.changeTaskName(newName);
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-	}
-
-
-	@When("the employee edits a task to have no estimated time")
-	public void the_employee_edits_a_task_to_have_no_estimated_time() {
-	   try {
-		   managementApp.setEstimatedTimeOfTask(0);
-	   } catch(OperationNotAllowed e) {
-		   errorMessageHolder.setErrorMessage(e.getMessage());
-	   }
-	   
-	}
-	
-	@When("the employee edits a non existing task")
-	public void the_employee_edits_a_non_existing_task() {
-	    try {
-	    	managementApp.setEstimatedTimeOfTask(5);
-	    } catch(OperationNotAllowed e) { // kan sandsynligvis refactors sammen på en smarter måde med @When("the employee tries to change the estimated time to {int} hours")
-	    	errorMessageHolder.setErrorMessage(e.getMessage());
-	    }   
-	}
-	
 }
-	
 	
 	
 	
