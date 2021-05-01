@@ -149,12 +149,12 @@ public class ActivitySteps {
 		}
 	}
 	@When("the active user assigns the task to {string} with the end time {int} {int} {int} {int} {int}")
-	public void the_active_user_assigns_the_task_to_with_the_end_time(String initials, Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart) {
+	public void the_active_user_assigns_the_task_to_with_the_end_time(String initials, Integer yearEnd, Integer monthEnd, Integer dayEnd, Integer hourEnd, Integer minuteEnd) {
 	    try {
 			taskActivity = new TaskActivity(
 					"Working on task", 
-					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart, minuteStart),
-					new GregorianCalendar(yearStart, monthStart, dayStart, hourStart + 1, minuteStart), task);
+					new GregorianCalendar(yearEnd, monthEnd, dayEnd - 1, hourEnd, minuteEnd),
+					new GregorianCalendar(yearEnd, monthEnd, dayEnd, hourEnd, minuteEnd), task);
 			managementApp.assignTask(initials, taskActivity);
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());

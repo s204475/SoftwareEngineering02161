@@ -29,9 +29,6 @@ public class Employee {
 		this.initials = initials; // MANGLER CHECK PÅ INITIALS
 	}
 	
-	public Project createProject(String title) throws OperationNotAllowed {
-		return new Project(title);
-	}
 	public void endProject() {
 		//will be implementet later.
 	}
@@ -41,17 +38,21 @@ public class Employee {
 	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
+		
 		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
-				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {
-			throw new OperationNotAllowed("Timeframe not available");
+				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {             // 1
+			throw new OperationNotAllowed("Timeframe not available"); 
 		}
-		for (Activity a : activities) {
-			/* MAN KAN EVT. OPTIMERE SØGNINGEN - ELLER LAV ARRAY MED GAMLE ACTIVITIES*/ 
-			if ((activity.getStartTime().after(a.getStartTime()) && activity.getStartTime().before(a.getEndTime()) ||
-					activity.getStartTime().equals(a.getStartTime()) || activity.getStartTime().equals(a.getEndTime())) ||
-					activity.getEndTime().equals(a.getStartTime())) {
+		for (Activity a : activities) {    // 2
+			if (
+					(activity.getStartTime().after(a.getStartTime())   &&  activity.getStartTime().before(a.getEndTime()))  ||
+					(activity.getEndTime().after(a.getStartTime())     &&  activity.getEndTime().before(a.getEndTime()))    ||
+					(activity.getStartTime().before(a.getStartTime())  &&  activity.getEndTime().after(a.getEndTime()))     ||
+					 activity.getStartTime().equals(a.getStartTime())  ||  activity.getEndTime().equals(a.getEndTime())
+			) {           // 3
 				throw new OperationNotAllowed("Timeframe not available");
 			}
+			
 		}
 		activities.add(activity);
 		sortActivities();
@@ -115,25 +116,19 @@ public class Employee {
 	}
 
 	
-	
-
-	
-//	public void finishTask() {
-//		//will be implementet later
-//	}
-//	
 	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
-		if (startTime.equals(endTime) || endTime.before(startTime) || startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {
+		if (startTime.equals(endTime) || endTime.before(startTime) || 
+				startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {     // 1
 			throw new OperationNotAllowed("Invalid timeframe");
 		}
-		if(activities.isEmpty()) {
+		
+		if(activities.isEmpty() || endTime.before(activities.get(0).getStartTime()) ||
+				startTime.after(activities.get(activities.size() - 1).getEndTime())) {         // 2
 			return true;
 		}
-		for(int i = 0; i < activities.size(); i++) {
-			if(activities.get(i).getEndTime().before(startTime) && i == activities.size() - 1) {
-				return true;
-			}
-			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {
+		
+		for(int i = 0; i < activities.size() - 1; i++) {        // 3
+			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {    // 4
 				return true;
 			}
 		}

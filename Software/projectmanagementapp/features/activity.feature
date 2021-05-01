@@ -55,13 +55,7 @@ Scenario: Assign a task activity in occupied timeframe
     When the active user assigns the task to "pet" with the start time 2021 4 5 0 0
     Then the error message "Timeframe not available" is given
     And  the task is not added to "pet" activities
-    When the active user assigns the task to "pet" with the start time 2021 4 6 0 0
-    Then the error message "Timeframe not available" is given
-    And  the task is not added to "pet" activities
     When the active user assigns the task to "pet" with the end time 2021 4 5 12 0
-    Then the error message "Timeframe not available" is given
-    And  the task is not added to "pet" activities
-    When the active user assigns the task to "pet" with the end time 2021 4 5 0 0
     Then the error message "Timeframe not available" is given
     And  the task is not added to "pet" activities
     When the active user assigns the task to "pet" with the end time 2021 4 6 0 0

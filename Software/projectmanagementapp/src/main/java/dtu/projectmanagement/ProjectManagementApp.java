@@ -1,5 +1,7 @@
 package dtu.projectmanagement;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,7 +29,7 @@ public class ProjectManagementApp {
 	
 	/* --------- UI CONNECTION --------- */ 
 	public void createProject(String title) throws OperationNotAllowed {
-		Project project = activeUser.createProject(title);
+		Project project = new Project(title);
 		addProject(project);
 	}
 	
@@ -78,9 +80,11 @@ public class ProjectManagementApp {
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
 		}
 	}
+	
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
 	}
+	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
@@ -90,14 +94,15 @@ public class ProjectManagementApp {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
 		}
 	}
+	
 	public void setProjectManager(Employee employee) {
 		activeProject.assignProjectManager(employee);
 	}
 
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		for (Employee employee : employees) {
-			if (employee.getInitials().equals(initials)) {
+		for (Employee employee : employees) {                       // 1
+			if (employee.getInitials().equals(initials)) {			// 2
 				return employee;
 			}
 		}
