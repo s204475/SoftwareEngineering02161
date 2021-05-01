@@ -107,9 +107,16 @@ public class ProjectManagementApp {
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
 		for (Employee employee : employees) {                       // 1
 			if (employee.getInitials().equals(initials)) {			// 2
+		//assert ((initials != null && !(initials.equals(""))) && (!(employees.isEmpty()) && employees!=null)); // precondition:
+		//boolean found =false;
+		for (Employee employee : employees) {
+			if (employee.getInitials().equals(initials)) {
+		//		found= true;
+		//		assert employees.contains(employee); // postcondition:
 				return employee;
 			}
 		}
+		assert !found; //postcondition:
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
