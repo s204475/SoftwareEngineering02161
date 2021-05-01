@@ -1,5 +1,7 @@
 package dtu.projectmanagement;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,7 +29,7 @@ public class ProjectManagementApp {
 	
 	/* --------- UI CONNECTION --------- */ 
 	public void createProject(String title) throws OperationNotAllowed {
-		Project project = activeUser.createProject(title);
+		Project project = new Project(title);
 		addProject(project);
 	}
 	
@@ -120,8 +122,8 @@ public class ProjectManagementApp {
 	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		for (Employee employee : employees) {
-			if (employee.getInitials().equals(initials)) {
+		for (Employee employee : employees) {                       // 1
+			if (employee.getInitials().equals(initials)) {			// 2
 				return employee;
 			}
 		}

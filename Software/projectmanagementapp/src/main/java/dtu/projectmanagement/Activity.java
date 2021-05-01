@@ -9,14 +9,14 @@ public class Activity {
 	private Calendar startTime;
 	private Calendar endTime;
 	
-	public Activity(String name, Calendar startTime2, Calendar endTime2) throws OperationNotAllowed {
+	public Activity(String name, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		if (name.equals("")) {
 			throw new OperationNotAllowed("An activity needs a name");
 		} else {
 			this.name = name;
 		}
-		this.startTime = startTime2;
-		this.endTime = endTime2;
+		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 	
 	public Calendar getEndTime() {
