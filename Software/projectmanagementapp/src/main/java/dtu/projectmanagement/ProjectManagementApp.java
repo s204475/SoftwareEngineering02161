@@ -61,6 +61,7 @@ public class ProjectManagementApp {
 		//addActivity(taskActivity);
 		taskActivity.getTask().addEmployeeToTask(employee);
 		assignTask(employee.getInitials(),taskActivity);
+		setTaskTimeWorked();
 	}
 	
 	
@@ -160,9 +161,7 @@ public class ProjectManagementApp {
 			String shortInitials = "";
 			shortInitials += initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
 			return shortInitials;
-		}
-		else
-		{
+		} else{
 			return initials;
 		}
 	}

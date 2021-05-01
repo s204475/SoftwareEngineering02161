@@ -649,14 +649,23 @@ public class Console {
 		switch(scanner.nextInt())
 		{
 			case 1:
-				System.out.println("Which task?");
-				printTasks();
-				while (!scanner.hasNextInt()) scanner.next();
-
-				app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+				if(app.projects != null && app.projects.size() > 0)
+				{
+					System.out.println("Which project?");
+					printProjects();
+					while (!scanner.hasNextInt()) scanner.next();
+					app.setActiveProject(app.projects.get(scanner.nextInt()));
+					
+					System.out.println("Which task?");
+					printTasks();
+					while (!scanner.hasNextInt()) scanner.next();
+					app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+					
+					app.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
+				} else{
+					System.out.println("There are currently no project and therefore no task can have been worked on.");
+				}
 				
-				app.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
-				app.setTaskTimeWorked();
 				break;
 			case 2:
 				app.createActivity(activityName, start, end);
@@ -721,6 +730,14 @@ public class Console {
 		{
 			System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
 		}	
+	}
+	
+	private void printProjects()
+	{
+		for(int i = 0; i < app.projects.size();i++)
+		{
+			System.out.println(i+": "+app.projects.get(i).getTitle()+" ("+app.projects.get(i).getId()+")");
+		}
 	}
 	
 	private void printTaskActivities()
