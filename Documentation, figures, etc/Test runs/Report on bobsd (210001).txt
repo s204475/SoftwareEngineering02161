@@ -1,0 +1,17 @@
+Project name: bobsd
+Project ID: 210001
+Collective budget time spent for all tasks: 0
+Estimated time remaining on tasks: 12.0
+Remaining budget time on tasks: 10.5
+Current project manager: bob(b)
+The following task are associated with the project:
+
+----------------------------------------------------------------
+Task name: tasky
+Estimated time left on task: 12.0
+Total budget time on task: 10.5
+Task started on: Sat May 01 00:00:00 CEST 2021
+Total work hours used on project: 1.5
+Employees currently assigned to task: 
+Johnny(J)
+

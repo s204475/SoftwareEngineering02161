@@ -63,7 +63,6 @@ public class ProjectManagementApp {
 		//addActivity(taskActivity);
 		taskActivity.getTask().addEmployeeToTask(employee);
 		assignTask(employee.getInitials(),taskActivity);
-		setTaskTimeWorked();
 	}
 	
 	
@@ -105,6 +104,7 @@ public class ProjectManagementApp {
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
+			setTaskTimeWorked();
 		} else if(activeUser.getInitials().equals(initials)){
 			activeUser.assignTask(taskActivity);
 			setTaskTimeWorked();
@@ -160,8 +160,7 @@ public class ProjectManagementApp {
 		}
 		if(initials.length()>4)
 		{
-			String shortInitials = "";
-			shortInitials += initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
+			String shortInitials = ""+initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
 			return shortInitials;
 		} else{
 			return initials;
@@ -230,6 +229,10 @@ public class ProjectManagementApp {
 	
 	public Employee getActiveUser() {
 		return activeUser;
+	}
+	
+	public Activity getActiveActivity() {
+		return activeActivity;
 	}
 
 	public ArrayList<Project> getProjects() {
@@ -425,6 +428,36 @@ public class ProjectManagementApp {
 
 	public Task getActiveTask() {
 		return activeTask;
+	}
+
+	public void deleteEmployee(Employee employee) {
+		employees.remove(employee);
+	}
+
+	public void deleteProject(Project project) {
+		if(project.getTasks() != null && project.getTasks().size() > 0)
+		{
+			for(Task task : project.getTasks())
+			{
+				deleteTask(task);
+			}
+		}
+		
+		projects.remove(project);
+		activeProject = null;
+	}
+
+	public void deleteTask(Task task) {
+		activeProject.tasks.remove(task);
+		activeTask = null;
+	}
+
+	public void deleteActivity(Activity activity) {
+		activeUser.getActivities().remove(activity);
+		if(activity instanceof TaskActivity)
+		{
+			((TaskActivity)(activity)).getTask().getEmployeesOnTask().remove(activeUser);
+		}
 	}
 	
 	

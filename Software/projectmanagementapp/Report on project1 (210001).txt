@@ -3,7 +3,7 @@ Project ID: 210001
 Collective budget time spent for all tasks: 0
 Estimated time remaining on tasks: 10.0
 Remaining budget time on tasks: 10.0
-Current project manager: John med et langt navn(392)
+Current project manager: John med et langt navn(Jmel)
 The following task are associated with the project:
 
 ----------------------------------------------------------------
@@ -13,5 +13,5 @@ Total budget time on task: 10.0
 Task started on: Sat May 01 00:00:00 CEST 2021
 Total work hours used on project: 0.0
 Employees currently assigned to task: 
-John med et langt navn(392)
+John med et langt navn(Jmel)
 

@@ -76,7 +76,10 @@ public class Task {
 
 	public void addEmployeeToTask(Employee employee)
 	{
-		employeesOnTask.add(employee);
+		if(!employeesOnTask.contains(employee))
+		{
+			employeesOnTask.add(employee);
+		}
 	}
 	
 	public ArrayList<Employee> getEmployeesOnTask() {

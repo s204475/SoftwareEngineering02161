@@ -29,13 +29,6 @@ public class Employee {
 		this.initials = initials; // MANGLER CHECK PÅ INITIALS
 	}
 	
-	public void endProject() {
-		//will be implementet later.
-	}
-	
-	public void getSchedule() {
-		//will be implementet later.
-	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
 		
@@ -85,19 +78,7 @@ public class Employee {
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
 	}
-	
 
-//	public Activity editActivity() {
-//		//will be implementet later.
-//	}
-	
-	public void setHoursWorked() {
-		//will be implementet later
-	}
-	
-	public void editHoursWorked() {
-		//will be implementet later
-	}
 
 	public String getInitials() {
 		return initials; 

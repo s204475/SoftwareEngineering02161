@@ -49,4 +49,12 @@ public class Helper {
 		System.exit(0);
 	}
 	
+	public void printError(OperationNotAllowed e) {
+		System.out.println(e.getMessage());
+	}
+	
+	public void printError(ParseException e) {
+		System.out.println(e.getMessage());
+	}
+	
 }
