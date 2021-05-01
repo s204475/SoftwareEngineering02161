@@ -1,0 +1,10 @@
+Project name: projcet
+Project ID: 210001
+Collective budget time spent for all tasks: 0
+Estimated time remaining on tasks: 0.0
+Remaining budget time on tasks: 0.0
+Current project manager: bob(b)
+The following task are associated with the project:
+
+There are no task associated with this project yet.
+

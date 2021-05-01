@@ -32,13 +32,6 @@ public class Employee {
 	public Project createProject(String title) throws OperationNotAllowed {
 		return new Project(title);
 	}
-	public void endProject() {
-		//will be implementet later.
-	}
-	
-	public void getSchedule() {
-		//will be implementet later.
-	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
 		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
@@ -84,19 +77,7 @@ public class Employee {
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
 	}
-	
 
-//	public Activity editActivity() {
-//		//will be implementet later.
-//	}
-	
-	public void setHoursWorked() {
-		//will be implementet later
-	}
-	
-	public void editHoursWorked() {
-		//will be implementet later
-	}
 
 	public String getInitials() {
 		return initials; 
