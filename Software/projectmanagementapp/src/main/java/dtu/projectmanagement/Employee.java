@@ -1,19 +1,10 @@
 package dtu.projectmanagement;
 
-import java.awt.ActiveEvent;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
-
-import org.junit.runner.manipulation.Sortable;
-
-
-
-
-
 
 public class Employee {
 
