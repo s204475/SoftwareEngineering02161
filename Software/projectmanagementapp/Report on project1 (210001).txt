@@ -10,7 +10,7 @@ The following task are associated with the project:
 Task name: task1
 Estimated time left on task: 10.0
 Total budget time on task: 10.0
-Task started on: Tue Apr 27 00:00:00 CEST 2021
+Task started on: Sat May 01 00:00:00 CEST 2021
 Total work hours used on project: 0.0
 Employees currently assigned to task: 
 John med et langt navn(392)
