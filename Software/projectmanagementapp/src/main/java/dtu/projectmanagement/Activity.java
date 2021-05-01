@@ -1,5 +1,6 @@
 package dtu.projectmanagement;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -37,6 +38,16 @@ public class Activity {
 
 	public void setName(String newName) {
 		name = newName;
+	}
+
+	public double getTimePassed() {
+		if(endTime.before(Calendar.getInstance()))
+		{
+			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), endTime.toInstant())/60;
+		} else
+		{
+			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), Calendar.getInstance().toInstant())/60;
+		}
 	}
 }
 

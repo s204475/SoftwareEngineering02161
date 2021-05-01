@@ -23,14 +23,19 @@ public class ReportSteps {
 	
 	@When("the employee tries to create a report to default path")
 	public void the_employee_tries_to_create_a_report_to_default_path() throws OperationNotAllowed, IOException {
-		managementApp.createEmployee("John", managementApp.createInitials("John"));
-		employee = managementApp.searchEmployees("J");
+		employee = new Employee("John med et langt navn",managementApp.createInitials("John med et langt navn"));
+		//employee = managementApp.searchEmployees("J");
 	    managementApp.addEmployee(employee);
 	    managementApp.setActiveUser(employee);
-	    //managementApp.createProject("project1");
+	    
 	    project = managementApp.searchProjectsTitle("project1");
 	    managementApp.setActiveProject(project);
 	    managementApp.assignProjectManager(employee);
+	    
+	    Task task = new Task("task1",10);
+	    managementApp.setActiveTask(task);
+	    task.addEmployeeToTask(employee);
+	    managementApp.addTask(task);
 	    
 	    //The report will be printed to the main folder of the java project
 	    managementApp.printReport(System.getProperty("user.dir"));

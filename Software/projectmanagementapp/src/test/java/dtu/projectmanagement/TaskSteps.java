@@ -16,7 +16,6 @@ public class TaskSteps {
 	private ProjectManagementApp managementApp;
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
-	private Employee employee2;
 	private Project project;
 	private Task task;
 	

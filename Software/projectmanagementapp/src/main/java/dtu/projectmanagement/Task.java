@@ -22,8 +22,24 @@ public class Task {
 		this.timeSpent = 0;
 	}
 	
-	public void setTimeSpent(double timeSpent) {
-		this.timeSpent = timeSpent;
+	public void setTimeSpent() {
+		
+		double hoursSpent = 0;
+		
+		for(Employee employee : employeesOnTask)
+		{
+			for(Activity activity : employee.getActivities())
+			{
+				if(activity instanceof TaskActivity)
+				{
+					if(activity.getStartTime().before(Calendar.getInstance()))
+					{
+						hoursSpent += activity.getTimePassed();
+					}
+				}
+			}
+		}
+		this.timeSpent = hoursSpent;
 	}
 	
 	public double getRemainingTime() {
