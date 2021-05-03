@@ -16,5 +16,5 @@ Scenario: A project manager gives a bad path when trying to create a report
     And the employee is active user
     And there is a project with the name "project1"
     And the employee is project manager of the project
-    When the employee tries creates a report to the bad path "thisisnotacorrectpath"
-    Then the report is not created in "thisisnotacorrectpath" and an error is given
+    When the employee tries creates a report to the path "this is not a correct path"
+    Then the error message "the path was not found" is given

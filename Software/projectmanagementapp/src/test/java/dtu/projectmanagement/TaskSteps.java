@@ -3,7 +3,7 @@ package dtu.projectmanagement;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Duration;
 import java.util.List;
@@ -64,6 +64,27 @@ public class TaskSteps {
 	@Then("the task is created")
 	public void the_task_is_created() {
 		assertTrue(project.getTasks().contains(task));
+	}
+	
+	@Given("there is a task in the project")
+	public void there_is_a_task_in_the_project() {
+		try {
+			if(managementApp.getActiveProject().getProjectManager() == null) {
+			managementApp.assignProjectManager(employee);
+			task = new Task("Task", 10);
+			managementApp.addTask(task);	
+			managementApp.setActiveTask(task);
+			managementApp.getActiveProject().removeProjectManager();
+			}
+			else {
+				task = new Task("Task", 10);
+				managementApp.addTask(task);	
+				managementApp.setActiveTask(task);
+			}
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+		assertTrue(managementApp.getActiveProject().getTasks().contains(task));
 	}
 	
 	@Given("the employee is not project manager of the project")

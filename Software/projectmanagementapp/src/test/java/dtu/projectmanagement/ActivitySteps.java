@@ -72,17 +72,6 @@ public class ActivitySteps {
 		}
 	}
 	
-	@Given("there is a task in the project")
-	public void there_is_a_task_in_the_project() {
-		try {
-			task = new Task("Task", 10);
-			managementApp.addTask(task);	
-			managementApp.setActiveTask(task);
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-		assertTrue(managementApp.getActiveProject().getTasks().contains(task));
-	}
 	@When("the active user assigns the task to {string}")
 	public void the_active_user_assigns_the_task_to(String initials) {
 		try {
