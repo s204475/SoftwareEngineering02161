@@ -66,23 +66,6 @@ public class Employee {
 	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
 		addActivity(taskActivity);
 	}
-	
-	public void removeActivities() {
-		for(int i = 0; i < activities.size(); i++) {
-			if(activities.get(i).getEndTime().before(dateServer.getDateAndTime())) {
-				oldActivities.add(activities.get(i));
-				activities.remove(i);
-				sortOldActivities();
-			}
-		}
-		
-	}
-	
-	public void sortOldActivities() {
-		oldActivities = (ArrayList<Activity>) oldActivities.stream()
-				.sorted(Comparator.comparing(Activity::getStartTime))
-				.collect(Collectors.toList());
-	}
 
 
 	public String getInitials() {

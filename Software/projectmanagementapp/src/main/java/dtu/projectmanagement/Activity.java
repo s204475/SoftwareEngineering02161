@@ -26,9 +26,9 @@ public class Activity {
 		return startTime;
 	}
 	
-	public String getStartTimeString()
+	public void setStartTime(Calendar newStartTime)
 	{
-		return startTime.toString();
+		startTime = newStartTime;
 	}
 	
 	public String getName() {

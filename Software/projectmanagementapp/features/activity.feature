@@ -40,14 +40,6 @@ Scenario: Assign task activity successfully
     When the active user assigns the task to "pet"
     Then the task is added to "pet" activities
 
-Scenario: An employee assings themself to a task activity successfully
-    Given there is an employee with the initials "joh"
-    And the employee is active user
-    And there is a project with the name "project1"
-    And there is a task in the project
-    When the active user assigns the task to "joh"
-    Then the task is added to "joh" activities
-
 Scenario: Assign a task activity in occupied timeframe
     Given there is an employee with the initials "pet"
     And "pet" has an activity starting at 2021 4 5 0 0 and ending at 2021 4 6 0 0
@@ -81,3 +73,10 @@ Scenario: Assign task activity when not project manager
     When "per" assigns the task to "pet"
     Then the error message "Only project managers can assign tasks" is given
     And  the task is not added to "pet" activities
+    
+Scenario: An employee edits an activity successfully
+  	Given there is an employee with the initials "joh"
+  	And the employee is active user
+	And the employee has an activity starting at 2021 04 02 0 0 and ending at 2021 04 04 0 0
+	When the employee wants to change the name of the activity to "vacation" and the startime to 2021 04 03 0 0
+	Then the name of the activity is "vacation" and the startime is 2021 04 03 0 0

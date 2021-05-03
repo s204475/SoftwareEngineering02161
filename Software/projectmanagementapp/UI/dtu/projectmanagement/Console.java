@@ -294,7 +294,7 @@ public class Console {
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
-		app.assignProjectManager(app.employees.get(scanner.nextInt()));
+		appConnector.assignProjectManager(app.employees.get(scanner.nextInt()));
 		
 		//clearConsole();
 		

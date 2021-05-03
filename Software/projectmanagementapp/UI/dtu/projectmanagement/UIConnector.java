@@ -13,6 +13,11 @@ public class UIConnector {
 	}
 
 	/* --------- UI CONNECTION --------- */ 
+	
+	public void assignProjectManager(Employee employee) {
+		app.activeProject.assignProjectManager(employee);
+	}
+	
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = new Project(title, app.getLastProjectId());
 		app.addProject(project);

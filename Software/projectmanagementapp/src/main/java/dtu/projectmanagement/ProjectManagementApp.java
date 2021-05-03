@@ -190,10 +190,6 @@ public class ProjectManagementApp {
 
 	/* GETTERS AND SETTERS */
 	
-	public void assignProjectManager(Employee employee) {
-		activeProject.assignProjectManager(employee);
-	}
-	
 	public ArrayList<Employee> getEmployees() {
 		return employees;
 	}
@@ -351,7 +347,6 @@ public class ProjectManagementApp {
 		taskInformation += "Remaining budget time on tasks: "+activeProject.getRemainingTime()+"\n";
 		taskInformation += "Current project manager: "+activeProject.getProjectManager().getName()
 														+ "("+activeProject.getProjectManager().getInitials()+")"+"\n";
-		
 		taskInformation += "The following task are associated with the project:\n";
 		
 		taskInformation += "\n";
@@ -363,10 +358,11 @@ public class ProjectManagementApp {
 			{
 				taskInformation += "----------------------------------------------------------------\n";
 				taskInformation += "Task name: "+ task.getName()+"\n";
-				taskInformation += "Estimated time left on task: "+task.getEstimatedTime()+"\n";
-				taskInformation += "Total budget time on task: "+task.getRemainingTime()+"\n";
-				taskInformation += "Task started on: "+task.getStartTime().getTime().toString()+"\n";
-				taskInformation += "Total work hours used on project: "+task.getTimeSpent()+"\n";
+				taskInformation += "Task started on: "+task.getStartTime().getTime().toString()
+						+" (Week:"+task.getStartTime().get(Calendar.WEEK_OF_YEAR)+")"+"\n";
+				taskInformation += "Estimated time left on task in hours: "+task.getEstimatedTime()+"\n";
+				taskInformation += "Total budget time on task in hours: "+task.getRemainingTime()+"\n";
+				taskInformation += "Total work hours used on task: "+task.getTimeSpent()+"\n";
 				taskInformation += "Employees currently assigned to task: "+"\n";
 				if(task.getEmployeesOnTask().size() > 0)
 				{
