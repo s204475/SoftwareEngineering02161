@@ -44,7 +44,7 @@ public class TaskSteps {
 	
 	@Given("there is a project with the name {string}")
 	public void there_is_a_project_with_the_name(String title) throws OperationNotAllowed {
-		project = new Project(title);
+		project = new Project(title, 0);
 		managementApp.addProject(project);
 		managementApp.setActiveProject(project);
 	    assertTrue(managementApp.getProjects().contains(project));

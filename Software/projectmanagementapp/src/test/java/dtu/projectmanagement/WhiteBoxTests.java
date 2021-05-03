@@ -98,7 +98,7 @@ public class WhiteBoxTests {
 	@Given("there exists a project with the name {string}")
 	public void there_exists_a_project_with_the_name(String title) {
 	    try {
-			this.project = new Project(title);
+			this.project = new Project(title, 0);
 			managementApp.addProject(project);
 			managementApp.setActiveProject(project);
 		} catch (OperationNotAllowed e) {

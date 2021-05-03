@@ -19,13 +19,13 @@ public class Project {
 	
 	
 	
-	public Project(String title) throws OperationNotAllowed {
+	public Project(String title, int lastProjectId) throws OperationNotAllowed {
 		if (title.equals("")) {
 			throw new OperationNotAllowed("A project needs a name");
 		} else {
 			this.title = title;
 		}
-		this.id = setId();
+		this.id = setId(lastProjectId);
 		this.startTime = dateServer.getDate();
 	}
 	
@@ -41,8 +41,12 @@ public class Project {
 		projectManager = employee;
 	}
 	
-	public String setId() { 
-		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + "0001"; // IMPLEMENTER LØBENUMMER
+	public String setId(int lastProjectId) { 
+		String lastProjectIdString = String.valueOf(lastProjectId);
+		while(lastProjectIdString.length() < 4) {
+			lastProjectIdString = "0" + lastProjectIdString;
+		}
+		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + lastProjectIdString;
 		return id;
 	}
 	

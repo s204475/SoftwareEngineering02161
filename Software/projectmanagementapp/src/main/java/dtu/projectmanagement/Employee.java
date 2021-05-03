@@ -40,16 +40,16 @@ public class Employee {
 	
 	public boolean checkTimeframe(Activity activity) {
 		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
-				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {             // 1
+				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {  
 			return false;
 		}
-		for (Activity a : activities) {    // 2
+		for (Activity a : activities) {    
 			if (
 					(activity.getStartTime().after(a.getStartTime())   &&  activity.getStartTime().before(a.getEndTime()))  ||
 					(activity.getEndTime().after(a.getStartTime())     &&  activity.getEndTime().before(a.getEndTime()))    ||
 					(activity.getStartTime().before(a.getStartTime())  &&  activity.getEndTime().after(a.getEndTime()))     ||
 					 activity.getStartTime().equals(a.getStartTime())  ||  activity.getEndTime().equals(a.getEndTime())
-			) {           // 3
+			) {           
 				return false;
 			}
 			

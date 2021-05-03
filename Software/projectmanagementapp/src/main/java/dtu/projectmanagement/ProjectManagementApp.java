@@ -17,10 +17,13 @@ public class ProjectManagementApp {
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
-	/* ---------------------------------- */
-	/* --------- BUSINESS LOGIC --------- */
-	/* ---------------------------------- */
-	/* METHODS */
+	int lastProjectId = 0;
+	
+	public void createProject(String title) throws OperationNotAllowed {
+		Project project = new Project(title, lastProjectId);
+		addProject(project);
+	}
+	
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
 		addEmployee(employee);
@@ -34,6 +37,7 @@ public class ProjectManagementApp {
 			}
 		}
 		projects.add(project);
+		incrementLastProjectId();
 	}
 	
 	public void addEmployee(Employee employee) {
@@ -72,16 +76,16 @@ public class ProjectManagementApp {
 	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		//assert ((initials != null && !(initials.equals(""))) && (!(employees.isEmpty()) && employees!=null)); // precondition:
-		//boolean found =false;
+		assert ((initials != null && employees!=null)); // precondition:
+		boolean found = false;
 		for (Employee employee : employees) { //1
 			if (employee.getInitials().equals(initials)) { //2
-		//		found= true;
-		//		assert employees.contains(employee); // postcondition:
+				found = true;
+				assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
 				return employee;
 			}
 		}
-		// assert !found; //postcondition:
+		assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
@@ -174,6 +178,15 @@ public class ProjectManagementApp {
         }
 	}
 	
+	public void incrementLastProjectId() {
+		lastProjectId++;
+		if(lastProjectId == 10000) {
+			lastProjectId = 0;
+		}
+	}
+	public int getLastProjectId() {
+		return lastProjectId;
+	}
 
 	/* GETTERS AND SETTERS */
 	
