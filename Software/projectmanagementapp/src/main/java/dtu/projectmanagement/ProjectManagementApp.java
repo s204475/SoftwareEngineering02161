@@ -17,10 +17,11 @@ public class ProjectManagementApp {
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
+	int lastProjectId = 0;
 	
 	/* --------- UI CONNECTION --------- */ 
 	public void createProject(String title) throws OperationNotAllowed {
-		Project project = new Project(title);
+		Project project = new Project(title, lastProjectId);
 		addProject(project);
 	}
 	
@@ -59,6 +60,7 @@ public class ProjectManagementApp {
 			}
 		}
 		projects.add(project);
+		incrementLastProjectId();
 	}
 	
 	public void addEmployee(Employee employee) {
@@ -197,6 +199,13 @@ public class ProjectManagementApp {
         else {
             return false;
         }
+	}
+	
+	public void incrementLastProjectId() {
+		lastProjectId++;
+		if(lastProjectId == 10000) {
+			lastProjectId = 0;
+		}
 	}
 	
 

@@ -48,7 +48,7 @@ public class ProjectSteps {
 	@When("the active user tries to create a project with the name {string}")
 	public void the_active_user_tries_to_create_a_project_with_the_name(String title) {
 	    try {
-			project = new Project(title);
+			project = new Project(title, 0);
 			managementApp.addProject(project);
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());

@@ -29,7 +29,7 @@ public class AssignManagerSteps {
 	
 	@Given("there is a project named {string}")
 	public void there_is_a_project_named(String title) throws OperationNotAllowed {
-		project = new Project(title);
+		project = new Project(title, 0);
 		managementApp.addProject(project);
 	    assertTrue(managementApp.getProjects().contains(project));
 	}
