@@ -66,10 +66,12 @@ public class WhiteBoxTests {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
 	}
+	
 	@Then("the activity is contained in the employees activities")
 	public void the_activity_is_contained_in_the_employees_activities() {
 	    assertTrue(managementApp.getActiveUser().getActivities().contains(activity));
 	}
+	
 	@Then("the activity is not contained in the employees activities")
 	public void the_activity_is_not_contained_in_the_employees_activities() {
 		assertFalse(managementApp.getActiveUser().getActivities().contains(activity));
@@ -99,16 +101,16 @@ public class WhiteBoxTests {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
 	}
+	
 	@Then("the result is true")
 	public void the_result_is_true() {
 	    assertTrue(isAvailable);
 	}
+	
 	@Then("the result is false")
 	public void the_result_is_false() {
 	    assertFalse(isAvailable);
 	}
-
-	
 }
 	
 	

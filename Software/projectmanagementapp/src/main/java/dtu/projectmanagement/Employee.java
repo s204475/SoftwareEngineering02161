@@ -32,9 +32,26 @@ public class Employee {
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
 		
+		if (!checkTimeframe(activity)) {
+			throw new OperationNotAllowed("Timeframe not available"); 
+		}
+		activities.add(activity);
+		sortActivities();
+	}
+	
+	public void addTaskActivity(TaskActivity activity) throws OperationNotAllowed {	
+		if (!checkTimeframe(activity)) {
+			throw new OperationNotAllowed("Timeframe not available"); 
+		}
+		activities.add(activity);
+		sortActivities();
+	}
+	
+	
+	public boolean checkTimeframe(Activity activity) {
 		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
 				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {             // 1
-			throw new OperationNotAllowed("Timeframe not available"); 
+			return false;
 		}
 		for (Activity a : activities) {    // 2
 			if (
@@ -43,14 +60,12 @@ public class Employee {
 					(activity.getStartTime().before(a.getStartTime())  &&  activity.getEndTime().after(a.getEndTime()))     ||
 					 activity.getStartTime().equals(a.getStartTime())  ||  activity.getEndTime().equals(a.getEndTime())
 			) {           // 3
-				throw new OperationNotAllowed("Timeframe not available");
+				return false;
 			}
 			
 		}
-		activities.add(activity);
-		sortActivities();
+		return true;
 	}
-	
 	
 	public void sortActivities() {
 		activities = (ArrayList<Activity>) activities.stream()
