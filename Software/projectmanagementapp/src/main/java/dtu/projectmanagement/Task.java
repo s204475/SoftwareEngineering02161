@@ -1,11 +1,7 @@
 package dtu.projectmanagement;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
-import javax.naming.NameNotFoundException;
 
 public class Task {
 	private String name;
