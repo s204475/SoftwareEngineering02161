@@ -105,12 +105,10 @@ public class ProjectManagementApp {
 	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		for (Employee employee : employees) {                       // 1
-			if (employee.getInitials().equals(initials)) {			// 2
 		//assert ((initials != null && !(initials.equals(""))) && (!(employees.isEmpty()) && employees!=null)); // precondition:
 		//boolean found =false;
-		for (Employee employee : employees) {
-			if (employee.getInitials().equals(initials)) {
+		for (Employee employee : employees) { //1
+			if (employee.getInitials().equals(initials)) { //2
 		//		found= true;
 		//		assert employees.contains(employee); // postcondition:
 				return employee;
@@ -119,6 +117,7 @@ public class ProjectManagementApp {
 		// assert !found; //postcondition:
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
+	
 	
 	public Project searchProjectsId(String id) {
 		for (Project project : projects) {
