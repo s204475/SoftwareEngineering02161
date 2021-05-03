@@ -53,10 +53,6 @@ public class ProjectManagementApp {
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
-		if(activity instanceof TaskActivity)
-		{
-			setTaskTimeWorked();
-		}
 	}
 	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {

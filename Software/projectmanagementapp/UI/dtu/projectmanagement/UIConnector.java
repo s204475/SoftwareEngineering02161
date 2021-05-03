@@ -3,11 +3,11 @@ package dtu.projectmanagement;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class UIconnecter {
+public class UIConnector {
 	
 	private ProjectManagementApp app;
 	
-	public UIconnecter(ProjectManagementApp app)
+	public UIConnector(ProjectManagementApp app)
 	{
 		this.app = app;
 	}
