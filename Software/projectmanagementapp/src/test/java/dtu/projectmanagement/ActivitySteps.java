@@ -30,6 +30,7 @@ public class ActivitySteps {
 					new GregorianCalendar(2021, 04, 02, 0, 0),
 					new GregorianCalendar(2021, 04, 05, 0, 0));
 			managementApp.addActivity(activity);
+			assertTrue(activity.getName().equals(name));
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
@@ -148,6 +149,22 @@ public class ActivitySteps {
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
+	}
+	
+	@When("the employee wants to change the name of the activity to {string} and the startime to {int} {int} {int} {int} {int}")
+	public void the_employee_wants_to_change_the_name_of_the_activity_to_and_the_startime_to(String newName, Integer newYear, Integer newMonth, Integer newDay, Integer newHour, Integer newMinute) {
+	    assertFalse(activity.getName().equals(newName));
+	    managementApp.setActiveActivity(activity);
+	    managementApp.setNewActivityName(newName);
+	    
+	    assertFalse(activity.getStartTime().equals(new GregorianCalendar(newYear,newMonth,newDay,newHour,newMinute)));
+	    activity.setStartTime(new GregorianCalendar(newYear,newMonth,newDay,newHour,newMinute));
+	}
+
+	@Then("the name of the activity is {string} and the startime is {int} {int} {int} {int} {int}")
+	public void the_name_of_the_activity_is_and_the_startime_is(String newName, Integer newYear, Integer newMonth, Integer newDay, Integer newHour, Integer newMinute) {
+		assertTrue(activity.getName().equals(newName));
+		assertTrue(activity.getStartTime().equals(new GregorianCalendar(newYear,newMonth,newDay,newHour,newMinute)));
 	}
 	
 }

@@ -177,10 +177,6 @@ public class ProjectManagementApp {
 
 	/* GETTERS AND SETTERS */
 	
-	public void assignProjectManager(Employee employee) {
-		activeProject.assignProjectManager(employee);
-	}
-	
 	public ArrayList<Employee> getEmployees() {
 		return employees;
 	}
@@ -351,9 +347,6 @@ public class ProjectManagementApp {
 				taskInformation += "Task name: "+ task.getName()+"\n";
 				taskInformation += "Task started on: "+task.getStartTime().getTime().toString()
 						+" (Week:"+task.getStartTime().get(Calendar.WEEK_OF_YEAR)+")"+"\n";
-				Calendar finishDate = task.getStartTime();
-				finishDate.add(Calendar.HOUR_OF_DAY, (int)task.getEstimatedTime());
-				taskInformation += "Task should be finished on week "+finishDate.get(Calendar.WEEK_OF_YEAR)+"\n";
 				taskInformation += "Estimated time left on task in hours: "+task.getEstimatedTime()+"\n";
 				taskInformation += "Total budget time on task in hours: "+task.getRemainingTime()+"\n";
 				taskInformation += "Total work hours used on task: "+task.getTimeSpent()+"\n";

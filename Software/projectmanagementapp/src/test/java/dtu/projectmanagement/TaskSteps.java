@@ -70,7 +70,7 @@ public class TaskSteps {
 	public void there_is_a_task_in_the_project() {
 		try {
 			if(managementApp.getActiveProject().getProjectManager() == null) {
-			managementApp.assignProjectManager(employee);
+			managementApp.getActiveProject().assignProjectManager(employee);
 			task = new Task("Task", 10);
 			managementApp.addTask(task);	
 			managementApp.setActiveTask(task);
