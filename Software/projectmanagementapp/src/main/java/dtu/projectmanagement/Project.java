@@ -1,15 +1,9 @@
 package dtu.projectmanagement;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.text.DateFormat;
-import java.time.Duration;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.function.BooleanSupplier;
 
 
 public class Project {

@@ -11,7 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.cucumber.java.bs.A;
-import io.cucumber.java.bs.I.Is;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,7 +20,10 @@ public class WhiteBoxTests {
 	private ErrorMessageHolder errorMessageHolder;
 	private Employee employee;
 	private Activity activity;
+	private Project project;
+	private Task task;
 	private boolean isAvailable;
+
 
 	
 	public WhiteBoxTests(ProjectManagementApp managementApp, ErrorMessageHolder errorMessageHolder) {
@@ -93,6 +95,52 @@ public class WhiteBoxTests {
 		} 
 	}
 	
+	@Given("there exists a project with the name {string}")
+	public void there_exists_a_project_with_the_name(String title) {
+	    try {
+			this.project = new Project(title);
+			managementApp.addProject(project);
+			managementApp.setActiveProject(project);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	    	    		
+	}
+
+	@Given("{string} is projectmanager of {string}")
+	public void is_projectmanager_of(String initials, String project) {
+		try {
+			managementApp.setProjectManager(managementApp.searchEmployees(initials));
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@When("employee tries to create a task with the name {string} and an estimated time {double}")
+	public void employee_tries_to_create_a_task_with_the_name_and_an_estimated_time(String name, Double duration) {
+		try {
+			task = new Task(name, duration);
+			managementApp.addTask(task);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@Then("the task is not created")
+	public void the_task_is_not_created() {
+	    assertFalse(project.getTasks().contains(task));
+	}
+
+	@Given("project does not have a project manager")
+	public void project_does_not_have_a_project_manager() {
+	    assertTrue(project.getProjectManager()== null);
+	}
+	
+	@Then("the task is in the task list")
+	public void the_task_is_in_the_task_list() {
+		assertTrue(project.getTasks().contains(task));
+	}
+	
 	@When("a isAvaiable request with the start time {int} {int} {int} {int} {int} and end time {int} {int} {int} {int} {int} is made")
 	public void a_is_avaiable_request_with_the_start_time_and_end_time_is_made(Integer yearStart, Integer monthStart, Integer dayStart, Integer hourStart, Integer minuteStart, Integer yearEnd, Integer monthEnd, Integer dayEnd, Integer hourEnd, Integer minuteEnd) {
 	    try {
@@ -111,6 +159,8 @@ public class WhiteBoxTests {
 	public void the_result_is_false() {
 	    assertFalse(isAvailable);
 	}
+
+
 }
 	
 	

@@ -1,20 +1,11 @@
 package dtu.projectmanagement;
 
-import static org.junit.Assert.assertArrayEquals;
-
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import io.cucumber.messages.Messages.TestCaseStarted;
 
 
 public class ProjectManagementApp {
@@ -31,14 +22,6 @@ public class ProjectManagementApp {
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = new Project(title);
 		addProject(project);
-	}
-	
-	public void addEmployeeToTask(Employee employee) {
-		//Should be merged wit assigntask method
-		if(!activeTask.getEmployeesOnTask().contains(employee))
-		{
-			activeTask.addEmployeeToTask(employee);
-		}
 	}
 	
 	public void createEmployee(String name, String initials) {
@@ -60,7 +43,6 @@ public class ProjectManagementApp {
 	
 	public void createTaskActivity(String activityName, Calendar startTime, Calendar endTime, Task task,Employee employee) throws OperationNotAllowed {
 		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar)startTime, (GregorianCalendar)endTime,task);
-		//addActivity(taskActivity);
 		taskActivity.getTask().addEmployeeToTask(employee);
 		assignTask(employee.getInitials(),taskActivity);
 	}
@@ -82,11 +64,12 @@ public class ProjectManagementApp {
 	public void addEmployee(Employee employee) {
 		employees.add(employee);
 	}
+	
 	public void addTask(Task task) throws OperationNotAllowed {
-		if(task.getName().equals("") || task.getEstimatedTime() <= 0) {
-			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		if(task.getName().equals("") || task.getEstimatedTime() <= 0) { //2
+			throw new OperationNotAllowed("A task has to have a name and estimated time");
 		}
-		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) { //3
 			activeProject.addTask(task);
 		} else {
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
@@ -256,8 +239,6 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	
-	
 	public ArrayList<Employee> getAvailableEmployees(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
 		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
 		if (startTime.equals(endTime)) {
@@ -274,10 +255,7 @@ public class ProjectManagementApp {
 			return availableEmployees;
 		}
 		}
-		
 	}
-		
-	
 	
 	
 	public void setActiveTask(Task task) {
@@ -353,13 +331,8 @@ public class ProjectManagementApp {
 	
 
 	
-	public void setTaskEstimatedTime(double estimatedTime) {
-		try {
-			activeTask.setEstimatedTime(estimatedTime);
-		} catch (OperationNotAllowed e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void setTaskEstimatedTime(double estimatedTime) throws OperationNotAllowed {
+		activeTask.setEstimatedTime(estimatedTime);
 	}
 	
 	public void setTaskTimeWorked() {
@@ -435,20 +408,13 @@ public class ProjectManagementApp {
 	}
 
 	public void deleteProject(Project project) {
-		if(project.getTasks() != null && project.getTasks().size() > 0)
-		{
-			for(Task task : project.getTasks())
-			{
-				deleteTask(task);
-			}
-		}
 		
 		projects.remove(project);
 		activeProject = null;
 	}
 
 	public void deleteTask(Task task) {
-		activeProject.tasks.remove(task);
+		activeProject.getTasks().remove(task);
 		activeTask = null;
 	}
 
@@ -463,18 +429,6 @@ public class ProjectManagementApp {
 	
 	
 }
-
-
-	
-	//getTaskStarttime
-	//getTaskTimespent
-	//getTaskEstimatedTime
-	//getTaskRemaningTime
-
-
-	//setTaskEstimatedTime
-	//setTaskTimeWorked
-	//setStartTime
 
 	
 	

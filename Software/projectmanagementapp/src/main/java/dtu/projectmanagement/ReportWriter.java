@@ -2,16 +2,12 @@ package dtu.projectmanagement;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.io.IOException;
 
 public class ReportWriter {
 
 	private String path;
-	private boolean append = false; //doesn't append, but erases everything in the file
+	private boolean append = false; //doesn't append, but erases everything in the file. Unused
 	
 	public ReportWriter(String path)
 	{

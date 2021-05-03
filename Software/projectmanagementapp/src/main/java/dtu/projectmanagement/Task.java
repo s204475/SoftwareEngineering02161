@@ -1,11 +1,7 @@
 package dtu.projectmanagement;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
-import javax.naming.NameNotFoundException;
 
 public class Task {
 	private String name;
@@ -15,9 +11,14 @@ public class Task {
 	private double timeSpent;
 	private ArrayList<Employee> employeesOnTask = new ArrayList<Employee>();
 	
-	public Task (String name, double estimatedTime) {
+	public Task (String name, double estimatedTime) throws OperationNotAllowed {
 		this.name = name;
 		this.startTime = dateServer.getDate();
+		if (estimatedTime % 0.5 == 0 && estimatedTime > 0) {   //1
+			this.estimatedTime = estimatedTime;
+		} else {
+			throw new OperationNotAllowed("Estimated time has to be given 0.5 hours");
+		}
 		this.estimatedTime = estimatedTime;
 		this.timeSpent = 0;
 	}

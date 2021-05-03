@@ -24,6 +24,6 @@ Scenario: A project mannager tries to create a task with no name or estimated ti
     And there is a project with the name "project1"
     And the employee is project manager of the project
     When the employee tries to creates a task with the name "Refactoring" and a estimated time of 0 hours
-    Then the error message "A task has to have a name and estimed time" is given
+    Then the error message "Estimated time has to be given 0.5 hours" is given
 	When the employee tries to creates a task with the name "" and a estimated time of 20 hours
-	Then the error message "A task has to have a name and estimed time" is given
+	Then the error message "A task has to have a name and estimated time" is given
