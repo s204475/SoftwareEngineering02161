@@ -5,10 +5,10 @@ Actors: Employee
 Scenario: Get available employees successfully
 Given there is an employee with the initials "joh"
 And there is an employee with the initials "bob"
-And they have an empty schedules
+And "joh" and "bob" have an empty schedules
 When the active user provides a duration
 And there is an employee who is available in the duration
-Then the available employees "John" and "Bob" are given
+Then the available employees "joh" and "bob" are given
 
 Scenario: There are no available employees
 Given there is an employee with the initials "joh"

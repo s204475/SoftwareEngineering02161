@@ -25,10 +25,12 @@ public class GetAvailableEmployeesSteps {
 		this.employees = managementApp.getEmployees();
 	}
 	
-	@Given("they have an empty schedules")
-	public void they_have_an_empty_schedules() {
+	@Given("{string} and {string} have an empty schedules")
+	public void and_have_an_empty_schedules(String initials1, String initials2) {
 		for (Employee employee : employees) {
-			assertTrue(employee.getActivities().isEmpty());
+			if (employee.getInitials().equals(initials1) || employee.getInitials().equals(initials2)) {
+				assertTrue(employee.getActivities().isEmpty());
+			}
 		}  
 	}
 
@@ -47,8 +49,8 @@ public class GetAvailableEmployeesSteps {
 	
 	@Then("the available employees {string} and {string} are given")
 	public void the_available_employees_and_are_given(String string, String string2) {
-		for (Employee employee : employees) {
-			assertTrue(availableEmployees.contains(employee));
+		for (Employee availableEmployee : availableEmployees) {
+			assertTrue(availableEmployee.getInitials().equals(string) || availableEmployee.getInitials().equals(string2));
 		}
 	}
 	

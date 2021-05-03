@@ -68,16 +68,18 @@ public class ProjectManagementApp {
 	public void addEmployee(Employee employee) {
 		employees.add(employee);
 	}
+	
 	public void addTask(Task task) throws OperationNotAllowed {
-		if(task.getName().equals("") || task.getEstimatedTime() <= 0) {
-			throw new OperationNotAllowed("A task has to have a name and estimed time");
+		if(task.getName().equals("") || task.getEstimatedTime() <= 0) { //2
+			throw new OperationNotAllowed("A task has to have a name and estimated time");
 		}
-		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) { //3
 			activeProject.addTask(task);
 		} else {
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
 		}
 	}
+	
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
 	}
