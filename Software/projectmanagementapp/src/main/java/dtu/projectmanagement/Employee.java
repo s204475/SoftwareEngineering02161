@@ -11,7 +11,6 @@ public class Employee {
 	private String name; 
 	private String initials; 
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private ArrayList<Activity> oldActivities = new ArrayList<Activity>();
 	private DateServer dateServer = new DateServer();
 	
 	
@@ -78,10 +77,6 @@ public class Employee {
 
 	public ArrayList<Activity> getActivities() {
 		return activities;
-	}
-	
-	public ArrayList<Activity> getOldActivities(){
-		return oldActivities;
 	}
 
 	

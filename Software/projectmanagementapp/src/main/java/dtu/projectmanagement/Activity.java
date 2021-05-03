@@ -43,8 +43,7 @@ public class Activity {
 		if(endTime.before(Calendar.getInstance()))
 		{
 			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), endTime.toInstant())/60;
-		} else
-		{
+		} else		{
 			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), Calendar.getInstance().toInstant())/60;
 		}
 	}
