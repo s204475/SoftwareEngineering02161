@@ -20,7 +20,6 @@ public class Employee {
 		this.initials = initials; // MANGLER CHECK PÅ INITIALS
 	}
 	
-	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
 		
 		if (!checkTimeframe(activity)) {
