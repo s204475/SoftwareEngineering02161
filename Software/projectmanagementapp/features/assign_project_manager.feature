@@ -1,5 +1,5 @@
 Feature: Assign project manager
-    Description: An employees assign a project manager to a project
+    Description: An employee assign a project manager to a project
     Actors: Employee
 
 Scenario: An employee is assigned as project manager

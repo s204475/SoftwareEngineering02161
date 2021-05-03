@@ -41,3 +41,4 @@ Scenario: A project manager tries to edit a non existing task.
 		When the employee tries to change the name to "bugfix"
 		Then the error message "the task does not exist" is given
 	
+	
