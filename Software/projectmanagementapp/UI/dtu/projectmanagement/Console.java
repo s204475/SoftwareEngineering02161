@@ -414,7 +414,6 @@ public class Console {
 					}
 					mainMenu();
 					break;
-					
 				default: 
 					if(choice <1 || choice > 11)
 					{
@@ -424,7 +423,7 @@ public class Console {
 			}
 		}
 		
-		if (choice != 5) //unless you go back, you are presented with the project choices again.
+		if (choice != 5 && choice != 11) //unless you go back, you are presented with the project choices again.
 		{
 			activeProjectChoices();
 		}
@@ -434,61 +433,67 @@ public class Console {
 	
 
 	private void assignEmployeeToTask() throws ParseException {
-		System.out.println("Choose employee to add");
-		printEmployees();
-		
-		while (!scanner.hasNextInt()) scanner.next();
-		int userChoice = scanner.nextInt();
-		
-		if(userChoice>app.getEmployees().size() || userChoice<0)
+		if(app.getActiveProject().getTasks() != null && app.getActiveProject().getTasks().size() > 0)
 		{
-			System.out.println("Incorrect input.");
-		} else {
-			System.out.println("Choose task to add employee to");
-			printTasks();
+			System.out.println("Choose employee to add");
+			printEmployees();
+			
 			while (!scanner.hasNextInt()) scanner.next();
+			int userChoice = scanner.nextInt();
 			
-			app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
-			
-			GregorianCalendar end;
-			GregorianCalendar start;
-			
-			System.out.println("Input start time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
-					+ "The system only accepts half hour intervals.");
-			
-			String dateString = userInput();
-			
-			if(helper.isDate(dateString))
+			if(userChoice>app.getEmployees().size() || userChoice<0)
 			{
-				start = helper.dateToCalendar(helper.convertDate(dateString));
-			} else {
 				System.out.println("Incorrect input.");
-				return;
-			}
-			
-			System.out.println("Input end time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
-					+ "The system only accepts half hour intervals.");
-			
-			dateString = userInput();
-			if(helper.isDate(dateString))
-			{
-				end = helper.dateToCalendar(helper.convertDate(dateString));
 			} else {
-				System.out.println("Incorrect input.");
-				return;
+				System.out.println("Choose task to add employee to");
+				printTasks();
+				while (!scanner.hasNextInt()) scanner.next();
+				
+				app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+				
+				GregorianCalendar end;
+				GregorianCalendar start;
+				
+				System.out.println("Input start time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
+						+ "The system only accepts half hour intervals.");
+				
+				String dateString = userInput();
+				
+				if(helper.isDate(dateString))
+				{
+					start = helper.dateToCalendar(helper.convertDate(dateString));
+				} else {
+					System.out.println("Incorrect input.");
+					return;
+				}
+				
+				System.out.println("Input end time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
+						+ "The system only accepts half hour intervals.");
+				
+				dateString = userInput();
+				if(helper.isDate(dateString))
+				{
+					end = helper.dateToCalendar(helper.convertDate(dateString));
+				} else {
+					System.out.println("Incorrect input.");
+					return;
+				}
+				
+				try {
+					app.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
+											+ "\" by "+app.getActiveUser().getName() +"("+ app.getActiveUser().getInitials()+")",
+											start, end, app.getActiveTask(),app.getEmployees().get(userChoice));
+					app.setTaskTimeWorked();
+				
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
+				
 			}
-			
-			try {
-				app.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
-										+ "\" by "+app.getActiveUser().getName() +"("+ app.getActiveUser().getInitials()+")",
-										start, end, app.getActiveTask(),app.getEmployees().get(userChoice));
-				app.setTaskTimeWorked();
-			
-			} catch (OperationNotAllowed e) {
-				helper.printError(e);
-			}
-			
+		} else {
+			System.out.println("There are currently no tasks to add employees to.");
 		}
+		
 	}
 
 	private void createReport()
@@ -605,7 +610,11 @@ public class Console {
 				case 3: 
 					System.out.println("Input new estimated time");
 					while (!scanner.hasNextDouble()) scanner.next();
+				try {
 					app.setTaskEstimatedTime(scanner.nextDouble());
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
 					break;
 				case 4:
 					System.out.println("Are you sure you wish to delete this task and all of its information?"

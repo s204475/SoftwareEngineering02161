@@ -2,7 +2,6 @@ package dtu.projectmanagement;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class Activity {
 	private String name;
