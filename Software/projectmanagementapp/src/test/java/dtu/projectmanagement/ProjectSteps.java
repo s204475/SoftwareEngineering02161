@@ -55,8 +55,26 @@ public class ProjectSteps {
 		}
 	    
 	}
-	
-	
-	
-	
+	@When("the employee searches for the project with the Id {string}")
+	public void the_employee_searches_for_the_project_with_the_id(String Id) throws OperationNotAllowed {
+	    	try {
+	    	project = managementApp.searchProjectsId(Id);
+	    	} catch (OperationNotAllowed e) {
+	    		errorMessageHolder.setErrorMessage(e.getMessage());
+	    	}
+	}
+
+	    @Then("the project {string} is given to the user.")
+	    public void the_project_is_given_to_the_user(String ProjectName) {
+	    	assertTrue(project.getTitle().equals(ProjectName));
+	    }
+
+	    @When("the employee searches for the project with the Title for {string}")
+	    public void the_employee_searches_for_the_project_with_the_title_for(String projectName) throws OperationNotAllowed {
+		    	try {
+		    	project = managementApp.searchProjectsTitle(projectName);
+		    	} catch (OperationNotAllowed e) {
+		    		errorMessageHolder.setErrorMessage(e.getMessage());
+		    	}
+		    }
 }

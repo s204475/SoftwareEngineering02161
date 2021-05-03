@@ -103,17 +103,7 @@ public class WhiteBoxTests {
 			managementApp.setActiveProject(project);
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-	    	    		
-	}
-
-	@Given("{string} is projectmanager of {string}")
-	public void is_projectmanager_of(String initials, String project) {
-		try {
-			managementApp.setProjectManager(managementApp.searchEmployees(initials));
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
+		} 	    		
 	}
 
 	@When("employee tries to create a task with the name {string} and an estimated time {double}")

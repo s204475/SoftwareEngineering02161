@@ -19,7 +19,6 @@ public class ProjectManagementApp {
 	
 	int lastProjectId = 0;
 	
-	/* --------- UI CONNECTION --------- */ 
 	public void createProject(String title) throws OperationNotAllowed {
 		Project project = new Project(title, lastProjectId);
 		addProject(project);
@@ -31,28 +30,6 @@ public class ProjectManagementApp {
 		sortEmployees();
 	}
 	
-	public void createTask(String taskName, double estimatedtime) throws OperationNotAllowed {
-		Task task = new Task(taskName, estimatedtime);
-		addTask(task);
-	}
-	
-	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
-		Activity activity = new Activity(activityName, startTime, endTime);
-		addActivity(activity);
-		
-	}
-	
-	public void createTaskActivity(String activityName, Calendar startTime, Calendar endTime, Task task,Employee employee) throws OperationNotAllowed {
-		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar)startTime, (GregorianCalendar)endTime,task);
-		taskActivity.getTask().addEmployeeToTask(employee);
-		assignTask(employee.getInitials(),taskActivity);
-	}
-	
-	
-	/* ---------------------------------- */
-	/* --------- BUSINESS LOGIC --------- */
-	/* ---------------------------------- */
-	/* METHODS */
 	public void addProject(Project project) throws OperationNotAllowed {
 		for (Project p : projects) {
 			if (p.getTitle().equals(project.getTitle())) {
@@ -80,10 +57,6 @@ public class ProjectManagementApp {
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
-		if(activity instanceof TaskActivity)
-		{
-			setTaskTimeWorked();
-		}
 	}
 	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
@@ -97,40 +70,42 @@ public class ProjectManagementApp {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
 		}
 	}
-	
-	public void setProjectManager(Employee employee) {
-		activeProject.assignProjectManager(employee);
-	}
 
 	private void sortEmployees() {
 		employees.sort(new NameSort());        
 	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		for (Employee employee : employees) {                       // 1
-			if (employee.getInitials().equals(initials)) {			// 2
+		assert ((initials != null && employees!=null)); // precondition:
+		boolean found = false;
+		for (Employee employee : employees) { //1
+			if (employee.getInitials().equals(initials)) { //2
+				found = true;
+				assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
 				return employee;
 			}
 		}
+		assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
-	public Project searchProjectsId(String id) {
+	
+	public Project searchProjectsId(String id) throws OperationNotAllowed {
 		for (Project project : projects) {
 			if (project.getId().equals(id)) {
 				return project;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("project does not exist");
 	}
 	
-	public Project searchProjectsTitle(String title) {
+	public Project searchProjectsTitle(String title) throws OperationNotAllowed {
 		for (Project project : projects) {
 			if (project.getTitle().equals(title)) {
 				return project;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("project does not exist");
 	}
 	
 	public String createInitials(String userName) {
@@ -176,8 +151,7 @@ public class ProjectManagementApp {
 	}
 
 	public void printReport(String path_to_file) throws IOException {
-		if(pathExists(path_to_file))
-		{
+		if(pathExists(path_to_file)) {
 			ReportWriter writer = new ReportWriter(path_to_file);
 			
 			String reportFileName = "Report on " + activeProject.getTitle() + " ("+activeProject.getId()+")";
@@ -185,6 +159,9 @@ public class ProjectManagementApp {
 			String reportContent = getActiveProjectInformation();
 			
 			writer.writeReportToFile(reportFileName,reportContent);
+		}
+		else {
+			throw new IOException("the path was not found");
 		}
 		
 	}
@@ -207,7 +184,9 @@ public class ProjectManagementApp {
 			lastProjectId = 0;
 		}
 	}
-	
+	public int getLastProjectId() {
+		return lastProjectId;
+	}
 
 	/* GETTERS AND SETTERS */
 	

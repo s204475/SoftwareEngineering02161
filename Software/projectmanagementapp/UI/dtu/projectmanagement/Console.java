@@ -14,11 +14,13 @@ public class Console {
 	
 	public static Scanner scanner = new Scanner(System.in);
 	private ProjectManagementApp app;
+	private UIConnector appConnector;
 	private Helper helper = new Helper();
 	
 	public Console(ProjectManagementApp app)
 	{
 		this.app = app;
+		this.appConnector=new UIConnector(app);
 	}
 	
 	public void start()
@@ -163,7 +165,7 @@ public class Console {
 		System.out.println("Choose a name for the project");
 		String projectTitle = userInput();
 		try {
-			app.createProject(projectTitle);
+			appConnector.createProject(projectTitle);
 			System.out.println("The project can now be found under \"See projects\"");
 		} catch (OperationNotAllowed e) {
 			helper.printError(e);
@@ -480,7 +482,7 @@ public class Console {
 				}
 				
 				try {
-					app.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
+					appConnector.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
 											+ "\" by "+app.getActiveUser().getName() +"("+ app.getActiveUser().getInitials()+")",
 											start, end, app.getActiveTask(),app.getEmployees().get(userChoice));
 					app.setTaskTimeWorked();
@@ -546,7 +548,7 @@ public class Console {
 		System.out.println("Input estimated duration of task in hours (e.g. 4.5 or 4.0 )");
 		while (!scanner.hasNextDouble()) scanner.next();
 		try {
-			app.createTask(taskName,scanner.nextDouble());
+			appConnector.createTask(taskName,scanner.nextDouble());
 		} catch (OperationNotAllowed e) {
 			helper.printError(e);
 		}
@@ -738,7 +740,7 @@ public class Console {
 						app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
 						
 						try {
-							app.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
+							appConnector.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
 						} catch (OperationNotAllowed e) {
 							helper.printError(e);
 						}
@@ -751,7 +753,7 @@ public class Console {
 			
 			case 2:
 			try {
-				app.createActivity(activityName, start, end);
+				appConnector.createActivity(activityName, start, end);
 			} catch (OperationNotAllowed e) {
 				helper.printError(e);
 			}
