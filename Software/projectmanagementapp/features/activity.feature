@@ -40,6 +40,13 @@ Scenario: Assign task activity successfully
     When the active user assigns the task to "pet"
     Then the task is added to "pet" activities
 
+Scenario: An employee assings themself to a task activity successfully
+    Given there is an employee with the initials "joh"
+    And the employee is active user
+    And there is a project with the name "project1"
+    And there is a task in the project
+    When the active user assigns the task to "joh"
+    Then the task is added to "joh" activities
 
 Scenario: Assign a task activity in occupied timeframe
     Given there is an employee with the initials "pet"

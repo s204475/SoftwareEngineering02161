@@ -51,16 +51,6 @@ public class AssignManagerSteps {
 		assertEquals(firstEmployee, project.getProjectManager());
 	}
 	
-	@Given("there is two employees with the initials {string} and {string}")
-	public void there_is_two_employees_with_the_initials_and(String initials1, String initials2) {
-		firstEmployee = new Employee("John", initials1);
-		secondEmployee = new Employee("Peter", initials2);
-		managementApp.addEmployee(firstEmployee);
-		managementApp.addEmployee(secondEmployee);
-		assertTrue(managementApp.getEmployees().contains(firstEmployee));
-		assertTrue(managementApp.getEmployees().contains(secondEmployee));
-	}
-	
 	@Given("and the first empolyee is the project manager of the project")
 	public void and_the_first_empolyee_is_the_project_manager_of_the_project() {
 	    project.assignProjectManager(firstEmployee);

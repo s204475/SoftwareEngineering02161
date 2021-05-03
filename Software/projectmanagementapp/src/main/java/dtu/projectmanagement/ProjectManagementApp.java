@@ -66,10 +66,6 @@ public class ProjectManagementApp {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
 		}
 	}
-	
-	public void setProjectManager(Employee employee) {
-		activeProject.assignProjectManager(employee);
-	}
 
 	private void sortEmployees() {
 		employees.sort(new NameSort());        
@@ -90,22 +86,22 @@ public class ProjectManagementApp {
 	}
 	
 	
-	public Project searchProjectsId(String id) {
+	public Project searchProjectsId(String id) throws OperationNotAllowed {
 		for (Project project : projects) {
 			if (project.getId().equals(id)) {
 				return project;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("project does not exist");
 	}
 	
-	public Project searchProjectsTitle(String title) {
+	public Project searchProjectsTitle(String title) throws OperationNotAllowed {
 		for (Project project : projects) {
 			if (project.getTitle().equals(title)) {
 				return project;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("project does not exist");
 	}
 	
 	public String createInitials(String userName) {
@@ -151,8 +147,7 @@ public class ProjectManagementApp {
 	}
 
 	public void printReport(String path_to_file) throws IOException {
-		if(pathExists(path_to_file))
-		{
+		if(pathExists(path_to_file)) {
 			ReportWriter writer = new ReportWriter(path_to_file);
 			
 			String reportFileName = "Report on " + activeProject.getTitle() + " ("+activeProject.getId()+")";
@@ -160,6 +155,9 @@ public class ProjectManagementApp {
 			String reportContent = getActiveProjectInformation();
 			
 			writer.writeReportToFile(reportFileName,reportContent);
+		}
+		else {
+			throw new IOException("the path was not found");
 		}
 		
 	}
