@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -49,15 +50,27 @@ public class ReportSteps {
 		}
 	}
 	
-//	@When("the employee tries creates a report to the bad path {string}")
-//	public void the_employee_tries_creates_a_report_to_the_bad_path(String badPath) throws IOException {
-//		managementApp.printReport(badPath);
-//	}
-//
-//	@Then("the report is not created in {string} and an error is given")
-//	public void the_report_is_not_created_in_and_an_error_is_given(String badPath) {
-//	    assertFalse(new File(badPath).isFile());
-//	}
+	@Given("the employee with the initials {string} is assigned to the task")
+	public void the_employee_with_the_initials_is_assigned_to_the_task(String string) throws OperationNotAllowed {
+		try {
+		managementApp.getActiveTask().addEmployeeToTask(managementApp.searchEmployees(string));
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@Then("the report contains information")
+	public void the_report_contains_information() {
+		assertTrue(new File(System.getProperty("user.dir")
+				+"\\"
+				+"Report on "
+				+project.getTitle()
+				+" ("
+				+project.getId()
+				+")"
+				+".txt").length() > 0);
+	}
+	
 	
 //    managementApp.assignProjectManager(employee);
 //    

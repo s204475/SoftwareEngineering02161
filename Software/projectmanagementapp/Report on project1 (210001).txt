@@ -1,10 +1,17 @@
 Project name: project1
 Project ID: 210001
 Collective budget time spent for all tasks: 0
-Estimated time remaining on tasks: 0.0
-Remaining budget time on tasks: 0.0
+Estimated time remaining on tasks: 20.0
+Remaining budget time on tasks: 20.0
 Current project manager: John(joh)
 The following task are associated with the project:
 
-There are no task associated with this project yet.
+----------------------------------------------------------------
+Task name: Refactoring
+Estimated time left on task: 20.0
+Total budget time on task: 20.0
+Task started on: Mon May 03 00:00:00 CEST 2021
+Total work hours used on project: 0.0
+Employees currently assigned to task: 
+John(joh)
 

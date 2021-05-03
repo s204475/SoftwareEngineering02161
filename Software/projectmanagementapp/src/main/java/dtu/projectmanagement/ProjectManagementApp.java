@@ -72,16 +72,16 @@ public class ProjectManagementApp {
 	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		//assert ((initials != null && !(initials.equals(""))) && (!(employees.isEmpty()) && employees!=null)); // precondition:
-		//boolean found =false;
+		assert ((initials != null && employees!=null)); // precondition:
+		boolean found = false;
 		for (Employee employee : employees) { //1
 			if (employee.getInitials().equals(initials)) { //2
-		//		found= true;
-		//		assert employees.contains(employee); // postcondition:
+				found = true;
+				assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
 				return employee;
 			}
 		}
-		// assert !found; //postcondition:
+		assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
