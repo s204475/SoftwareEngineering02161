@@ -14,7 +14,7 @@ public class UIConnector {
 
 	/* --------- UI CONNECTION --------- */ 
 	public void createProject(String title) throws OperationNotAllowed {
-		Project project = new Project(title);
+		Project project = new Project(title, app.getLastProjectId());
 		app.addProject(project);
 	}
 	
