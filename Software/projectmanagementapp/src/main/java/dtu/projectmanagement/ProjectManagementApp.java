@@ -116,7 +116,7 @@ public class ProjectManagementApp {
 				return employee;
 			}
 		}
-		assert !found; //postcondition:
+		// assert !found; //postcondition:
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
