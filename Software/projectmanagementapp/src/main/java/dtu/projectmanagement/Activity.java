@@ -26,8 +26,7 @@ public class Activity {
 		return startTime;
 	}
 	
-	public void setStartTime(Calendar newStartTime)
-	{
+	public void setStartTime(Calendar newStartTime)	{
 		startTime = newStartTime;
 	}
 	
@@ -40,6 +39,7 @@ public class Activity {
 	}
 
 	public double getTimePassed() {
+		//How much time (in hours) have passed since the activity started (an potentially ended)
 		if(endTime.before(Calendar.getInstance()))
 		{
 			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), endTime.toInstant())/60;

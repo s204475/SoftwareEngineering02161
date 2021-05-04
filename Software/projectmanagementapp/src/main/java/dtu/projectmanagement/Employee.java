@@ -1,7 +1,5 @@
 package dtu.projectmanagement;
 
-import static org.junit.Assert.assertArrayEquals;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -13,12 +11,11 @@ public class Employee {
 	private String name; 
 	private String initials; 
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private DateServer dateServer = new DateServer();
 	
 	
 	public Employee(String name, String initials) {
 		this.name = name;
-		this.initials = initials; // MANGLER CHECK PÅ INITIALS
+		this.initials = initials;
 	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
@@ -40,8 +37,27 @@ public class Employee {
 		sortActivities();
 	}
 	
+	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		//Checks whether the employee already is available for an activity in the given timeframe
+		
+		assert startTime != null && endTime != null && activities != null; // Precondition
+		boolean result = false;
+		if (!checkInput(startTime, endTime)){
+			assert result == checkInput(startTime, endTime);
+			throw new OperationNotAllowed("Invalid timeframe");
+		}
+		if (hasActivityAtTime(startTime, endTime)) {
+			assert !result;		// Postcondition
+			return false;
+		} else {
+			result = true;
+		}
+		assert result;    // Postcondition
+		return result;
+	}
 	
 	public boolean checkTimeframe(Activity activity) {
+		//Checks whether the employee already has an activity in a given timeframe
 		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
 				activity.getStartTime().get(Calendar.MINUTE) % 30 != 0 || activity.getEndTime().get(Calendar.MINUTE) % 30 != 0) {  
 			return false;
@@ -61,6 +77,8 @@ public class Employee {
 	}
 	
 	public void sortActivities() {
+		//Sorts activities by their start time
+		
 		activities = (ArrayList<Activity>) activities.stream()
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
@@ -83,24 +101,8 @@ public class Employee {
 		return activities;
 	}
 
-	
-	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
-		assert startTime != null && endTime != null && activities != null; // Precondition
-		boolean result = false;
-		if (!checkInput(startTime, endTime)){
-			assert result == checkInput(startTime, endTime);
-			throw new OperationNotAllowed("Invalid timeframe");
-		}
-		if (hasActivityAtTime(startTime, endTime)) {
-			assert !result;		// Postcondition
-			return false;
-		} else {
-			result = true;
-		}
-		assert result;    // Postcondition
-		return result;
-	}
 	public boolean checkInput(GregorianCalendar startTime, GregorianCalendar endTime) {
+		//The system only accepts half-hour intervals
 		if (startTime.equals(endTime) || endTime.before(startTime) || 
 				startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {     // 1
 			return false;
