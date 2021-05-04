@@ -112,9 +112,11 @@ public class ProjectManagementApp {
 		
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
+			activeTask.addEmployeeToTask(searchEmployees(initials));
 			setTaskTimeWorked();
 		} else if(activeUser.getInitials().equals(initials)){
 			activeUser.assignTask(taskActivity);
+			activeTask.addEmployeeToTask(searchEmployees(initials));
 			setTaskTimeWorked();
 		} else {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
