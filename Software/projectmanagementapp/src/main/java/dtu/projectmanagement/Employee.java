@@ -1,5 +1,7 @@
 package dtu.projectmanagement;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -21,12 +23,14 @@ public class Employee {
 	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed {
-		
+		assert activity != null && activities != null; // Precondition
 		if (!checkTimeframe(activity)) {
+			assert !activities.contains(activity); // Postcondition
 			throw new OperationNotAllowed("Timeframe not available"); 
 		}
 		activities.add(activity);
 		sortActivities();
+		assert activities.contains(activity); // Postcondition
 	}
 	
 	public void addTaskActivity(TaskActivity activity) throws OperationNotAllowed {	
@@ -86,21 +90,40 @@ public class Employee {
 
 	
 	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
-		if (startTime.equals(endTime) || endTime.before(startTime) || 
-				startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {     // 1
+		assert startTime != null && endTime != null && activities != null; // Precondition
+		boolean result = false;
+		if (!checkInput(startTime, endTime)){
+			assert result == checkInput(startTime, endTime);
 			throw new OperationNotAllowed("Invalid timeframe");
 		}
-		
+		if (hasActivityAtTime(startTime, endTime)) {
+			assert !result;		// Postcondition
+			return false;
+		} else {
+			result = true;
+		}
+		assert result;    // Postcondition
+		return result;
+	}
+	public boolean checkInput(GregorianCalendar startTime, GregorianCalendar endTime) {
+		if (startTime.equals(endTime) || endTime.before(startTime) || 
+				startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {     // 1
+			return false;
+		}
+		return true;
+	}
+	public boolean hasActivityAtTime(GregorianCalendar startTime, GregorianCalendar endTime) {
 		if(activities.isEmpty() || endTime.before(activities.get(0).getStartTime()) ||
 				startTime.after(activities.get(activities.size() - 1).getEndTime())) {         // 2
-			return true;
+			return false;
 		}
-		
 		for(int i = 0; i < activities.size() - 1; i++) {        // 3
 			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {    // 4
-				return true;
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
  }
+
+	

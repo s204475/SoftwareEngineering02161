@@ -8,10 +8,10 @@ The following task are associated with the project:
 
 ----------------------------------------------------------------
 Task name: Refactoring
-Estimated time left on task: 20.0
-Total budget time on task: 20.0
-Task started on: Mon May 03 00:00:00 CEST 2021
-Total work hours used on project: 0.0
+Task started on: Tue May 04 00:00:00 CEST 2021 (Week:18)
+Estimated time left on task in hours: 20.0
+Total budget time on task in hours: 20.0
+Total work hours used on task: 0.0
 Employees currently assigned to task: 
 John(joh)
 

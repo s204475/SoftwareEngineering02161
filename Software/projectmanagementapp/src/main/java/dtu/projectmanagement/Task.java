@@ -12,19 +12,24 @@ public class Task {
 	private ArrayList<Employee> employeesOnTask = new ArrayList<Employee>();
 	
 	public Task (String name, double estimatedTime) throws OperationNotAllowed {
+		assert name != null && dateServer != null; // Precondition 
+		boolean created = false;
 		this.name = name;
 		this.startTime = dateServer.getDate();
 		if (estimatedTime % 0.5 == 0 && estimatedTime > 0) {   //1
 			this.estimatedTime = estimatedTime;
 		} else {
+			assert !created; // Postcondition
 			throw new OperationNotAllowed("Estimated time has to be given 0.5 hours");
 		}
 		this.estimatedTime = estimatedTime;
 		this.timeSpent = 0;
+		created = true; 
+		assert created;  // Postcondition
 	}
 	
+	
 	public void setTimeSpent() {
-		
 		double hoursSpent = 0;
 		
 		for(Employee employee : employeesOnTask)

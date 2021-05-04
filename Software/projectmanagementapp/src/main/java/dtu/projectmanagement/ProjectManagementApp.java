@@ -45,12 +45,16 @@ public class ProjectManagementApp {
 	}
 	
 	public void addTask(Task task) throws OperationNotAllowed {
+		assert activeProject != null && activeUser != null; // Precondition
 		if(task.getName().equals("") || task.getEstimatedTime() <= 0) { //2
+			assert !activeProject.getTasks().contains(task); // Postcondition
 			throw new OperationNotAllowed("A task has to have a name and estimated time");
 		}
 		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) { //3
 			activeProject.addTask(task);
+			assert activeProject.getTasks().contains(task); // Postcondition
 		} else {
+			assert !activeProject.getTasks().contains(task); // Postcondition
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
 		}
 	}

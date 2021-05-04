@@ -123,7 +123,7 @@ public class WhiteBoxTests {
 
 	@Given("project does not have a project manager")
 	public void project_does_not_have_a_project_manager() {
-	    assertTrue(project.getProjectManager()== null);
+	    assertTrue(project.getProjectManager() == null);
 	}
 	
 	@Then("the task is in the task list")
