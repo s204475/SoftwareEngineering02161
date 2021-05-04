@@ -63,7 +63,7 @@ public class Employee {
 	}
 
 	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
-		addActivity(taskActivity);
+		addTaskActivity(taskActivity);
 	}
 
 

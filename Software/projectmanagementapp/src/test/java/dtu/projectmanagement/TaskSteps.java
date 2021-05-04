@@ -33,8 +33,12 @@ public class TaskSteps {
 	
 	@Given("the employee is active user")
 	public void the_employee_is_active_user() {
+		try {
 	    managementApp.setActiveUser(employee);
 	    assertTrue(managementApp.getActiveUser().equals(employee));
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
 	}
 	@Given("{string} is active user")
 	public void is_active_user(String initials) throws OperationNotAllowed {
