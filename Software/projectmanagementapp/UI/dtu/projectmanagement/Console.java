@@ -29,7 +29,7 @@ public class Console {
 		chooseActiveUser();
 	}
 	
-	public void chooseActiveUser()
+	public void chooseActiveUser() 
 	{	
 		/*Prints all employees in the app and the active user can then be chosen.
 		 * If there are no user in the app, a guest user is automatically added. 

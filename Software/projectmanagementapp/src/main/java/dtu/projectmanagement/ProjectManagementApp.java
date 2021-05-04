@@ -12,7 +12,7 @@ public class ProjectManagementApp {
 	Employee activeUser;
 	Project activeProject;
 	Task activeTask;
-	Activity activeActivity;
+	private Activity activeActivity;
 	
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
@@ -20,11 +20,6 @@ public class ProjectManagementApp {
 	int lastProjectId = 0;
 	
 	/* Create and add */
-	
-	public void createProject(String title) throws OperationNotAllowed {
-		Project project = new Project(title, lastProjectId);
-		addProject(project);
-	}
 	
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
@@ -43,7 +38,7 @@ public class ProjectManagementApp {
 	}
 	
 	public void incrementLastProjectId() {
-		lastProjectId++;
+		lastProjectId=getLastProjectId()+1;
 		if(lastProjectId == 10000) {
 			lastProjectId = 0;
 		}
@@ -86,11 +81,11 @@ public class ProjectManagementApp {
 	}
 
 	public void deleteActivity(Activity activity) {
-		activeUser.getActivities().remove(activity);
 		if(activity instanceof TaskActivity)
 		{
 			((TaskActivity)(activity)).getTask().getEmployeesOnTask().remove(activeUser);
 		}
+		activeUser.getActivities().remove(activity);
 	}
 	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
@@ -238,9 +233,9 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void setActiveUser(Employee employee) {
+	public void setActiveUser(Employee employee) throws OperationNotAllowed {
 		if (!(employees.contains(employee))) {
-			//implementer error message. Med den employee ikke eksistere 
+			throw new OperationNotAllowed("the employee doesn't exist");
 		} else {
 			activeUser = employee;	
 		}

@@ -41,4 +41,10 @@ Scenario: A project manager tries to edit a non existing task.
 		When the employee tries to change the name to "bugfix"
 		Then the error message "the task does not exist" is given
 	
-	
+Scenario: A project manager tries to edit the tine of a non existing task.	
+		Given there is an employee with the initials "joh"
+    And the employee is active user
+    And there is a project with the name "project1"
+    And the employee is project manager of the project
+		When the employee tries to change the estimated time to 10 hours
+		Then the error message "the task does not exist" is given

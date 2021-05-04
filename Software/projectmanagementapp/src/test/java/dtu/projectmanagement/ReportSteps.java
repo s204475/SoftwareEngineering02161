@@ -71,19 +71,4 @@ public class ReportSteps {
 				+".txt").length() > 0);
 	}
 	
-	
-//    managementApp.assignProjectManager(employee);
-//    
-//    Task task = new Task("task1",10);
-//    managementApp.setActiveTask(task);
-//    task.addEmployeeToTask(employee);
-//    managementApp.addTask(task);
-    
-    //The report will be printed to the main folder of the java project
-	
-	//employee = new Employee("John med et langt navn",managementApp.createInitials("John med et langt navn"));
-	//employee = managementApp.searchEmployees("J");
-   // managementApp.addEmployee(employee);
-   // managementApp.setActiveUser(employee);
-	
 }
