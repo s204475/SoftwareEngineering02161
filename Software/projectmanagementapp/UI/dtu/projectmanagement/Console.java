@@ -462,8 +462,12 @@ public class Console {
 				System.out.println("Choose task to add employee to");
 				printTasks();
 				while (!scanner.hasNextInt()) scanner.next();
+				try {
+					app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
 				
-				app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
 				
 				GregorianCalendar end;
 				GregorianCalendar start;
@@ -578,8 +582,11 @@ public class Console {
 			printTasks();
 			
 			while (!scanner.hasNextInt()) scanner.next();
-
+			try {
 			app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 			
 			System.out.println("Choose what to edit");
 			
@@ -753,7 +760,11 @@ public class Console {
 						System.out.println("Which task?");
 						printTasks();
 						while (!scanner.hasNextInt()) scanner.next();
+						try {
 						app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+						} catch (OperationNotAllowed e) {
+							helper.printError(e);
+						}
 						
 						try {
 							appConnector.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
@@ -856,35 +867,7 @@ public class Console {
 			System.out.println(i+": "+app.projects.get(i).getTitle()+" ("+app.projects.get(i).getId()+")");
 		}
 	}
-	
-	/*private void printTaskActivities()
-	{
-		for(int i = 0; i < app.activeUser.getActivities().size();i++)
-		{
-			if(app.activeUser.getActivities().get(i) instanceof TaskActivity)
-			{
-				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
-			}
-		}	
-	}*/
-	
-	/*private Activity selectTaskActivity()
-	{
-		ArrayList<Activity> tempList = new ArrayList<Activity>();
-		for(int i = 0; i < app.activeUser.getActivities().size();i++)
-		{
-			if(app.activeUser.getActivities().get(i) instanceof TaskActivity)
-			{
-				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
-				tempList.add(app.getActiveUser().getActivities().get(i));
-			}
-		}
-		while(!scanner.hasNextInt()) scanner.next();
-		
-		return tempList.get(scanner.nextInt());
-		
-	}*/
-	
+
 	private void printAllActivitesInfo()
 	{
 		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)

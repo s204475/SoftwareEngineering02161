@@ -39,10 +39,10 @@ public class Task {
 				if(activity instanceof TaskActivity && activity.getStartTime().before(Calendar.getInstance())) {
 					if (((TaskActivity)activity).getTask() == null) {
 						break;
-				} else if (((TaskActivity)activity).getTask().equals(task)) {
-					hoursSpent += activity.getTimePassed();	
-							}
-					
+					} else if (((TaskActivity)activity).getTask().equals(task)) {
+						hoursSpent += activity.getTimePassed();	
+					}
+
 				}
 			}
 		}
