@@ -32,7 +32,7 @@ public class Console {
 	public void chooseActiveUser() 
 	{	
 		/*Prints all employees in the app and the active user can then be chosen.
-		 * If there are no user in the app, a guest user is automatically added. 
+		 * If there are no users in the app, a new user must be added. 
 		 */
 		if(app.getEmployees() == null || app.getEmployees().size() == 0)
 		{
@@ -85,9 +85,10 @@ public class Console {
 		}
 	}
 
-	//Checks if a string has any digits.
-	//Currently not used
+	
 	public boolean hasDigits(String s) {
+		//Checks if a string has any digits.
+		//Currently not used.
 	    boolean digits = false;
 
 	    if (s != null && !s.isEmpty())
@@ -169,7 +170,7 @@ public class Console {
 		}
 	}
 
-	private void createProject()  {
+	private void createProject() {
 		System.out.println("Choose a name for the project");
 		String projectTitle = userInput();
 		try {
@@ -178,11 +179,11 @@ public class Console {
 		} catch (OperationNotAllowed e) {
 			helper.printError(e);
 		}
-		
 	}
 
 	public String userInput()
 	{
+		//Handles user line input.
 		String input = "";
 		while (input.equals(""))
 		{
@@ -193,6 +194,9 @@ public class Console {
 	
 	private void seePersonalActivities()
 	{
+		/*A menu for the active user's activities
+		 */
+		
 		System.out.println(""
 				+ "\n1: Add activity"
 				+ "\n2: Edit activity"
@@ -228,36 +232,15 @@ public class Console {
 		}
 	}
 
-	/*private void setTimeWorkedOnTaskActivity() {
-		
-		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
-		{
-			System.out.println("You currently have no activities.");
-			seePersonalActivities();
-		} else {
-			System.out.println("Choose task to edit work time: ");
-
-			Activity activity = selectTaskActivity();
-			
-			app.setActiveActivity(activity);
-		
-			System.out.println("Input hours worked on task (e.g. 4.5 or 4.0 )");
-			while (!scanner.hasNextDouble()) scanner.next();
-			
-			TaskActivity taskActivity = (TaskActivity)activity;
-		
-		}
-			
-		
-	}*/
-
 	private void InvalidInput() {
 		System.out.println("Invalid input");
 	}
 	
 	public void seeProjects()
 	{
-		//Prints all active projects and chooses one to be the active project
+		/*Prints all projects and chooses one to be the active project
+		 */
+		
 		if (app.getProjects().size() == 0)
 		{
 			System.out.println("There are currently no projects. Please create one first. Returning to main menu...");
@@ -291,9 +274,12 @@ public class Console {
 	}
 	
 	
-	//Prints all eligible employees and assigns one as project manager on currently active project
+	
 	public void setProjectManager()
 	{
+		/*Prints all eligible employees and assigns one as project manager on the currently active project
+		 */
+		
 		System.out.println("Choose a Project Manager.");
 		if(app.getActiveProject().getProjectManager() != null)
 		{
@@ -329,7 +315,9 @@ public class Console {
 	
 	public void activeProjectChoices()
 	{
-		//Choices after choosing a project
+		/*Menu for choices after choosing a project
+		 */
+		
 		System.out.println("Current project: "
 												+ app.getActiveProject().getTitle()
 												+ " (Serial number: "
@@ -468,7 +456,6 @@ public class Console {
 					helper.printError(e);
 				}
 				
-				
 				GregorianCalendar end;
 				GregorianCalendar start;
 				
@@ -516,6 +503,9 @@ public class Console {
 
 	private void createReport()
 	{
+		/* After a user inputs a correct path to create the file,
+		 * a .txt file with the current project's information will be created.
+		 */
 		System.out.println("Please input complete path to save report in.");
 		
 		String path_to_file = userInput();
@@ -658,14 +648,6 @@ public class Console {
 		activeProjectChoices();
 	}
 
-	
-	/*private void addEmployeeToTask() {
-		printEmployees();
-		
-		while (!scanner.hasNextInt()) scanner.next();
-		app.addEmployeeToTask(app.getEmployees().get(scanner.nextInt()));
-	}*/
-
 	private void printTasks()
 	{
 		//Prints all tasks (in name only) 
@@ -684,7 +666,9 @@ public class Console {
 	
 	private void printAllTaskInformation()
 	{
-		//Prints all tasks and their information
+		/*Prints all tasks and their information
+		 */
+		
 		if(app.getActiveProject().getTasks().size() == 0)
 		{
 			System.out.println("There are currently no tasks.");
@@ -796,6 +780,9 @@ public class Console {
 
 	private void editActivity()
 	{
+		/* Change name, starttime or other natures of an activity
+		 */
+		
 		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
 		{
 			System.out.println("You currently have no activities.");
@@ -886,7 +873,7 @@ public class Console {
 	
 	public void clearConsole()
 	{
-		//Clears the console. 
+		//Clears the console,, albeit primitively and Eclipse exclusively. Used only for testing. 
 		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 	}
 	

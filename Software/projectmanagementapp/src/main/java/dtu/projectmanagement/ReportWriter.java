@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.IOException;
 
+//The ReportWriter handles creating the report as an actual .txt to a specified path on the user's computer
+
 public class ReportWriter {
 
 	private String path;

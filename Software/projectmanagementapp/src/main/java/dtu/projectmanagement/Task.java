@@ -29,7 +29,8 @@ public class Task {
 	}
 
 	public void setTimeSpent(Task task) {
-
+		//Calculates how much time employees assigned to the task cumulatively have spent on the task
+		
 		double hoursSpent = 0;
 
 		for(Employee employee : employeesOnTask)
@@ -58,6 +59,7 @@ public class Task {
 	}
 
 	public void setEstimatedTime(double newEstimatedTime) throws OperationNotAllowed {
+		//Effectively sets the budget time for a task. Assigned by the project manager. 
 		if(newEstimatedTime <= 0) {
 			throw new OperationNotAllowed ("A task has to have a name and estimed time");
 		} else {
@@ -81,8 +83,7 @@ public class Task {
 		return timeSpent;
 	}
 
-	public void addEmployeeToTask(Employee employee)
-	{
+	public void addEmployeeToTask(Employee employee) {
 		if(!employeesOnTask.contains(employee))
 		{
 			employeesOnTask.add(employee);
