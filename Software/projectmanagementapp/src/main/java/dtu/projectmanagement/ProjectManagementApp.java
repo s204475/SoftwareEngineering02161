@@ -85,12 +85,25 @@ public class ProjectManagementApp {
 		activeTask = null;
 	}
 
-	public void deleteActivity(Activity activity) {
-		activeUser.getActivities().remove(activity);
-		if(activity instanceof TaskActivity)
+	public void deleteActivity(Activity activityToBeDeleted) {
+		//If the user is active on several activities associated with a task, they are not removed from the task
+		int activitiesForTask = 0;
+		for(Activity activity : activeUser.getActivities())
 		{
-			((TaskActivity)(activity)).getTask().getEmployeesOnTask().remove(activeUser);
+			if(activity instanceof TaskActivity)
+			{
+				if (((TaskActivity)(activity)).getTask() == getActiveTask())
+				{
+					activitiesForTask++;
+				}
+			}
 		}
+		
+		if(activityToBeDeleted instanceof TaskActivity && activitiesForTask < 2)
+		{
+			((TaskActivity)(activityToBeDeleted)).getTask().getEmployeesOnTask().remove(activeUser);
+		}
+		activeUser.getActivities().remove(activityToBeDeleted);
 	}
 	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
@@ -311,8 +324,8 @@ public class ProjectManagementApp {
 			//Error message. no activeProject.
 			return 0.0;
 		} else {
-		double remamningTimeInHours = activeProject.getRemainingTime(); 
-		return remamningTimeInHours;
+		double remainingTimeInHours = activeProject.getRemainingTime(); 
+		return remainingTimeInHours;
 		}
 	}
 	
@@ -413,6 +426,3 @@ public class ProjectManagementApp {
 	}
 
 }
-
-	
-	
