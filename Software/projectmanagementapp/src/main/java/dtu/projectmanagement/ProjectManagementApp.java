@@ -329,7 +329,7 @@ public class ProjectManagementApp {
 	}
 	
 	public void setTaskTimeWorked() {
-		activeTask.setTimeSpent();
+		activeTask.setTimeSpent(activeTask);
 	}
 	
 	public void setActiveActivity(Activity activity) {

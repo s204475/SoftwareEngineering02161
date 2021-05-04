@@ -23,7 +23,7 @@ public class Task {
 		this.timeSpent = 0;
 	}
 	
-	public void setTimeSpent() {
+	public void setTimeSpent(Task task) {
 		
 		double hoursSpent = 0;
 		
@@ -31,12 +31,11 @@ public class Task {
 		{
 			for(Activity activity : employee.getActivities())
 			{
-				if(activity instanceof TaskActivity)
+				if(activity instanceof TaskActivity
+						&& activity.getStartTime().before(Calendar.getInstance())
+						&& ((TaskActivity)activity).getTask().equals(task))
 				{
-					if(activity.getStartTime().before(Calendar.getInstance()))
-					{
-						hoursSpent += activity.getTimePassed();
-					}
+					hoursSpent += activity.getTimePassed();
 				}
 			}
 		}
