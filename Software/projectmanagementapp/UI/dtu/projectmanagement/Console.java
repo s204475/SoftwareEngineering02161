@@ -541,12 +541,12 @@ public class Console {
 
 	private void printRemainingTime()
 	{
-		System.out.println(app.getProjectRemainingTime());
+		System.out.println(app.getActiveProject().getRemainingTime());
 	}
 
 	private void printEstimatedTime()
 	{
-		System.out.println(app.getProjectEstimatedTime());
+		System.out.println(app.getActiveProject().getEstimatedTime());
 	}
 
 	public void createTask()

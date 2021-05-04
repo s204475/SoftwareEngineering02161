@@ -33,7 +33,12 @@ public class Project {
 		this.budgetTime = budgetTime;
 	}
 	
-	public int getBudgetTime() {
+	public double getBudgetTime() {
+		double budgetTime = 0;
+		for(Task task : tasks)
+		{
+			budgetTime += task.getEstimatedTime();
+		}
 		return budgetTime;
 	}
 	

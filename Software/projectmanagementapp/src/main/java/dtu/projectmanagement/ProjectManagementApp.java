@@ -294,33 +294,13 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public int getProjectBudgetTime() {
+	public double getProjectBudgetTime() {
 		if(activeProject == null) {
 			//Error message. no activeProject.
 			return 0;
 		}
 		else {
 			return activeProject.getBudgetTime();
-		}
-	}
-	
-	public double getProjectEstimatedTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0.0;
-		} else {
-		double estimatedTimeInHours = activeProject.getEstimatedTime(); 
-		return estimatedTimeInHours;
-		}
-	}
-	
-	public double getProjectRemainingTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0.0;
-		} else {
-		double remainingTimeInHours = activeProject.getRemainingTime(); 
-		return remainingTimeInHours;
 		}
 	}
 	
