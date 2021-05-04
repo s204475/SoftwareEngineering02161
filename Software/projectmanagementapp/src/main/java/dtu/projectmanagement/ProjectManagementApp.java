@@ -297,12 +297,12 @@ public class ProjectManagementApp {
 	}
 	
 	
-	public void setActiveTask(Task task) {
+	public void setActiveTask(Task task) throws OperationNotAllowed {
 		if(activeProject == null) {
-			//Error message. no activeProject.
+			throw new OperationNotAllowed("no project choosen");
 		}
 		else if(!(activeProject.tasks.contains(task))) {
-			//Error message. activeProject, does not contain the task. 
+			throw new OperationNotAllowed("the task does not exist"); 
 		}
 		else {
 			activeTask=task; 
