@@ -92,8 +92,4 @@ public class Task {
 		startTime = newStartTime;
 	}
 	
-	public void changeName(String newName) {
-		name = newName;
-	}
-	
 }

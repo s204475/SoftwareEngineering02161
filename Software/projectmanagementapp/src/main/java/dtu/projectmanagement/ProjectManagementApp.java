@@ -233,6 +233,18 @@ public class ProjectManagementApp {
 		return projects;
 	}
 	
+	public void setActiveTask(Task task) {
+		if(activeProject == null) {
+			//Error message. no activeProject.
+		}
+		else if(!(activeProject.tasks.contains(task))) {
+			//Error message. activeProject, does not contain the task. 
+		}
+		else {
+			activeTask=task; 
+		}
+	}
+	
 	public void setEstimatedTimeOfTask(double Time) throws OperationNotAllowed {
 		if(activeTask == null) {
 			throw new OperationNotAllowed("the task does not exist");
@@ -254,9 +266,9 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void setActiveProject(Project project) {
+	public void setActiveProject(Project project) throws OperationNotAllowed {
 		if(!(projects.contains(project))) {
-			//implementer error message. Projectet eksistrer ikke.
+			throw new OperationNotAllowed("the project does not exist");
 		}
 		else {
 			activeProject=project;
