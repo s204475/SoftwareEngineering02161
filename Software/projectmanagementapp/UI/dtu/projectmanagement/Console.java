@@ -280,8 +280,12 @@ public class Console {
 			System.out.println("Incorrect input. Returning to main menu...");
 			mainMenu();
 		} else {
+			try {
 			app.setActiveProject(app.getProjects().get(userChoice));;
 			activeProjectChoices();
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 		}
 		
 	}
@@ -738,7 +742,11 @@ public class Console {
 					System.out.println("Which project?");
 					printProjects();
 					while (!scanner.hasNextInt()) scanner.next();
+					try {
 					app.setActiveProject(app.projects.get(scanner.nextInt()));
+					} catch (OperationNotAllowed e) {
+						helper.printError(e);
+					}
 					
 					if(app.getActiveProject() != null && app.getActiveProject().getTasks().size() > 0)
 					{
