@@ -52,11 +52,11 @@ public class ProjectManagementApp {
 	
 	public void addTask(Task task) throws OperationNotAllowed {
 		assert activeProject != null && activeUser != null; // Precondition
-		if(task.getName().equals("") || task.getEstimatedTime() <= 0) { //2
+		if(task.getName().equals("") || task.getEstimatedTime() <= 0) {
 			assert !activeProject.getTasks().contains(task); // Postcondition
 			throw new OperationNotAllowed("A task has to have a name and estimated time");
 		}
-		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) { //3
+		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			activeProject.addTask(task);
 			assert activeProject.getTasks().contains(task); // Postcondition
 		} else {
@@ -130,16 +130,16 @@ public class ProjectManagementApp {
 	}
 	
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		assert ((initials != null && employees!=null)); // precondition:
+		assert ((initials != null && employees!=null)); // Precondition
 		boolean found = false;
 		for (Employee employee : employees) { //1
 			if (employee.getInitials().equals(initials)) { //2
 				found = true;
-				assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
+				assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // Postcondition
 				return employee;
 			}
 		}
-		assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // postcondition:
+		assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // Postcondition
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
