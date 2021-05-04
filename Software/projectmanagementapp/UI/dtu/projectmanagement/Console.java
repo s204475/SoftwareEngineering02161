@@ -51,7 +51,11 @@ public class Console {
 			{
 				System.out.println("Incorrect input. Returning to main menu...");
 			} else {
-				app.setActiveUser(app.getEmployees().get(userChoice));
+				try {
+					app.setActiveUser(app.getEmployees().get(userChoice));
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
 			}
 		}
 		mainMenu();
@@ -73,7 +77,11 @@ public class Console {
 		app.createEmployee(userName, initials);
 		if(app.getActiveUser() == null)
 		{
-			app.setActiveUser(app.getEmployees().get(0));
+			try {
+				app.setActiveUser(app.getEmployees().get(0));
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 		}
 	}
 
