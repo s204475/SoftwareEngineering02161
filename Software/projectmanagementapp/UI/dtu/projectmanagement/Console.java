@@ -540,7 +540,7 @@ public class Console {
 
 	private void printBudgetedTime()
 	{
-		System.out.println(app.getProjectBudgetTime());
+		System.out.println(app.getActiveProject().getBudgetTime());
 	}
 
 	private void printRemainingTime()
