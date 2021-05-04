@@ -1,6 +1,6 @@
 Project name: project1
 Project ID: 210000
-Collective budget time spent for all tasks: 0
+Collective budget time spent for all tasks: 20.0
 Estimated time remaining on tasks: 20.0
 Remaining budget time on tasks: 20.0
 Current project manager: John(joh)

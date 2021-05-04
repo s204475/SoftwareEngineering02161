@@ -29,7 +29,7 @@ public class Console {
 		chooseActiveUser();
 	}
 	
-	public void chooseActiveUser()
+	public void chooseActiveUser() 
 	{	
 		/*Prints all employees in the app and the active user can then be chosen.
 		 * If there are no user in the app, a guest user is automatically added. 
@@ -51,7 +51,11 @@ public class Console {
 			{
 				System.out.println("Incorrect input. Returning to main menu...");
 			} else {
-				app.setActiveUser(app.getEmployees().get(userChoice));
+				try {
+					app.setActiveUser(app.getEmployees().get(userChoice));
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
 			}
 		}
 		mainMenu();
@@ -73,7 +77,11 @@ public class Console {
 		app.createEmployee(userName, initials);
 		if(app.getActiveUser() == null)
 		{
-			app.setActiveUser(app.getEmployees().get(0));
+			try {
+				app.setActiveUser(app.getEmployees().get(0));
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 		}
 	}
 
@@ -272,8 +280,12 @@ public class Console {
 			System.out.println("Incorrect input. Returning to main menu...");
 			mainMenu();
 		} else {
+			try {
 			app.setActiveProject(app.getProjects().get(userChoice));;
 			activeProjectChoices();
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 		}
 		
 	}
@@ -528,17 +540,17 @@ public class Console {
 
 	private void printBudgetedTime()
 	{
-		System.out.println(app.getProjectBudgetTime());
+		System.out.println(app.getActiveProject().getBudgetTime());
 	}
 
 	private void printRemainingTime()
 	{
-		System.out.println(app.getProjectRemainingTime());
+		System.out.println(app.getActiveProject().getRemainingTime());
 	}
 
 	private void printEstimatedTime()
 	{
-		System.out.println(app.getProjectEstimatedTime());
+		System.out.println(app.getActiveProject().getEstimatedTime());
 	}
 
 	public void createTask()
@@ -730,7 +742,11 @@ public class Console {
 					System.out.println("Which project?");
 					printProjects();
 					while (!scanner.hasNextInt()) scanner.next();
+					try {
 					app.setActiveProject(app.projects.get(scanner.nextInt()));
+					} catch (OperationNotAllowed e) {
+						helper.printError(e);
+					}
 					
 					if(app.getActiveProject() != null && app.getActiveProject().getTasks().size() > 0)
 					{

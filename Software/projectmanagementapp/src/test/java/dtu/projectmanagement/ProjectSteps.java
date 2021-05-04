@@ -24,10 +24,15 @@ public class ProjectSteps {
 	
 	@Given("there is an employee who is active user")
 	public void there_is_an_employee_who_is_active_user() {
-	    employee = new Employee("John", "joh");
+		try {
+		String name = "John Hans Petersen";
+	    employee = new Employee(name, managementApp.createInitials(name));
 	    managementApp.addEmployee(employee);
 	    managementApp.setActiveUser(employee);
 	    assertTrue(managementApp.getEmployees().contains(employee));
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
 	}
 	
 	@Then("the project is created and added to the list of projects")

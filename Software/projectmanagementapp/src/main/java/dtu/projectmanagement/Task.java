@@ -28,20 +28,19 @@ public class Task {
 		assert created;  // Postcondition
 	}
 	
-	
-	public void setTimeSpent() {
+	public void setTimeSpent(Task task) {
+		
 		double hoursSpent = 0;
 		
 		for(Employee employee : employeesOnTask)
 		{
 			for(Activity activity : employee.getActivities())
 			{
-				if(activity instanceof TaskActivity)
+				if(activity instanceof TaskActivity
+						&& activity.getStartTime().before(Calendar.getInstance())
+						&& ((TaskActivity)activity).getTask().equals(task))
 				{
-					if(activity.getStartTime().before(Calendar.getInstance()))
-					{
-						hoursSpent += activity.getTimePassed();
-					}
+					hoursSpent += activity.getTimePassed();
 				}
 			}
 		}
@@ -95,10 +94,6 @@ public class Task {
 
 	public void setStartTime(Calendar newStartTime) {
 		startTime = newStartTime;
-	}
-	
-	public void changeName(String newName) {
-		name = newName;
 	}
 	
 }

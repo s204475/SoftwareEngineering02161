@@ -12,17 +12,14 @@ public class ProjectManagementApp {
 	Employee activeUser;
 	Project activeProject;
 	Task activeTask;
-	Activity activeActivity;
+	private Activity activeActivity;
 	
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
 	int lastProjectId = 0;
 	
-	public void createProject(String title) throws OperationNotAllowed {
-		Project project = new Project(title, lastProjectId);
-		addProject(project);
-	}
+	/* Create and add */
 	
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
@@ -38,6 +35,13 @@ public class ProjectManagementApp {
 		}
 		projects.add(project);
 		incrementLastProjectId();
+	}
+	
+	public void incrementLastProjectId() {
+		lastProjectId=getLastProjectId()+1;
+		if(lastProjectId == 10000) {
+			lastProjectId = 0;
+		}
 	}
 	
 	public void addEmployee(Employee employee) {
@@ -63,6 +67,44 @@ public class ProjectManagementApp {
 		activeUser.addActivity(activity);
 	}
 	
+	/* Methods for removal and clean-up */
+	
+	public void deleteEmployee(Employee employee) {
+		employees.remove(employee);
+	}
+
+	public void deleteProject(Project project) {
+		
+		projects.remove(project);
+		activeProject = null;
+	}
+
+	public void deleteTask(Task task) {
+		activeProject.getTasks().remove(task);
+		activeTask = null;
+	}
+
+	public void deleteActivity(Activity activityToBeDeleted) {
+		//If the user is active on several activities associated with a task, they are not removed from the task
+		int activitiesForTask = 0;
+		for(Activity activity : activeUser.getActivities())
+		{
+			if(activity instanceof TaskActivity)
+			{
+				if (((TaskActivity)(activity)).getTask() == getActiveTask())
+				{
+					activitiesForTask++;
+				}
+			}
+		}
+		
+		if(activityToBeDeleted instanceof TaskActivity && activitiesForTask < 2)
+		{
+			((TaskActivity)(activityToBeDeleted)).getTask().getEmployeesOnTask().remove(activeUser);
+		}
+		activeUser.getActivities().remove(activityToBeDeleted);
+	}
+	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
@@ -75,6 +117,8 @@ public class ProjectManagementApp {
 		}
 	}
 
+	/* Sort and search */
+	
 	private void sortEmployees() {
 		employees.sort(new NameSort());        
 	}
@@ -131,19 +175,6 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public void setEstimatedTimeOfTask(double Time) throws OperationNotAllowed {
-		if(activeTask == null) {
-			throw new OperationNotAllowed("the task does not exist");
-		}
-		else {
-			if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
-				activeTask.setEstimatedTime(Time);
-			} else {
-				throw new OperationNotAllowed("You have to be a project manager to change or create a task");
-			}
-		}
-	}
-	
 	public class NameSort implements Comparator<Employee> 
 	{
 		//Sorts employees alphabetically
@@ -154,6 +185,8 @@ public class ProjectManagementApp {
 	    }
 	}
 
+	/* Report writing */
+	
 	public void printReport(String path_to_file) throws IOException {
 		if(pathExists(path_to_file)) {
 			ReportWriter writer = new ReportWriter(path_to_file);
@@ -181,18 +214,12 @@ public class ProjectManagementApp {
             return false;
         }
 	}
+
+	/* GETTERS AND SETTERS */
 	
-	public void incrementLastProjectId() {
-		lastProjectId++;
-		if(lastProjectId == 10000) {
-			lastProjectId = 0;
-		}
-	}
 	public int getLastProjectId() {
 		return lastProjectId;
 	}
-
-	/* GETTERS AND SETTERS */
 	
 	public ArrayList<Employee> getEmployees() {
 		return employees;
@@ -210,17 +237,30 @@ public class ProjectManagementApp {
 		return projects;
 	}
 	
-	public void setActiveUser(Employee employee) {
+	public void setEstimatedTimeOfTask(double Time) throws OperationNotAllowed {
+		if(activeTask == null) {
+			throw new OperationNotAllowed("the task does not exist");
+		}
+		else {
+			if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+				activeTask.setEstimatedTime(Time);
+			} else {
+				throw new OperationNotAllowed("You have to be a project manager to change or create a task");
+			}
+		}
+	}
+	
+	public void setActiveUser(Employee employee) throws OperationNotAllowed {
 		if (!(employees.contains(employee))) {
-			//implementer error message. Med den employee ikke eksistere 
+			throw new OperationNotAllowed("the employee doesn't exist");
 		} else {
 			activeUser = employee;	
 		}
 	}
 	
-	public void setActiveProject(Project project) {
+	public void setActiveProject(Project project) throws OperationNotAllowed {
 		if(!(projects.contains(project))) {
-			//implementer error message. Projectet eksistrer ikke.
+			throw new OperationNotAllowed("the project does not exist");
 		}
 		else {
 			activeProject=project;
@@ -258,35 +298,7 @@ public class ProjectManagementApp {
 		}
 	}
 	
-	public int getProjectBudgetTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0;
-		}
-		else {
-			return activeProject.getBudgetTime();
-		}
-	}
-	
-	public double getProjectEstimatedTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0.0;
-		} else {
-		double estimatedTimeInHours = activeProject.getEstimatedTime(); 
-		return estimatedTimeInHours;
-		}
-	}
-	
-	public double getProjectRemainingTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0.0;
-		} else {
-		double remamningTimeInHours = activeProject.getRemainingTime(); 
-		return remamningTimeInHours;
-		}
-	}
+
 	
 	public Project getActiveProject() {
 		return activeProject;
@@ -299,7 +311,7 @@ public class ProjectManagementApp {
 		else if(newName.equals("")) {
 			throw new OperationNotAllowed("A task has to have a name and estimed time");
 		} else {
-		activeTask.setName(newName);
+			changeTaskName(newName);
 		}
 	}
 	
@@ -310,21 +322,18 @@ public class ProjectManagementApp {
 
 	public void changeTaskName(String newName) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
-			activeProject.changeTaskName(activeTask, newName);
+			activeTask.setName(newName);
 		} else {
-			System.out.println("fejl");
 			throw new OperationNotAllowed("Active user is not project manager for this project");
 		}
 	}
-	
-
 	
 	public void setTaskEstimatedTime(double estimatedTime) throws OperationNotAllowed {
 		activeTask.setEstimatedTime(estimatedTime);
 	}
 	
 	public void setTaskTimeWorked() {
-		activeTask.setTimeSpent();
+		activeTask.setTimeSpent(activeTask);
 	}
 	
 	public void setActiveActivity(Activity activity) {
@@ -334,10 +343,6 @@ public class ProjectManagementApp {
 	public void setNewActivityName(String newName) {
 		activeActivity.setName(newName);
 	}
-
-	
-	
-	
 	
 	private String getActiveProjectInformation() {
 		
@@ -391,32 +396,4 @@ public class ProjectManagementApp {
 		return activeTask;
 	}
 
-	public void deleteEmployee(Employee employee) {
-		employees.remove(employee);
-	}
-
-	public void deleteProject(Project project) {
-		
-		projects.remove(project);
-		activeProject = null;
-	}
-
-	public void deleteTask(Task task) {
-		activeProject.getTasks().remove(task);
-		activeTask = null;
-	}
-
-	public void deleteActivity(Activity activity) {
-		activeUser.getActivities().remove(activity);
-		if(activity instanceof TaskActivity)
-		{
-			((TaskActivity)(activity)).getTask().getEmployeesOnTask().remove(activeUser);
-		}
-	}
-	
-	
-	
 }
-
-	
-	

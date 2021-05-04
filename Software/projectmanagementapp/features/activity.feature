@@ -80,3 +80,26 @@ Scenario: An employee edits an activity successfully
 	And the employee has an activity starting at 2021 04 02 0 0 and ending at 2021 04 04 0 0
 	When the employee wants to change the name of the activity to "vacation" and the startime to 2021 04 03 0 0
 	Then the name of the activity is "vacation" and the startime is 2021 04 03 0 0
+	
+Scenario: delete task activity successfully
+    Given there is an employee with the initials "joh"
+    And the employee is active user
+    And there is a project with the name "project1"
+    And the employee is project manager of the project
+    And there is a task in the project
+    And the active user is assigned to the task
+    When the active user deletes their task-activty
+    Then the user is no longer working on the task
+    
+Scenario: An employee assign a task activity to themself
+    Given there is an employee with the initials "joh"
+	And the employee is active user
+    And there is a project with the name "project1"
+    And the employee is project manager of the project
+    And there is a task in the project
+    And there is an employee with the initials "per"
+	And the employee is active user
+	And the active user is assigned to the task
+    And "per" is not project manager of the project
+    When "per" assigns the task to "per"
+    Then the task is added to "per" activities
