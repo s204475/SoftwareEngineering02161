@@ -27,6 +27,7 @@ public class Project {
 	}
 	
 	public double getBudgetTime() {
+		//Returns the budget time which is the sum of the project manager's estimation of tasks' time in hours
 		double budgetTime = 0;
 		for(Task task : tasks)
 		{
@@ -96,8 +97,3 @@ public class Project {
 	}
 
 }
-	
-	
-	
-	
-
