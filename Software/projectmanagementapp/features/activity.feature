@@ -17,8 +17,8 @@ Scenario: An employee tries to create an activity with no name
   	And the activity is not added to the employees schedule
 	
 Scenario: An employee tries to create an activity in occupied timeframe
-		Given there is an employee with the initials "joh"
-		And the employee is active user
+	Given there is an employee with the initials "joh"
+	And the employee is active user
   	And the employee has an activity starting at 2021 04 02 0 0 and ending at 2021 04 04 0 0
   	When the employee tries to create an activity starting at 2021 04 02 0 0
   	Then the error message "Timeframe not available" is given
@@ -77,7 +77,7 @@ Scenario: Assign task activity when not project manager
 Scenario: An employee edits an activity successfully
   	Given there is an employee with the initials "joh"
   	And the employee is active user
-	And the employee has an activity starting at 2021 04 02 0 0 and ending at 2021 04 04 0 0
+	And the employee has an activity starting at 2021 04 02 0 0 and ending at 2022 04 04 0 0
 	When the employee wants to change the name of the activity to "vacation" and the startime to 2021 04 03 0 0
 	Then the name of the activity is "vacation" and the startime is 2021 04 03 0 0
 	
@@ -103,3 +103,4 @@ Scenario: An employee assign a task activity to themself
     And "per" is not project manager of the project
     When "per" assigns the task to "per"
     Then the task is added to "per" activities
+    

@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
+/* The main application commands 
+*/
 
 public class ProjectManagementApp {
 	Employee activeUser;
@@ -106,11 +108,15 @@ public class ProjectManagementApp {
 	}
 	
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
+		//Assign an employee to a task
+		
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
+			activeTask.addEmployeeToTask(searchEmployees(initials));
 			setTaskTimeWorked();
 		} else if(activeUser.getInitials().equals(initials)){
 			activeUser.assignTask(taskActivity);
+			activeTask.addEmployeeToTask(searchEmployees(initials));
 			setTaskTimeWorked();
 		} else {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
@@ -157,6 +163,7 @@ public class ProjectManagementApp {
 	}
 	
 	public String createInitials(String userName) {
+		//Creates initials for an employee based on the full name of the employee. John Smithson would be name JS. 
 		String initials = "";
 		initials += userName.charAt(0);
 		for (int i = 1; i < userName.length() - 1; i++)
@@ -188,6 +195,8 @@ public class ProjectManagementApp {
 	/* Report writing */
 	
 	public void printReport(String path_to_file) throws IOException {
+		//Print a report of the current active project
+		
 		if(pathExists(path_to_file)) {
 			ReportWriter writer = new ReportWriter(path_to_file);
 			
@@ -200,10 +209,10 @@ public class ProjectManagementApp {
 		else {
 			throw new IOException("the path was not found");
 		}
-		
 	}
 	
 	public boolean pathExists(String path_to_file) {
+		//Checks if the directory path exist
 		
 		File file = new File(path_to_file);
 		 
@@ -268,6 +277,8 @@ public class ProjectManagementApp {
 	}
 	
 	public ArrayList<Employee> getAvailableEmployees(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		//Returns a list of employees who are not occupied in the provided timeframe
+		
 		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
 		if (startTime.equals(endTime)) {
 			throw new OperationNotAllowed("You have not selected a duration to find available employees");
@@ -345,6 +356,7 @@ public class ProjectManagementApp {
 	}
 	
 	private String getActiveProjectInformation() {
+		//All the information in a project. Used for printing a report.
 		
 		String taskInformation = "";
 		

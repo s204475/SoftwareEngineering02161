@@ -10,14 +10,11 @@ public class Project {
 	private String title;
 	private String id;
 	private Calendar startTime; 
-	private int budgetTime;
 
 	private Employee projectManager;
 	
 	private DateServer dateServer = new DateServer();
 	ArrayList<Task> tasks = new ArrayList<Task>();
-	
-	
 	
 	public Project(String title, int lastProjectId) throws OperationNotAllowed {
 		if (title.equals("")) {
@@ -27,10 +24,6 @@ public class Project {
 		}
 		this.id = setId(lastProjectId);
 		this.startTime = dateServer.getDate();
-	}
-	
-	public void setBudgetTime(int budgetTime) {
-		this.budgetTime = budgetTime;
 	}
 	
 	public double getBudgetTime() {
@@ -97,7 +90,6 @@ public class Project {
 	public void addTask(Task task) {
 		tasks.add(task);
 	}
-	
 
 	public void removeProjectManager() {
 		projectManager = null;
