@@ -29,7 +29,7 @@ public class AssignManagerSteps {
 	
 	@Given("there is a project named {string}")
 	public void there_is_a_project_named(String title) throws OperationNotAllowed {
-		project = new Project(title);
+		project = new Project(title, 0);
 		managementApp.addProject(project);
 	    assertTrue(managementApp.getProjects().contains(project));
 	}
@@ -49,16 +49,6 @@ public class AssignManagerSteps {
 	@Then("the employee is assigned as project manager of the project")
 	public void the_employee_is_assigned_as_project_manager_of_the_project() {
 		assertEquals(firstEmployee, project.getProjectManager());
-	}
-	
-	@Given("there is two employees with the initials {string} and {string}")
-	public void there_is_two_employees_with_the_initials_and(String initials1, String initials2) {
-		firstEmployee = new Employee("John", initials1);
-		secondEmployee = new Employee("Peter", initials2);
-		managementApp.addEmployee(firstEmployee);
-		managementApp.addEmployee(secondEmployee);
-		assertTrue(managementApp.getEmployees().contains(firstEmployee));
-		assertTrue(managementApp.getEmployees().contains(secondEmployee));
 	}
 	
 	@Given("and the first empolyee is the project manager of the project")

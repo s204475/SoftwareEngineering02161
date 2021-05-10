@@ -6,19 +6,24 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
-/* The UI done as console commands 
- * By Victor Rasmussen s204475
+/* The UI done as console commands by all group members
+ *  Anders Gad s204496
+ *  Anders Reher s194587
+ *  Magnus Siegumfeldt s204472
+ * 	Victor Rasmussen s204475
 */
 
 public class Console {
 	
 	public static Scanner scanner = new Scanner(System.in);
 	private ProjectManagementApp app;
+	private UIConnector appConnector;
 	private Helper helper = new Helper();
 	
 	public Console(ProjectManagementApp app)
 	{
 		this.app = app;
+		this.appConnector = new UIConnector(app);
 	}
 	
 	public void start()
@@ -27,10 +32,10 @@ public class Console {
 		chooseActiveUser();
 	}
 	
-	public void chooseActiveUser()
+	public void chooseActiveUser() 
 	{	
 		/*Prints all employees in the app and the active user can then be chosen.
-		 * If there are no user in the app, a guest user is automatically added. 
+		 * If there are no users in the app, a new user must be added. 
 		 */
 		if(app.getEmployees() == null || app.getEmployees().size() == 0)
 		{
@@ -49,7 +54,11 @@ public class Console {
 			{
 				System.out.println("Incorrect input. Returning to main menu...");
 			} else {
-				app.setActiveUser(app.getEmployees().get(userChoice));
+				try {
+					app.setActiveUser(app.getEmployees().get(userChoice));
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
 			}
 		}
 		mainMenu();
@@ -71,13 +80,18 @@ public class Console {
 		app.createEmployee(userName, initials);
 		if(app.getActiveUser() == null)
 		{
-			app.setActiveUser(app.getEmployees().get(0));
+			try {
+				app.setActiveUser(app.getEmployees().get(0));
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 		}
 	}
 
-	//Checks if a string has any digits.
-	//Currently not used
+	
 	public boolean hasDigits(String s) {
+		//Checks if a string contains any digits.
+		//Currently not used.
 	    boolean digits = false;
 
 	    if (s != null && !s.isEmpty())
@@ -100,7 +114,9 @@ public class Console {
 
 	private void mainMenu()
 	{
-		//The main menu of the app
+		/*
+		 * The main menu of the app
+		 */
 		System.out.println("Main menu("+app.getActiveUser().getName()+")"
 		+ "\n1: Change active user"
 		+ "\n2: Add user"
@@ -159,20 +175,20 @@ public class Console {
 		}
 	}
 
-	private void createProject()  {
+	private void createProject() {
 		System.out.println("Choose a name for the project");
 		String projectTitle = userInput();
 		try {
-			app.createProject(projectTitle);
+			appConnector.createProject(projectTitle);
 			System.out.println("The project can now be found under \"See projects\"");
 		} catch (OperationNotAllowed e) {
 			helper.printError(e);
 		}
-		
 	}
 
 	public String userInput()
 	{
+		//Handles user line input.
 		String input = "";
 		while (input.equals(""))
 		{
@@ -183,6 +199,9 @@ public class Console {
 	
 	private void seePersonalActivities()
 	{
+		/*A menu for the active user's activities
+		 */
+		
 		System.out.println(""
 				+ "\n1: Add activity"
 				+ "\n2: Edit activity"
@@ -218,36 +237,15 @@ public class Console {
 		}
 	}
 
-	/*private void setTimeWorkedOnTaskActivity() {
-		
-		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
-		{
-			System.out.println("You currently have no activities.");
-			seePersonalActivities();
-		} else {
-			System.out.println("Choose task to edit work time: ");
-
-			Activity activity = selectTaskActivity();
-			
-			app.setActiveActivity(activity);
-		
-			System.out.println("Input hours worked on task (e.g. 4.5 or 4.0 )");
-			while (!scanner.hasNextDouble()) scanner.next();
-			
-			TaskActivity taskActivity = (TaskActivity)activity;
-		
-		}
-			
-		
-	}*/
-
 	private void InvalidInput() {
 		System.out.println("Invalid input");
 	}
 	
 	public void seeProjects()
 	{
-		//Prints all active projects and chooses one to be the active project
+		/*Prints all projects and chooses one to be the active project
+		 */
+		
 		if (app.getProjects().size() == 0)
 		{
 			System.out.println("There are currently no projects. Please create one first. Returning to main menu...");
@@ -270,16 +268,23 @@ public class Console {
 			System.out.println("Incorrect input. Returning to main menu...");
 			mainMenu();
 		} else {
+			try {
 			app.setActiveProject(app.getProjects().get(userChoice));;
 			activeProjectChoices();
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 		}
 		
 	}
 	
 	
-	//Prints all eligible employees and assigns one as project manager on currently active project
+	
 	public void setProjectManager()
 	{
+		/*Prints all eligible employees and assigns one as project manager on the currently active project
+		 */
+		
 		System.out.println("Choose a Project Manager.");
 		if(app.getActiveProject().getProjectManager() != null)
 		{
@@ -292,7 +297,7 @@ public class Console {
 		
 		while (!scanner.hasNextInt()) scanner.next();
 		
-		app.assignProjectManager(app.employees.get(scanner.nextInt()));
+		appConnector.assignProjectManager(app.employees.get(scanner.nextInt()));
 		
 		//clearConsole();
 		
@@ -315,7 +320,9 @@ public class Console {
 	
 	public void activeProjectChoices()
 	{
-		//Choices after choosing a project
+		/*Menu for choices after choosing a project
+		 */
+		
 		System.out.println("Current project: "
 												+ app.getActiveProject().getTitle()
 												+ " (Serial number: "
@@ -414,7 +421,6 @@ public class Console {
 					}
 					mainMenu();
 					break;
-					
 				default: 
 					if(choice <1 || choice > 11)
 					{
@@ -424,7 +430,7 @@ public class Console {
 			}
 		}
 		
-		if (choice != 5) //unless you go back, you are presented with the project choices again.
+		if (choice != 5 && choice != 11) //unless you go back, you are presented with the project choices again.
 		{
 			activeProjectChoices();
 		}
@@ -434,65 +440,77 @@ public class Console {
 	
 
 	private void assignEmployeeToTask() throws ParseException {
-		System.out.println("Choose employee to add");
-		printEmployees();
-		
-		while (!scanner.hasNextInt()) scanner.next();
-		int userChoice = scanner.nextInt();
-		
-		if(userChoice>app.getEmployees().size() || userChoice<0)
+		if(app.getActiveProject().getTasks() != null && app.getActiveProject().getTasks().size() > 0)
 		{
-			System.out.println("Incorrect input.");
-		} else {
-			System.out.println("Choose task to add employee to");
-			printTasks();
+			System.out.println("Choose employee to add");
+			printEmployees();
+			
 			while (!scanner.hasNextInt()) scanner.next();
+			int userChoice = scanner.nextInt();
 			
-			app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
-			
-			GregorianCalendar end;
-			GregorianCalendar start;
-			
-			System.out.println("Input start time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
-					+ "The system only accepts half hour intervals.");
-			
-			String dateString = userInput();
-			
-			if(helper.isDate(dateString))
+			if(userChoice>app.getEmployees().size() || userChoice<0)
 			{
-				start = helper.dateToCalendar(helper.convertDate(dateString));
-			} else {
 				System.out.println("Incorrect input.");
-				return;
-			}
-			
-			System.out.println("Input end time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
-					+ "The system only accepts half hour intervals.");
-			
-			dateString = userInput();
-			if(helper.isDate(dateString))
-			{
-				end = helper.dateToCalendar(helper.convertDate(dateString));
 			} else {
-				System.out.println("Incorrect input.");
-				return;
+				System.out.println("Choose task to add employee to");
+				printTasks();
+				while (!scanner.hasNextInt()) scanner.next();
+				try {
+					app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
+				
+				GregorianCalendar end;
+				GregorianCalendar start;
+				
+				System.out.println("Input start time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
+						+ "The system only accepts half hour intervals.");
+				
+				String dateString = userInput();
+				
+				if(helper.isDate(dateString))
+				{
+					start = helper.dateToCalendar(helper.convertDate(dateString));
+				} else {
+					System.out.println("Incorrect input.");
+					return;
+				}
+				
+				System.out.println("Input end time as HH-mm-dd-MM-yyyy (e.g. 12-30-10-02-2020 = 12:30 10/02/2020)"
+						+ "The system only accepts half hour intervals.");
+				
+				dateString = userInput();
+				if(helper.isDate(dateString))
+				{
+					end = helper.dateToCalendar(helper.convertDate(dateString));
+				} else {
+					System.out.println("Incorrect input.");
+					return;
+				}
+				
+				try {
+					appConnector.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
+											+ "\" by "+app.getActiveUser().getName() +"("+ app.getActiveUser().getInitials()+")",
+											start, end, app.getActiveTask(),app.getEmployees().get(userChoice));
+					app.setTaskTimeWorked();
+				
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
+				
 			}
-			
-			try {
-				app.createTaskActivity("Assigned to work on the task \""+app.getActiveTask().getName()
-										+ "\" by "+app.getActiveUser().getName() +"("+ app.getActiveUser().getInitials()+")",
-										start, end, app.getActiveTask(),app.getEmployees().get(userChoice));
-				app.setTaskTimeWorked();
-			
-			} catch (OperationNotAllowed e) {
-				helper.printError(e);
-			}
-			
+		} else {
+			System.out.println("There are currently no tasks to add employees to.");
 		}
+		
 	}
 
 	private void createReport()
 	{
+		/* After a user inputs a correct path to create the file,
+		 * a .txt file with the current project's information will be created.
+		 */
 		System.out.println("Please input complete path to save report in.");
 		
 		String path_to_file = userInput();
@@ -521,17 +539,17 @@ public class Console {
 
 	private void printBudgetedTime()
 	{
-		System.out.println(app.getProjectBudgetTime());
+		System.out.println(app.getActiveProject().getBudgetTime());
 	}
 
 	private void printRemainingTime()
 	{
-		System.out.println(app.getProjectRemainingTime());
+		System.out.println(app.getActiveProject().getRemainingTime());
 	}
 
 	private void printEstimatedTime()
 	{
-		System.out.println(app.getProjectEstimatedTime());
+		System.out.println(app.getActiveProject().getEstimatedTime());
 	}
 
 	public void createTask()
@@ -541,7 +559,7 @@ public class Console {
 		System.out.println("Input estimated duration of task in hours (e.g. 4.5 or 4.0 )");
 		while (!scanner.hasNextDouble()) scanner.next();
 		try {
-			app.createTask(taskName,scanner.nextDouble());
+			appConnector.createTask(taskName,scanner.nextDouble());
 		} catch (OperationNotAllowed e) {
 			helper.printError(e);
 		}
@@ -559,8 +577,11 @@ public class Console {
 			printTasks();
 			
 			while (!scanner.hasNextInt()) scanner.next();
-
+			try {
 			app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+			} catch (OperationNotAllowed e) {
+				helper.printError(e);
+			}
 			
 			System.out.println("Choose what to edit");
 			
@@ -605,7 +626,11 @@ public class Console {
 				case 3: 
 					System.out.println("Input new estimated time");
 					while (!scanner.hasNextDouble()) scanner.next();
+				try {
 					app.setTaskEstimatedTime(scanner.nextDouble());
+				} catch (OperationNotAllowed e) {
+					helper.printError(e);
+				}
 					break;
 				case 4:
 					System.out.println("Are you sure you wish to delete this task and all of its information?"
@@ -628,14 +653,6 @@ public class Console {
 		activeProjectChoices();
 	}
 
-	
-	/*private void addEmployeeToTask() {
-		printEmployees();
-		
-		while (!scanner.hasNextInt()) scanner.next();
-		app.addEmployeeToTask(app.getEmployees().get(scanner.nextInt()));
-	}*/
-
 	private void printTasks()
 	{
 		//Prints all tasks (in name only) 
@@ -654,7 +671,9 @@ public class Console {
 	
 	private void printAllTaskInformation()
 	{
-		//Prints all tasks and their information
+		/*Prints all tasks and their information
+		 */
+		
 		if(app.getActiveProject().getTasks().size() == 0)
 		{
 			System.out.println("There are currently no tasks.");
@@ -719,17 +738,25 @@ public class Console {
 					System.out.println("Which project?");
 					printProjects();
 					while (!scanner.hasNextInt()) scanner.next();
+					try {
 					app.setActiveProject(app.projects.get(scanner.nextInt()));
+					} catch (OperationNotAllowed e) {
+						helper.printError(e);
+					}
 					
 					if(app.getActiveProject() != null && app.getActiveProject().getTasks().size() > 0)
 					{
 						System.out.println("Which task?");
 						printTasks();
 						while (!scanner.hasNextInt()) scanner.next();
+						try {
 						app.setActiveTask(app.getActiveProject().getTasks().get(scanner.nextInt()));
+						} catch (OperationNotAllowed e) {
+							helper.printError(e);
+						}
 						
 						try {
-							app.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
+							appConnector.createTaskActivity(activityName, start, end, app.getActiveTask(),app.getActiveUser());
 						} catch (OperationNotAllowed e) {
 							helper.printError(e);
 						}
@@ -742,7 +769,7 @@ public class Console {
 			
 			case 2:
 			try {
-				app.createActivity(activityName, start, end);
+				appConnector.createActivity(activityName, start, end);
 			} catch (OperationNotAllowed e) {
 				helper.printError(e);
 			}
@@ -758,6 +785,9 @@ public class Console {
 
 	private void editActivity()
 	{
+		/* Change name, starttime or other natures of an activity
+		 */
+		
 		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
 		{
 			System.out.println("You currently have no activities.");
@@ -829,35 +859,7 @@ public class Console {
 			System.out.println(i+": "+app.projects.get(i).getTitle()+" ("+app.projects.get(i).getId()+")");
 		}
 	}
-	
-	/*private void printTaskActivities()
-	{
-		for(int i = 0; i < app.activeUser.getActivities().size();i++)
-		{
-			if(app.activeUser.getActivities().get(i) instanceof TaskActivity)
-			{
-				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
-			}
-		}	
-	}*/
-	
-	/*private Activity selectTaskActivity()
-	{
-		ArrayList<Activity> tempList = new ArrayList<Activity>();
-		for(int i = 0; i < app.activeUser.getActivities().size();i++)
-		{
-			if(app.activeUser.getActivities().get(i) instanceof TaskActivity)
-			{
-				System.out.println(i+": "+app.getActiveUser().getActivities().get(i).getName());
-				tempList.add(app.getActiveUser().getActivities().get(i));
-			}
-		}
-		while(!scanner.hasNextInt()) scanner.next();
-		
-		return tempList.get(scanner.nextInt());
-		
-	}*/
-	
+
 	private void printAllActivitesInfo()
 	{
 		if(app.getActiveUser().getActivities() == null || app.getActiveUser().getActivities().size() == 0)
@@ -876,7 +878,7 @@ public class Console {
 	
 	public void clearConsole()
 	{
-		//Clears the console. 
+		//Clears the console, albeit primitively and Eclipse exclusively. Used only for testing. 
 		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 	}
 	
