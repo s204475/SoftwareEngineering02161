@@ -11,12 +11,13 @@ public class Task {
 	private double timeSpent;
 	private ArrayList<Employee> employeesOnTask = new ArrayList<Employee>();
 
+	// Anders Reher s194587
 	public Task (String name, double estimatedTime) throws OperationNotAllowed {
 		assert name != null && dateServer != null; // Precondition 
 		boolean created = false;
 		this.name = name;
 		this.startTime = dateServer.getDate();
-		if (estimatedTime % 0.5 == 0 && estimatedTime > 0) {   //1
+		if (estimatedTime % 0.5 == 0 && estimatedTime > 0) {   
 			this.estimatedTime = estimatedTime;
 		} else {
 			assert !created; // Postcondition
@@ -28,6 +29,7 @@ public class Task {
 		assert created;  // Postcondition
 	}
 
+	// Victor Rasmussen s204475
 	public void setTimeSpent(Task task) {
 		//Calculates how much time employees assigned to the task cumulatively have spent on the task
 		
@@ -58,6 +60,7 @@ public class Task {
 		return estimatedTime;
 	}
 
+	// Victor Rasmussen s204475
 	public void setEstimatedTime(double newEstimatedTime) throws OperationNotAllowed {
 		//Effectively sets the budget time for a task. Assigned by the project manager. 
 		if(newEstimatedTime <= 0) {

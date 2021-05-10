@@ -1,7 +1,7 @@
 Feature: White box tests
 	Description: White box tests
 
-
+# Anders Gad s204496
 Scenario: searchEmployees test 1
 	Given that no employees is contained in the app
     When there is searched for an employee with the initials "joh"
@@ -30,8 +30,7 @@ Scenario: searchEmployees test 4
 
 
 
-
-
+# Magnus Siegumfeldt s204472 
 Scenario: addActivity test 1
 	Given there is an employee with the initials "joh"
     And the employee is active user
@@ -148,6 +147,8 @@ Scenario: addActivity test 13
     Then the activity is not contained in the employees activities
     And the error message "Timeframe not available" is given
     
+
+# Victor Rasmusssen s204475
 Scenario: isAvailable test 1
 	Given there is an employee with the initials "joh"
     And the employee is active user
@@ -216,7 +217,7 @@ Scenario: isAvailable test 9
     When a isAvaiable request with the start time 2021 04 06 8 0 and end time 2021 04 06 12 0 is made
     Then the result is false
     
-    
+# Anders Reher s194587   
 Scenario: createTask test 1
 		Given these employees are contained in the app 
         | John | joh | 

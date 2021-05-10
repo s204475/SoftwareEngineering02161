@@ -1,5 +1,7 @@
-Feature: Create activity	
-    Description: An employee is able create an activity in his/her schedule
+# Magnus Siegumfeldt s204472
+
+Feature: All actions related to activities.
+    Description: An employee is able to delete, add and edit activities. A project manager can also assign an employee to a TaskActivity.
     Actors: Employee
 	
 Scenario: Create activity successfully

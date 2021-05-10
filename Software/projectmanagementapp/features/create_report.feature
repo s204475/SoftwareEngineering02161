@@ -1,3 +1,5 @@
+# Victor Rasmussen s204475 og Anders Gad s204496
+
 Feature: Create a report
     Description: A project manager is able create a report. The report is saved as a .txt file.
     Actors: Project manager

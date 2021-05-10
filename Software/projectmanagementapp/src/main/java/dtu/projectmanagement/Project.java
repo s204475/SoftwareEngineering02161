@@ -16,6 +16,7 @@ public class Project {
 	private DateServer dateServer = new DateServer();
 	ArrayList<Task> tasks = new ArrayList<Task>();
 	
+	// Victor Rasmussen s204475
 	public Project(String title, int lastProjectId) throws OperationNotAllowed {
 		if (title.equals("")) {
 			throw new OperationNotAllowed("A project needs a name");
@@ -25,7 +26,7 @@ public class Project {
 		this.id = setId(lastProjectId);
 		this.startTime = dateServer.getDate();
 	}
-	
+	// Anders Gad s204496
 	public double getBudgetTime() {
 		//Returns the budget time which is the sum of the project manager's estimation of tasks' time in hours
 		double budgetTime = 0;
@@ -39,7 +40,7 @@ public class Project {
 	public void assignProjectManager(Employee employee) {
 		projectManager = employee;
 	}
-	
+	// Magnus Siegumfeldt
 	public String setId(int lastProjectId) { 
 		String lastProjectIdString = String.valueOf(lastProjectId);
 		while(lastProjectIdString.length() < 4) {
@@ -48,7 +49,7 @@ public class Project {
 		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + lastProjectIdString;
 		return id;
 	}
-	
+	// Anders Gad s204496
 	public double getEstimatedTime() {
 		double estimatedTimeInHours = 0.0;
 		for(Task task : tasks) {
@@ -56,7 +57,7 @@ public class Project {
 		}
 		return estimatedTimeInHours;
 	}
-	
+	// Anders Gad s204496
 	public double getRemainingTime() {
 		double remainingTime = 0.0;
 		for(Task task : tasks) {

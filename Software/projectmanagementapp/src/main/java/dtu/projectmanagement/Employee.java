@@ -17,7 +17,7 @@ public class Employee {
 		this.name = name;
 		this.initials = initials;
 	}
-	
+	// Magnus Siegumfeldt s204472
 	public void addActivity(Activity activity) throws OperationNotAllowed {
 		assert activity != null && activities != null; // Precondition
 		if (!checkTimeframe(activity)) {
@@ -37,6 +37,7 @@ public class Employee {
 		sortActivities();
 	}
 	
+	// Victor Rasmussen s204475
 	public boolean isAvailable(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
 		//Checks whether the employee already is available for an activity in the given timeframe
 		
@@ -55,7 +56,7 @@ public class Employee {
 		assert result;    // Postcondition
 		return result;
 	}
-	
+	// Magnus Siegumfeldt s204472
 	public boolean checkTimeframe(Activity activity) {
 		//Checks whether the employee already has an activity in a given timeframe
 		if (activity.getStartTime().equals(activity.getEndTime()) || activity.getEndTime().before(activity.getStartTime()) ||
@@ -78,7 +79,6 @@ public class Employee {
 	
 	public void sortActivities() {
 		//Sorts activities by their start time
-		
 		activities = (ArrayList<Activity>) activities.stream()
 				.sorted(Comparator.comparing(Activity::getStartTime))
 				.collect(Collectors.toList());
@@ -87,7 +87,6 @@ public class Employee {
 	public void assignTask(TaskActivity taskActivity) throws OperationNotAllowed {
 		addTaskActivity(taskActivity);
 	}
-
 
 	public String getInitials() {
 		return initials; 
@@ -100,22 +99,23 @@ public class Employee {
 	public ArrayList<Activity> getActivities() {
 		return activities;
 	}
-
+	// Victor Rasmussen s204475
 	public boolean checkInput(GregorianCalendar startTime, GregorianCalendar endTime) {
 		//The system only accepts half-hour intervals
 		if (startTime.equals(endTime) || endTime.before(startTime) || 
-				startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {     // 1
+				startTime.get(Calendar.MINUTE) % 30 != 0 || endTime.get(Calendar.MINUTE) % 30 != 0) {     
 			return false;
 		}
 		return true;
 	}
+	// Victor Rasmussen s204475
 	public boolean hasActivityAtTime(GregorianCalendar startTime, GregorianCalendar endTime) {
 		if(activities.isEmpty() || endTime.before(activities.get(0).getStartTime()) ||
-				startTime.after(activities.get(activities.size() - 1).getEndTime())) {         // 2
+				startTime.after(activities.get(activities.size() - 1).getEndTime())) {         
 			return false;
 		}
-		for(int i = 0; i < activities.size() - 1; i++) {        // 3
-			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {    // 4
+		for(int i = 0; i < activities.size() - 1; i++) {       
+			if(activities.get(i).getEndTime().before(startTime) && activities.get(i + 1).getStartTime().after(endTime)) {    
 				return false;
 			}
 		}

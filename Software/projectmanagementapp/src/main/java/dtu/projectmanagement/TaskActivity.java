@@ -2,7 +2,7 @@ package dtu.projectmanagement;
 
 import java.util.GregorianCalendar;
 
-
+// Magnus Siegumfeldt s204472
 public class TaskActivity extends Activity{
 	
 	/*A TaskActivity is a work-related activity which has an associated task and thus project
@@ -11,7 +11,6 @@ public class TaskActivity extends Activity{
 	
 	private Task task;
 
-	
 	public TaskActivity(String name, GregorianCalendar startTime, GregorianCalendar endTime, Task task) throws OperationNotAllowed {
 		super(name, startTime, endTime);
 		this.task = task;

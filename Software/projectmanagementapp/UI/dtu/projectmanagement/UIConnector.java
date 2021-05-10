@@ -3,6 +3,7 @@ package dtu.projectmanagement;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+// Victor Rasmussen s204475
 public class UIConnector {
 	
 	private ProjectManagementApp app;
@@ -13,7 +14,6 @@ public class UIConnector {
 	}
 
 	/* --------- UI CONNECTION --------- */ 
-	
 	public void assignProjectManager(Employee employee) {
 		app.activeProject.assignProjectManager(employee);
 	}
@@ -32,14 +32,11 @@ public class UIConnector {
 	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		Activity activity = new Activity(activityName, startTime, endTime);
 		app.addActivity(activity);
-		
 	}
 	
 	public void createTaskActivity(String activityName, Calendar startTime, Calendar endTime, Task task,Employee employee) throws OperationNotAllowed {
-		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar)startTime, (GregorianCalendar)endTime,task);
+		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar) startTime, (GregorianCalendar) endTime, task);
 		taskActivity.getTask().addEmployeeToTask(employee);
-		app.assignTask(employee.getInitials(),taskActivity);
+		app.assignTask(employee.getInitials(), taskActivity);
 	}
-	
-	
 }

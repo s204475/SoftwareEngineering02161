@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 //Does general calculation and conversions unrelated to the individual classes
-
+// Victor Rasmussen s204475
 public class Helper {
 
 	

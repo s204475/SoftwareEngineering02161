@@ -7,7 +7,7 @@ public class Activity {
 	private String name;
 	private Calendar startTime;
 	private Calendar endTime;
-	
+	// Magnus Siegumfeldt s204472
 	public Activity(String name, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		if (name.equals("")) {
 			throw new OperationNotAllowed("An activity needs a name");
@@ -37,7 +37,7 @@ public class Activity {
 	public void setName(String newName) {
 		name = newName;
 	}
-
+	// Anders Reher s194587
 	public double getTimePassed() {
 		//How much time (in hours) have passed since the activity started (an potentially ended)
 		if(endTime.before(Calendar.getInstance()))

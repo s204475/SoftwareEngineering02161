@@ -6,10 +6,10 @@ import java.io.IOException;
 
 //The ReportWriter handles creating the report as an actual .txt to a specified path on the user's computer
 
+// Anders Gad s204496
 public class ReportWriter {
 
 	private String path;
-	private boolean append = false; //doesn't append, but erases everything in the file. Unused
 	
 	public ReportWriter(String path)
 	{

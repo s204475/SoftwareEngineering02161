@@ -6,8 +6,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
-/* The UI done as console commands 
- * By Victor Rasmussen s204475
+/* The UI done as console commands by all group members
+ *  Anders Gad s204496
+ *  Anders Reher s194587
+ *  Magnus Siegumfeldt s204472
+ * 	Victor Rasmussen s204475
 */
 
 public class Console {
