@@ -23,7 +23,7 @@ public class Console {
 	public Console(ProjectManagementApp app)
 	{
 		this.app = app;
-		this.appConnector=new UIConnector(app);
+		this.appConnector = new UIConnector(app);
 	}
 	
 	public void start()
@@ -90,7 +90,7 @@ public class Console {
 
 	
 	public boolean hasDigits(String s) {
-		//Checks if a string has any digits.
+		//Checks if a string contains any digits.
 		//Currently not used.
 	    boolean digits = false;
 
@@ -114,7 +114,9 @@ public class Console {
 
 	private void mainMenu()
 	{
-		//The main menu of the app
+		/*
+		 * The main menu of the app
+		 */
 		System.out.println("Main menu("+app.getActiveUser().getName()+")"
 		+ "\n1: Change active user"
 		+ "\n2: Add user"
@@ -876,7 +878,7 @@ public class Console {
 	
 	public void clearConsole()
 	{
-		//Clears the console,, albeit primitively and Eclipse exclusively. Used only for testing. 
+		//Clears the console, albeit primitively and Eclipse exclusively. Used only for testing. 
 		System.out.println(new String(new char[70]).replace("\0", "\r\n"));
 	}
 	
