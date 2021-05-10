@@ -175,11 +175,25 @@ public class ProjectManagementApp {
 		}
 		if(initials.length()>4)
 		{
-			String shortInitials = ""+initials.charAt(0)+initials.charAt(1)+initials.charAt(2)+initials.charAt(3);
-			return shortInitials;
-		} else{
-			return initials;
+			initials = "" + initials.charAt(0)+initials.charAt(1)+initials.charAt(2);
 		}
+		boolean found = false;
+		int index = 0;
+		while (true) {
+			for (Employee e : employees) {
+				if (e.getInitials().equals(initials)) {
+					found = true;
+				}
+			}
+			if(!found) {
+				return initials;
+			}
+			initials = initials.substring(0, initials.length() - 1) + index;
+			found = false;
+			index++;
+			
+		}
+		
 	}
 	// Anders Reher s194587
 	public class NameSort implements Comparator<Employee> 
