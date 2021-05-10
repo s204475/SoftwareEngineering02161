@@ -30,6 +30,7 @@ public class ActivitySteps {
 					new GregorianCalendar(2021, 04, 02, 0, 0),
 					new GregorianCalendar(2021, 04, 05, 0, 0));
 			managementApp.addActivity(activity);
+			assertTrue(activity.getName().equals(name));
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
 		}
@@ -72,17 +73,6 @@ public class ActivitySteps {
 		}
 	}
 	
-	@Given("there is a task in the project")
-	public void there_is_a_task_in_the_project() {
-		try {
-			task = new Task("Task", 10);
-			managementApp.addTask(task);	
-			managementApp.setActiveTask(task);
-		} catch (OperationNotAllowed e) {
-			errorMessageHolder.setErrorMessage(e.getMessage());
-		}
-		assertTrue(managementApp.getActiveProject().getTasks().contains(task));
-	}
 	@When("the active user assigns the task to {string}")
 	public void the_active_user_assigns_the_task_to(String initials) {
 		try {
@@ -158,6 +148,53 @@ public class ActivitySteps {
 			managementApp.assignTask(initials, taskActivity);
 		} catch (OperationNotAllowed e) {
 			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the employee wants to change the name of the activity to {string} and the startime to {int} {int} {int} {int} {int}")
+	public void the_employee_wants_to_change_the_name_of_the_activity_to_and_the_startime_to(String newName, Integer newYear, Integer newMonth, Integer newDay, Integer newHour, Integer newMinute) {
+	    assertFalse(activity.getName().equals(newName));
+	    if(managementApp.getActiveActivity()!=activity) {
+	    managementApp.setActiveActivity(activity);
+	    }
+	    managementApp.setNewActivityName(newName);
+	    
+	    assertFalse(activity.getStartTime().equals(new GregorianCalendar(newYear,newMonth,newDay,newHour,newMinute)));
+	    activity.setStartTime(new GregorianCalendar(newYear,newMonth,newDay,newHour,newMinute));
+	}
+
+	@Then("the name of the activity is {string} and the startime is {int} {int} {int} {int} {int}")
+	public void the_name_of_the_activity_is_and_the_startime_is(String newName, Integer newYear, Integer newMonth, Integer newDay, Integer newHour, Integer newMinute) {
+		assertTrue(activity.getName().equals(newName));
+		assertTrue(activity.getStartTime().equals(new GregorianCalendar(newYear,newMonth,newDay,newHour,newMinute)));
+	}
+	
+	@Given("the active user is assigned to the task")
+	public void the_active_user_is_assigned_to_the_task() {
+		try {
+			task = managementApp.getActiveTask();
+			taskActivity = new TaskActivity(
+					"Working on task", 
+					new GregorianCalendar(2000, 11, 15, 10, 0),
+					new GregorianCalendar(2000, 12, 15, 10, 0), task);
+			activity = taskActivity;
+			managementApp.assignTask(managementApp.getActiveUser().getInitials(), taskActivity);
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+	}
+
+	@When("the active user deletes their task-activty")
+	public void the_active_user_deletes_their_task_activty() {
+	    managementApp.deleteActivity(activity);
+	}
+
+	@Then("the user is no longer working on the task")
+	public void the_user_is_no_longer_working_on_the_task() {
+		if(task.getEmployeesOnTask().isEmpty()) {
+			assertTrue(task.getEmployeesOnTask().isEmpty());
+		} else {
+	    assertFalse(task.getEmployeesOnTask().contains(managementApp.getActiveUser()));
 		}
 	}
 	

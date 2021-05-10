@@ -3,7 +3,7 @@ package dtu.projectmanagement;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Duration;
 import java.util.List;
@@ -33,8 +33,12 @@ public class TaskSteps {
 	
 	@Given("the employee is active user")
 	public void the_employee_is_active_user() {
+		try {
 	    managementApp.setActiveUser(employee);
 	    assertTrue(managementApp.getActiveUser().equals(employee));
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
 	}
 	@Given("{string} is active user")
 	public void is_active_user(String initials) throws OperationNotAllowed {
@@ -44,7 +48,7 @@ public class TaskSteps {
 	
 	@Given("there is a project with the name {string}")
 	public void there_is_a_project_with_the_name(String title) throws OperationNotAllowed {
-		project = new Project(title);
+		project = new Project(title, 0);
 		managementApp.addProject(project);
 		managementApp.setActiveProject(project);
 	    assertTrue(managementApp.getProjects().contains(project));
@@ -66,6 +70,27 @@ public class TaskSteps {
 		assertTrue(project.getTasks().contains(task));
 	}
 	
+	@Given("there is a task in the project")
+	public void there_is_a_task_in_the_project() {
+		try {
+			if(managementApp.getActiveProject().getProjectManager() == null) {
+			managementApp.getActiveProject().assignProjectManager(employee);
+			task = new Task("Task", 10);
+			managementApp.addTask(task);	
+			managementApp.setActiveTask(task);
+			managementApp.getActiveProject().removeProjectManager();
+			}
+			else {
+				task = new Task("Task", 10);
+				managementApp.addTask(task);	
+				managementApp.setActiveTask(task);
+			}
+		} catch (OperationNotAllowed e) {
+			errorMessageHolder.setErrorMessage(e.getMessage());
+		}
+		assertTrue(managementApp.getActiveProject().getTasks().contains(task));
+	}
+	
 	@Given("the employee is not project manager of the project")
 	public void the_employee_is_not_project_manager_of_the_project() {
 	    assertFalse(project.isProjectManager(employee));
@@ -73,7 +98,7 @@ public class TaskSteps {
 
 	@When("the employee tries to creates a task with the name {string} and a estimated time of {int} hours")
 	public void the_employee_tries_to_creates_a_task_with_the_name_and_a_estimated_time_of_hours(String title, Integer time) throws OperationNotAllowed {
-		createTask(title,time);
+		createTask(title, time);
 	}
 	
 	@Given("there exist a task with the name {string} and an estimated time of {int} hours, which is the active task")

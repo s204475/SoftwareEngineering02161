@@ -1,75 +1,34 @@
 package dtu.projectmanagement;
 
-import static org.junit.Assert.assertArrayEquals;
-
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import io.cucumber.messages.Messages.TestCaseStarted;
-
+/* The main application commands 
+*/
 
 public class ProjectManagementApp {
 	Employee activeUser;
 	Project activeProject;
 	Task activeTask;
-	Activity activeActivity;
+	private Activity activeActivity;
 	
 	ArrayList<Project> projects = new ArrayList<Project>();
 	ArrayList<Employee> employees = new ArrayList<Employee>();
 	
+	int lastProjectId = 0;
 	
-	/* --------- UI CONNECTION --------- */ 
-	public void createProject(String title) throws OperationNotAllowed {
-		Project project = new Project(title);
-		addProject(project);
-	}
-	
-	public void addEmployeeToTask(Employee employee) {
-		//Should be merged wit assigntask method
-		if(!activeTask.getEmployeesOnTask().contains(employee))
-		{
-			activeTask.addEmployeeToTask(employee);
-		}
-	}
-	
+	/* Create and add */
+	// Magnus Siegumfeldt s204472
 	public void createEmployee(String name, String initials) {
 		Employee employee = new Employee(name, initials);
 		addEmployee(employee);
 		sortEmployees();
 	}
-	
-	public void createTask(String taskName, double estimatedtime) throws OperationNotAllowed {
-		Task task = new Task(taskName, estimatedtime);
-		addTask(task);
-	}
-	
-	public void createActivity(String activityName, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
-		Activity activity = new Activity(activityName, startTime, endTime);
-		addActivity(activity);
-		
-	}
-	
-	public void createTaskActivity(String activityName, Calendar startTime, Calendar endTime, Task task,Employee employee) throws OperationNotAllowed {
-		TaskActivity taskActivity = new TaskActivity(activityName, (GregorianCalendar)startTime, (GregorianCalendar)endTime,task);
-		//addActivity(taskActivity);
-		taskActivity.getTask().addEmployeeToTask(employee);
-		assignTask(employee.getInitials(),taskActivity);
-	}
-	
-	
-	/* ---------------------------------- */
-	/* --------- BUSINESS LOGIC --------- */
-	/* ---------------------------------- */
-	/* METHODS */
+	// Magnus Siegumfeldt s204472
 	public void addProject(Project project) throws OperationNotAllowed {
 		for (Project p : projects) {
 			if (p.getTitle().equals(project.getTitle())) {
@@ -77,78 +36,134 @@ public class ProjectManagementApp {
 			}
 		}
 		projects.add(project);
+		incrementLastProjectId();
+	}
+	// Magnus Siegumfeldt s204472
+	public void incrementLastProjectId() {
+		lastProjectId=getLastProjectId()+1;
+		if(lastProjectId == 10000) {
+			lastProjectId = 0;
+		}
 	}
 	
 	public void addEmployee(Employee employee) {
 		employees.add(employee);
 	}
+	// Anders Reher s194587
 	public void addTask(Task task) throws OperationNotAllowed {
+		assert activeProject != null && activeUser != null; // Precondition
 		if(task.getName().equals("") || task.getEstimatedTime() <= 0) {
-			throw new OperationNotAllowed("A task has to have a name and estimed time");
+			assert !activeProject.getTasks().contains(task); // Postcondition
+			throw new OperationNotAllowed("A task has to have a name and estimated time");
 		}
 		else if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			activeProject.addTask(task);
+			assert activeProject.getTasks().contains(task); // Postcondition
 		} else {
+			assert !activeProject.getTasks().contains(task); // Postcondition
 			throw new OperationNotAllowed("You have to be a project manager to change or create a task");
 		}
 	}
 	
 	public void addActivity(Activity activity) throws OperationNotAllowed { 
 		activeUser.addActivity(activity);
-		if(activity instanceof TaskActivity)
-		{
-			setTaskTimeWorked();
-		}
 	}
 	
+	/* Methods for removal and clean-up */
+	// Anders Gad s204496
+	public void deleteEmployee(Employee employee) {
+		employees.remove(employee);
+	}
+	// Anders Gad s204496
+	public void deleteProject(Project project) {
+		
+		projects.remove(project);
+		activeProject = null;
+	}
+	// Anders Gad s204496
+	public void deleteTask(Task task) {
+		activeProject.getTasks().remove(task);
+		activeTask = null;
+	}
+	// Anders Gad s204496
+	public void deleteActivity(Activity activityToBeDeleted) {
+		//If the user is active on several activities associated with a task, they are not removed from the task
+		int activitiesForTask = 0;
+		for(Activity activity : activeUser.getActivities())
+		{
+			if(activity instanceof TaskActivity)
+			{
+				if (((TaskActivity)(activity)).getTask() == getActiveTask())
+				{
+					activitiesForTask++;
+				}
+			}
+		}
+		
+		if(activityToBeDeleted instanceof TaskActivity && activitiesForTask < 2)
+		{
+			((TaskActivity)(activityToBeDeleted)).getTask().getEmployeesOnTask().remove(activeUser);
+		}
+		activeUser.getActivities().remove(activityToBeDeleted);
+	}
+	// Magnus Siegumfeldt s204472
 	public void assignTask(String initials, TaskActivity taskActivity) throws OperationNotAllowed {
+		//Assign an employee to a task
+		
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
 			searchEmployees(initials).assignTask(taskActivity);
+			activeTask.addEmployeeToTask(searchEmployees(initials));
 			setTaskTimeWorked();
 		} else if(activeUser.getInitials().equals(initials)){
 			activeUser.assignTask(taskActivity);
+			activeTask.addEmployeeToTask(searchEmployees(initials));
 			setTaskTimeWorked();
 		} else {
 			throw new OperationNotAllowed("Only project managers can assign tasks");
 		}
 	}
-	
-	public void setProjectManager(Employee employee) {
-		activeProject.assignProjectManager(employee);
-	}
 
+	/* Sort and search */
+	
 	private void sortEmployees() {
 		employees.sort(new NameSort());        
 	}
-	
+	// Anders Gad s204496
 	public Employee searchEmployees(String initials) throws OperationNotAllowed {
-		for (Employee employee : employees) {                       // 1
-			if (employee.getInitials().equals(initials)) {			// 2
+		assert ((initials != null && employees!=null)); // Precondition
+		boolean found = false;
+		for (Employee employee : employees) { 
+			if (employee.getInitials().equals(initials)) { 
+				found = true;
+				assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // Postcondition
 				return employee;
 			}
 		}
+		assert found == employees.stream().anyMatch(e -> e.getInitials().equals(initials));  // Postcondition
 		throw new OperationNotAllowed("Employee doesn't exist");
 	}
 	
-	public Project searchProjectsId(String id) {
+	// Victor Rasmussen s204475
+	public Project searchProjectsId(String id) throws OperationNotAllowed {
 		for (Project project : projects) {
 			if (project.getId().equals(id)) {
 				return project;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("project does not exist");
 	}
-	
-	public Project searchProjectsTitle(String title) {
+	// Victor Rasmussen s204475
+	public Project searchProjectsTitle(String title) throws OperationNotAllowed {
 		for (Project project : projects) {
 			if (project.getTitle().equals(title)) {
 				return project;
 			}
 		}
-		return null;
+		throw new OperationNotAllowed("project does not exist");
 	}
-	
+	// Anders Reher s194587
 	public String createInitials(String userName) {
+		//Creates initials for an employee based on the full name of the employee. John Smithson would be name JS. 
 		String initials = "";
 		initials += userName.charAt(0);
 		for (int i = 1; i < userName.length() - 1; i++)
@@ -166,20 +181,7 @@ public class ProjectManagementApp {
 			return initials;
 		}
 	}
-	
-	public void setEstimatedTimeOfTask(double Time) throws OperationNotAllowed {
-		if(activeTask == null) {
-			throw new OperationNotAllowed("the task does not exist");
-		}
-		else {
-			if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
-				activeTask.setEstimatedTime(Time);
-			} else {
-				throw new OperationNotAllowed("You have to be a project manager to change or create a task");
-			}
-		}
-	}
-	
+	// Anders Reher s194587
 	public class NameSort implements Comparator<Employee> 
 	{
 		//Sorts employees alphabetically
@@ -190,9 +192,12 @@ public class ProjectManagementApp {
 	    }
 	}
 
+	/* Report writing */
+	// Anders Gad s204496
 	public void printReport(String path_to_file) throws IOException {
-		if(pathExists(path_to_file))
-		{
+		//Print a report of the current active project
+		
+		if(pathExists(path_to_file)) {
 			ReportWriter writer = new ReportWriter(path_to_file);
 			
 			String reportFileName = "Report on " + activeProject.getTitle() + " ("+activeProject.getId()+")";
@@ -201,10 +206,13 @@ public class ProjectManagementApp {
 			
 			writer.writeReportToFile(reportFileName,reportContent);
 		}
-		
+		else {
+			throw new IOException("the path was not found");
+		}
 	}
-	
+	// Anders Gad s204496
 	public boolean pathExists(String path_to_file) {
+		//Checks if the directory path exist
 		
 		File file = new File(path_to_file);
 		 
@@ -215,12 +223,11 @@ public class ProjectManagementApp {
             return false;
         }
 	}
-	
 
 	/* GETTERS AND SETTERS */
 	
-	public void assignProjectManager(Employee employee) {
-		activeProject.assignProjectManager(employee);
+	public int getLastProjectId() {
+		return lastProjectId;
 	}
 	
 	public ArrayList<Employee> getEmployees() {
@@ -234,31 +241,60 @@ public class ProjectManagementApp {
 	public Activity getActiveActivity() {
 		return activeActivity;
 	}
+	public Project getActiveProject() {
+		return activeProject;
+	}
+	
 
 	public ArrayList<Project> getProjects() {
 		return projects;
 	}
-	
-	public void setActiveUser(Employee employee) {
+	// Magnus Siegumfeldt s204472
+	public void setEstimatedTimeOfTask(double Time) throws OperationNotAllowed {
+		if(activeTask == null) {
+			throw new OperationNotAllowed("the task does not exist");
+		}
+		else {
+			if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
+				activeTask.setEstimatedTime(Time);
+			} else {
+				throw new OperationNotAllowed("You have to be a project manager to change or create a task");
+			}
+		}
+	}
+	// Anders Reher s194587
+	public void setActiveUser(Employee employee) throws OperationNotAllowed {
 		if (!(employees.contains(employee))) {
-			//implementer error message. Med den employee ikke eksistere 
+			throw new OperationNotAllowed("the employee doesn't exist");
 		} else {
 			activeUser = employee;	
 		}
 	}
-	
-	public void setActiveProject(Project project) {
+	// Anders Reher s194587
+	public void setActiveProject(Project project) throws OperationNotAllowed {
 		if(!(projects.contains(project))) {
-			//implementer error message. Projectet eksistrer ikke.
+			throw new OperationNotAllowed("the project does not exist");
 		}
 		else {
-			activeProject=project;
+			activeProject = project;
+		}
+	}
+	// Anders Reher s194587
+	public void setActiveTask(Task task) throws OperationNotAllowed {
+		if(activeProject == null) {
+			throw new OperationNotAllowed("no project choosen");
+		}
+		else if(!(activeProject.tasks.contains(task))) {
+			throw new OperationNotAllowed("the task does not exist"); 
+		}
+		else {
+			activeTask=task; 
 		}
 	}
 	
-	
-	
+	// Magnus Siegumfeldt s204472
 	public ArrayList<Employee> getAvailableEmployees(GregorianCalendar startTime, GregorianCalendar endTime) throws OperationNotAllowed {
+		//Returns a list of employees who are not occupied in the provided timeframe
 		ArrayList<Employee> availableEmployees= new ArrayList<Employee>();
 		if (startTime.equals(endTime)) {
 			throw new OperationNotAllowed("You have not selected a duration to find available employees");
@@ -274,58 +310,9 @@ public class ProjectManagementApp {
 			return availableEmployees;
 		}
 		}
-		
-	}
-		
-	
-	
-	
-	public void setActiveTask(Task task) {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-		}
-		else if(!(activeProject.tasks.contains(task))) {
-			//Error message. activeProject, does not contain the task. 
-		}
-		else {
-			activeTask=task; 
-		}
 	}
 	
-	public int getProjectBudgetTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0;
-		}
-		else {
-			return activeProject.getBudgetTime();
-		}
-	}
-	
-	public double getProjectEstimatedTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0.0;
-		} else {
-		double estimatedTimeInHours = activeProject.getEstimatedTime(); 
-		return estimatedTimeInHours;
-		}
-	}
-	
-	public double getProjectRemainingTime() {
-		if(activeProject == null) {
-			//Error message. no activeProject.
-			return 0.0;
-		} else {
-		double remamningTimeInHours = activeProject.getRemainingTime(); 
-		return remamningTimeInHours;
-		}
-	}
-	
-	public Project getActiveProject() {
-		return activeProject;
-	}
-	
+	// Anders Gad s204475
 	public void setTaskName(String newName) throws OperationNotAllowed {
 		if(activeTask == null) {
 			throw new OperationNotAllowed("the task does not exist");
@@ -333,37 +320,28 @@ public class ProjectManagementApp {
 		else if(newName.equals("")) {
 			throw new OperationNotAllowed("A task has to have a name and estimed time");
 		} else {
-		activeTask.setName(newName);
+			changeTaskName(newName);
 		}
 	}
 	
-
 	public void setTaskStartTime(Calendar newStartTime) {
 		activeTask.setStartTime(newStartTime);
 	}
 
 	public void changeTaskName(String newName) throws OperationNotAllowed {
 		if (activeProject.getProjectManager() != null && activeUser.equals(activeProject.getProjectManager())) {
-			activeProject.changeTaskName(activeTask, newName);
+			activeTask.setName(newName);
 		} else {
-			System.out.println("fejl");
 			throw new OperationNotAllowed("Active user is not project manager for this project");
 		}
 	}
 	
-
-	
-	public void setTaskEstimatedTime(double estimatedTime) {
-		try {
-			activeTask.setEstimatedTime(estimatedTime);
-		} catch (OperationNotAllowed e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void setTaskEstimatedTime(double estimatedTime) throws OperationNotAllowed {
+		activeTask.setEstimatedTime(estimatedTime);
 	}
 	
 	public void setTaskTimeWorked() {
-		activeTask.setTimeSpent();
+		activeTask.setTimeSpent(activeTask);
 	}
 	
 	public void setActiveActivity(Activity activity) {
@@ -373,16 +351,13 @@ public class ProjectManagementApp {
 	public void setNewActivityName(String newName) {
 		activeActivity.setName(newName);
 	}
-
-	
-	
-	
-	
+	// Victor Rasmussen s204475 
 	private String getActiveProjectInformation() {
+		// All the information in a project. Used for printing a report.
 		
 		String taskInformation = "";
 		
-		//PROJECT INFORMATION
+		// PROJECT INFORMATION
 		taskInformation += "Project name: "+activeProject.getTitle()+"\n";
 		taskInformation += "Project ID: "+activeProject.getId()+"\n";
 		taskInformation += "Collective budget time spent for all tasks: "+activeProject.getBudgetTime()+"\n";
@@ -390,22 +365,22 @@ public class ProjectManagementApp {
 		taskInformation += "Remaining budget time on tasks: "+activeProject.getRemainingTime()+"\n";
 		taskInformation += "Current project manager: "+activeProject.getProjectManager().getName()
 														+ "("+activeProject.getProjectManager().getInitials()+")"+"\n";
-		
 		taskInformation += "The following task are associated with the project:\n";
 		
 		taskInformation += "\n";
 		
-		//TASK INFORMATION
+		// TASK INFORMATION
 		if(activeProject.tasks.size() > 0)
 		{
 			for(Task task : activeProject.tasks)
 			{
 				taskInformation += "----------------------------------------------------------------\n";
 				taskInformation += "Task name: "+ task.getName()+"\n";
-				taskInformation += "Estimated time left on task: "+task.getEstimatedTime()+"\n";
-				taskInformation += "Total budget time on task: "+task.getRemainingTime()+"\n";
-				taskInformation += "Task started on: "+task.getStartTime().getTime().toString()+"\n";
-				taskInformation += "Total work hours used on project: "+task.getTimeSpent()+"\n";
+				taskInformation += "Task started on: "+task.getStartTime().getTime().toString()
+						+" (Week:"+task.getStartTime().get(Calendar.WEEK_OF_YEAR)+")"+"\n";
+				taskInformation += "Estimated time left on task in hours: "+task.getEstimatedTime()+"\n";
+				taskInformation += "Total budget time on task in hours: "+task.getRemainingTime()+"\n";
+				taskInformation += "Total work hours used on task: "+task.getTimeSpent()+"\n";
 				taskInformation += "Employees currently assigned to task: "+"\n";
 				if(task.getEmployeesOnTask().size() > 0)
 				{
@@ -430,51 +405,4 @@ public class ProjectManagementApp {
 		return activeTask;
 	}
 
-	public void deleteEmployee(Employee employee) {
-		employees.remove(employee);
-	}
-
-	public void deleteProject(Project project) {
-		if(project.getTasks() != null && project.getTasks().size() > 0)
-		{
-			for(Task task : project.getTasks())
-			{
-				deleteTask(task);
-			}
-		}
-		
-		projects.remove(project);
-		activeProject = null;
-	}
-
-	public void deleteTask(Task task) {
-		activeProject.tasks.remove(task);
-		activeTask = null;
-	}
-
-	public void deleteActivity(Activity activity) {
-		activeUser.getActivities().remove(activity);
-		if(activity instanceof TaskActivity)
-		{
-			((TaskActivity)(activity)).getTask().getEmployeesOnTask().remove(activeUser);
-		}
-	}
-	
-	
-	
 }
-
-
-	
-	//getTaskStarttime
-	//getTaskTimespent
-	//getTaskEstimatedTime
-	//getTaskRemaningTime
-
-
-	//setTaskEstimatedTime
-	//setTaskTimeWorked
-	//setStartTime
-
-	
-	

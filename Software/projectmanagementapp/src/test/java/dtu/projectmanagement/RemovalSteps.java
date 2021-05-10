@@ -45,7 +45,7 @@ public class RemovalSteps {
 	@When("the employee tries to delete the project")
 	public void the_employee_tries_to_delete_the_project() throws OperationNotAllowed {
 		task = new Task("Task", 5);
-		project = new Project("projectForDeletion");
+		project = new Project("projectForDeletion", 0);
 		project.addTask(task);
 		managementApp.deleteProject(project);
 	}

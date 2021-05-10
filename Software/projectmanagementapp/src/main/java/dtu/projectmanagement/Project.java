@@ -1,57 +1,55 @@
 package dtu.projectmanagement;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.text.DateFormat;
-import java.time.Duration;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.function.BooleanSupplier;
 
 
 public class Project {
 	private String title;
 	private String id;
 	private Calendar startTime; 
-	private int budgetTime;
 
 	private Employee projectManager;
 	
 	private DateServer dateServer = new DateServer();
 	ArrayList<Task> tasks = new ArrayList<Task>();
 	
-	
-	
-	public Project(String title) throws OperationNotAllowed {
+	// Victor Rasmussen s204475
+	public Project(String title, int lastProjectId) throws OperationNotAllowed {
 		if (title.equals("")) {
 			throw new OperationNotAllowed("A project needs a name");
 		} else {
 			this.title = title;
 		}
-		this.id = setId();
+		this.id = setId(lastProjectId);
 		this.startTime = dateServer.getDate();
 	}
-	
-	public void setBudgetTime(int budgetTime) {
-		this.budgetTime = budgetTime;
-	}
-	
-	public int getBudgetTime() {
+	// Anders Gad s204496
+	public double getBudgetTime() {
+		//Returns the budget time which is the sum of the project manager's estimation of tasks' time in hours
+		double budgetTime = 0;
+		for(Task task : tasks)
+		{
+			budgetTime += task.getEstimatedTime();
+		}
 		return budgetTime;
 	}
 	
 	public void assignProjectManager(Employee employee) {
 		projectManager = employee;
 	}
-	
-	public String setId() { 
-		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + "0001"; // IMPLEMENTER LØBENUMMER
+	// Magnus Siegumfeldt
+	public String setId(int lastProjectId) { 
+		String lastProjectIdString = String.valueOf(lastProjectId);
+		while(lastProjectIdString.length() < 4) {
+			lastProjectIdString = "0" + lastProjectIdString;
+		}
+		id = Year.now().format(DateTimeFormatter.ofPattern("yy")) + lastProjectIdString;
 		return id;
 	}
-	
+	// Anders Gad s204496
 	public double getEstimatedTime() {
 		double estimatedTimeInHours = 0.0;
 		for(Task task : tasks) {
@@ -59,7 +57,7 @@ public class Project {
 		}
 		return estimatedTimeInHours;
 	}
-	
+	// Anders Gad s204496
 	public double getRemainingTime() {
 		double remainingTime = 0.0;
 		for(Task task : tasks) {
@@ -94,20 +92,9 @@ public class Project {
 	public void addTask(Task task) {
 		tasks.add(task);
 	}
-	
 
 	public void removeProjectManager() {
 		projectManager = null;
 	}
-	
-
-	public void changeTaskName(Task task, String newName) throws OperationNotAllowed {
-		task.changeName(newName);
-	}
 
 }
-	
-	
-	
-	
-

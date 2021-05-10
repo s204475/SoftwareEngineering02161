@@ -2,13 +2,12 @@ package dtu.projectmanagement;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class Activity {
 	private String name;
 	private Calendar startTime;
 	private Calendar endTime;
-	
+	// Magnus Siegumfeldt s204472
 	public Activity(String name, Calendar startTime, Calendar endTime) throws OperationNotAllowed {
 		if (name.equals("")) {
 			throw new OperationNotAllowed("An activity needs a name");
@@ -27,9 +26,8 @@ public class Activity {
 		return startTime;
 	}
 	
-	public String getStartTimeString()
-	{
-		return startTime.toString();
+	public void setStartTime(Calendar newStartTime)	{
+		startTime = newStartTime;
 	}
 	
 	public String getName() {
@@ -39,13 +37,13 @@ public class Activity {
 	public void setName(String newName) {
 		name = newName;
 	}
-
+	// Anders Reher s194587
 	public double getTimePassed() {
+		//How much time (in hours) have passed since the activity started (an potentially ended)
 		if(endTime.before(Calendar.getInstance()))
 		{
 			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), endTime.toInstant())/60;
-		} else
-		{
+		} else		{
 			return (double)ChronoUnit.MINUTES.between(startTime.toInstant(), Calendar.getInstance().toInstant())/60;
 		}
 	}

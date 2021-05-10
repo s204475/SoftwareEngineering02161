@@ -2,16 +2,14 @@ package dtu.projectmanagement;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.io.IOException;
 
+//The ReportWriter handles creating the report as an actual .txt to a specified path on the user's computer
+
+// Anders Gad s204496
 public class ReportWriter {
 
 	private String path;
-	private boolean append = false; //doesn't append, but erases everything in the file
 	
 	public ReportWriter(String path)
 	{
